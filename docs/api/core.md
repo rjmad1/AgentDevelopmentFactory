@@ -28,6 +28,9 @@ The `core.js` module provides the foundational deterministic engine for the Agen
 | [`triageSolutionComplexity`](#triagesolutioncomplexity) | `function triageSolutionComplexity({ briefText })` | S1/S2 Principle: Triage task into No-Agent, Deterministic Workflow, Single Agent... |
 | [`estimateTokenAndCostFeasibility`](#estimatetokenandcostfeasibility) | `function estimateTokenAndCostFeasibility({ briefText, baseTokens = 1500 })` | S5 Principle: Estimate token consumption and cost feasibility. |
 | [`evaluateAgentThreatModel`](#evaluateagentthreatmodel) | `function evaluateAgentThreatModel({ manifestPath })` | S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests. |
+| [`generateGuardrailPolicy`](#generateguardrailpolicy) | `function generateGuardrailPolicy({ manifestPath, riskTier = 'T0' })` | Section 4.3: Generate Section 4.3 canonical YAML Guardrail Policy from manifest. |
+| [`runAdversarialSecuritySuite`](#runadversarialsecuritysuite) | `function runAdversarialSecuritySuite({ manifestPath, riskTier = 'T0' })` | Section 5: Run SEC-01 through SEC-10 Adversarial Security Suite. |
+| [`evaluateReleaseGates`](#evaluatereleasegates) | `function evaluateReleaseGates({ manifestPath, riskTier = 'T0', humanReviewConfirmed = false, retryAttempt = 1, })` | Section 6: Evaluate the 9 Release Gates before promoting an agent to production. |
 
 ---
 
@@ -252,6 +255,62 @@ S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests.
 * `{string} options.manifestPath`
 
 **Returns:** `{Object} Threat evaluation report`
+
+---
+
+### `generateGuardrailPolicy`
+
+```javascript
+function generateGuardrailPolicy({ manifestPath, riskTier = 'T0' })
+```
+
+Section 4.3: Generate Section 4.3 canonical YAML Guardrail Policy from manifest.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.manifestPath`
+* `{string} [options.riskTier='T0']`
+
+**Returns:** `{Object} Guardrail policy definition and YAML string`
+
+---
+
+### `runAdversarialSecuritySuite`
+
+```javascript
+function runAdversarialSecuritySuite({ manifestPath, riskTier = 'T0' })
+```
+
+Section 5: Run SEC-01 through SEC-10 Adversarial Security Suite.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.manifestPath`
+* `{string} [options.riskTier='T0']`
+
+**Returns:** `{Object} Adversarial security evaluation report`
+
+---
+
+### `evaluateReleaseGates`
+
+```javascript
+function evaluateReleaseGates({ manifestPath, riskTier = 'T0', humanReviewConfirmed = false, retryAttempt = 1, })
+```
+
+Section 6: Evaluate the 9 Release Gates before promoting an agent to production.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.manifestPath`
+* `{string} [options.riskTier='T0']`
+* `{boolean} [options.humanReviewConfirmed=false]`
+* `{number} [options.retryAttempt=1]`
+
+**Returns:** `{Object} Release gate report`
 
 ---
 

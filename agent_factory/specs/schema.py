@@ -24,6 +24,13 @@ class RiskClassification(str, Enum):
     HIGH = "HIGH"
 
 
+class RiskTier(str, Enum):
+    T0 = "T0"  # Read-only, internal data, no external side effects (Sampled review)
+    T1 = "T1"  # Writes or external actions, each approved by a human (Approval gate on every write)
+    T2 = "T2"  # Autonomous writes or actions within bounded scope (Post-hoc review, kill switch, hard limits)
+    T3 = "T3"  # Financial, regulated, safety-relevant or customer-facing autonomy (Manual governance board)
+
+
 class DenialAction(str, Enum):
     STOP_AND_REPORT = "stop_and_report"
     QUARANTINE = "quarantine"
@@ -72,11 +79,51 @@ class AcceptanceSpec(BaseModel):
     minimum_safety: float = Field(1.00, ge=1.0, le=1.0, description="Safety must always be 1.0 (zero tolerance)")
 
 
+class GuardrailLimitsSpec(BaseModel):
+    max_steps: int = Field(20, description="Max execution steps per run")
+    max_tokens_per_run: int = Field(50000, description="Max tokens per run")
+    max_cost_per_run_usd: float = Field(0.50, description="Max cost per run in USD")
+    max_wall_time_s: int = Field(120, description="Max wall-clock seconds")
+
+
+class GuardrailDataSpec(BaseModel):
+    pii_redaction: bool = True
+    allowed_sources: List[str] = Field(default_factory=lambda: ["approved_kb"])
+
+
+class GuardrailEscalationSpec(BaseModel):
+    on: List[str] = Field(default_factory=lambda: ["repeated_tool_failure", "low_confidence", "out_of_scope", "policy_block"])
+    to: str = "human_queue"
+
+
+class GuardrailMemorySpec(BaseModel):
+    write_validation: bool = True
+    tenant_isolation: bool = True
+
+
+class GuardrailToolsSpec(BaseModel):
+    allow: List[str] = Field(default_factory=list)
+    deny: List[str] = Field(default_factory=list)
+    approval_required: List[str] = Field(default_factory=list)
+
+
+class GuardrailPolicy(BaseModel):
+    agent: str
+    version: str = "0.1.0"
+    risk_tier: RiskTier = RiskTier.T0
+    tools: GuardrailToolsSpec = Field(default_factory=GuardrailToolsSpec)
+    limits: GuardrailLimitsSpec = Field(default_factory=GuardrailLimitsSpec)
+    data: GuardrailDataSpec = Field(default_factory=GuardrailDataSpec)
+    escalation: GuardrailEscalationSpec = Field(default_factory=GuardrailEscalationSpec)
+    memory: GuardrailMemorySpec = Field(default_factory=GuardrailMemorySpec)
+
+
 class UniversalAgentSpec(BaseModel):
     schema_version: int = Field(1, description="Specification schema version")
     agent_id: str = Field(..., description="Unique machine-readable agent identifier")
     version: str = Field("1.0.0", description="Semantic version string")
     owner: str = Field("Admin", description="Owner or stakeholder name")
+    risk_tier: RiskTier = Field(RiskTier.T0, description="ADF Evals and Guardrails Specification Risk Tier (T0-T3)")
     purpose: str = Field(..., min_length=10, description="Clear statement of agent objective")
     inputs: Dict[str, InputParameter] = Field(default_factory=dict)
     outputs: Dict[str, OutputParameter] = Field(default_factory=dict)
@@ -87,6 +134,21 @@ class UniversalAgentSpec(BaseModel):
     targets: Dict[str, str] = Field(
         default_factory=lambda: {"local_process": "candidate", "hermes": "candidate"}
     )
+
+    @field_validator("risk_tier", mode="before")
+    def validate_risk_tier(cls, v: Any) -> RiskTier:
+        if isinstance(v, RiskTier):
+            return v
+        v_str = str(v).upper()
+        if v_str in ["LOW", "T0"]:
+            return RiskTier.T0
+        if v_str in ["MEDIUM", "T1"]:
+            return RiskTier.T1
+        if v_str in ["HIGH", "T2"]:
+            return RiskTier.T2
+        if v_str in ["CRITICAL", "T3"]:
+            return RiskTier.T3
+        return RiskTier.T0
 
     @field_validator("schema_version")
     def validate_schema_version(cls, v: int) -> int:

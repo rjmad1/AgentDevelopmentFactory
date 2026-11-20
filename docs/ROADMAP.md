@@ -37,6 +37,9 @@ No row on this page claims a test result. The last full verification run is reco
 | Solution Complexity Triage (S1/S2 Simplicity Rule) | ✅ | `src/cli.js triage-solution`, `src/core.js triageSolutionComplexity` |
 | Token & Cost Feasibility Estimator (S5 Anthropic Benchmark) | ✅ | `src/cli.js estimate-cost`, `src/core.js estimateTokenAndCostFeasibility` |
 | OWASP Agentic Top 10 Threat Modeler (ASI01-ASI05) | ✅ | `src/cli.js threat-model`, `src/core.js evaluateAgentThreatModel` |
+| 10-Layer Guardrail Policy Generator (Section 4.3 YAML Spec) | ✅ | `src/cli.js generate-guardrails`, `src/core.js generateGuardrailPolicy` |
+| SEC-01..10 Adversarial Security Suite (Goal hijacking, data leakage, isolation) | ✅ | `src/cli.js sec-evals`, `src/core.js runAdversarialSecuritySuite` |
+| 9 Release Gates Verifier & Self-Healing Retry Handshake (Section 6) | ✅ | `src/cli.js eval-gates`, `src/core.js evaluateReleaseGates` |
 
 ### Control plane (Tier 2, Python)
 
@@ -57,6 +60,12 @@ No row on this page claims a test result. The last full verification run is reco
 | Layer 2 Agent Pattern Library & A2A Topology Generator | ✅ | `agent_factory/workbench/pattern_library.py` |
 | Layer 2 Skill Packaging (conforming to agentskills.io S8 specification) | ✅ | `agent_factory/workbench/skill_packager.py` |
 | Layer 6 OWASP Top 10 for Agentic Applications Threat Modeler | ✅ | `agent_factory/security/threat_modeler.py` |
+| Risk Tiers T0-T3 Taxonomy & Validation | ✅ | `agent_factory/specs/schema.py` |
+| EV-01 to EV-15 Evaluation Catalogue & Anatomy | ✅ | `agent_factory/evals/eval_catalogue.py` |
+| Reliability Calculator (`pass@k`, `pass^k`, compounding error) | ✅ | `agent_factory/evals/eval_catalogue.py` |
+| 10-Layer Guardrail Policy Generator & Coverage Auditor | ✅ | `agent_factory/security/guardrail_engine.py` |
+| SEC-01 to SEC-10 Adversarial Security Suite | ✅ | `agent_factory/security/adversarial_suite.py` |
+| 9 Release Gates Verifier with Self-Healing Retry Handshake | ✅ | `agent_factory/evals/release_gates.py` |
 
 ### Workbench and runtime
 

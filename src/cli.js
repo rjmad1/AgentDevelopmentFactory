@@ -14,6 +14,9 @@ import {
   triageSolutionComplexity,
   estimateTokenAndCostFeasibility,
   evaluateAgentThreatModel,
+  generateGuardrailPolicy,
+  runAdversarialSecuritySuite,
+  evaluateReleaseGates,
 } from './core.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -99,6 +102,23 @@ Commands:
 
   threat-model         Evaluate blueprint against OWASP Top 10 for Agentic Applications
     --revision <id>        Revision identifier (required)
+    --store <path>         Path to revision storage directory (default: ./store)
+
+  generate-guardrails  Generate 10-layer canonical YAML guardrail policy (Section 4)
+    --revision <id>        Revision identifier (required)
+    --tier <T0-T3>         Risk tier (default: T0)
+    --store <path>         Path to revision storage directory (default: ./store)
+
+  sec-evals            Run SEC-01 through SEC-10 adversarial security suite (Section 5)
+    --revision <id>        Revision identifier (required)
+    --tier <T0-T3>         Risk tier (default: T0)
+    --store <path>         Path to revision storage directory (default: ./store)
+
+  eval-gates           Evaluate 9 release gates before promotion (Section 6)
+    --revision <id>        Revision identifier (required)
+    --tier <T0-T3>         Risk tier (default: T0)
+    --human-review         Confirm human review token sign-off (required for T1+)
+    --retry <count>        Current retry attempt (default: 1)
     --store <path>         Path to revision storage directory (default: ./store)
 `);
 }
@@ -344,6 +364,89 @@ function main() {
           console.log(`    [${f.riskLevel}] ${f.category}: ${f.description}`);
         }
         console.log(`  Recommendation:      ${rep.recommendation}`);
+        break;
+      }
+
+      case 'generate-guardrails': {
+        if (!options.revision) {
+          console.error('Error: --revision is required for generate-guardrails.');
+          process.exit(1);
+        }
+        const revDir = path.join(storeDir, options.revision);
+        const manifestPath = path.join(revDir, 'manifest.json');
+        if (!fs.existsSync(manifestPath)) {
+          console.error(`Error: Manifest not found at ${manifestPath}`);
+          process.exit(1);
+        }
+        const res = generateGuardrailPolicy({
+          manifestPath,
+          riskTier: options.tier || 'T0',
+        });
+
+        console.log(`[GUARDRAIL POLICY GENERATED (Section 4.3)]`);
+        console.log(res.yaml);
+        break;
+      }
+
+      case 'sec-evals': {
+        if (!options.revision) {
+          console.error('Error: --revision is required for sec-evals.');
+          process.exit(1);
+        }
+        const revDir = path.join(storeDir, options.revision);
+        const manifestPath = path.join(revDir, 'manifest.json');
+        if (!fs.existsSync(manifestPath)) {
+          console.error(`Error: Manifest not found at ${manifestPath}`);
+          process.exit(1);
+        }
+        const res = runAdversarialSecuritySuite({
+          manifestPath,
+          riskTier: options.tier || 'T0',
+        });
+
+        console.log(`[ADVERSARIAL SECURITY SUITE REPORT (Section 5)]`);
+        console.log(`  Revision:            ${res.revisionId}`);
+        console.log(`  Risk Tier:           ${res.riskTier}`);
+        console.log(`  Tests Passed:        ${res.passedCount} / ${res.totalTests}`);
+        console.log(`  Verdict:             ${res.passed ? 'PASSED (ZERO CRITICAL FAILURES)' : 'FAILED'}`);
+        for (const f of res.findings) {
+          console.log(`    [${f.passed ? 'PASS' : 'FAIL'}] ${f.secId} (${f.severity}): ${f.name} -> ${f.details}`);
+        }
+        break;
+      }
+
+      case 'eval-gates': {
+        if (!options.revision) {
+          console.error('Error: --revision is required for eval-gates.');
+          process.exit(1);
+        }
+        const revDir = path.join(storeDir, options.revision);
+        const manifestPath = path.join(revDir, 'manifest.json');
+        if (!fs.existsSync(manifestPath)) {
+          console.error(`Error: Manifest not found at ${manifestPath}`);
+          process.exit(1);
+        }
+        const res = evaluateReleaseGates({
+          manifestPath,
+          riskTier: options.tier || 'T0',
+          humanReviewConfirmed: Boolean(options['human-review'] || options.humanReview),
+          retryAttempt: options.retry ? parseInt(options.retry, 10) : 1,
+        });
+
+        console.log(`[RELEASE GATES VERIFICATION REPORT (Section 6)]`);
+        console.log(`  Revision:            ${res.revisionId}`);
+        console.log(`  Risk Tier:           ${res.riskTier}`);
+        console.log(`  Promotion Granted:   ${res.promotionGranted ? 'YES (PROMOTED)' : 'NO (BLOCKED)'}`);
+        console.log(`  Verdict:             ${res.verdict}`);
+        console.log(`  Gates Satisfied:     ${res.passedGatesCount} / ${res.totalGates}`);
+        console.log(`  Retry Attempt:       ${res.retryAttempt} / ${res.maxRetries}`);
+        for (const g of res.gates) {
+          console.log(`    Gate ${g.gate} [${g.passed ? 'PASS' : 'FAIL'}]: ${g.name} (${g.threshold}) -> ${g.details}`);
+        }
+        console.log(`  Recommendation:      ${res.recommendation}`);
+        if (!res.promotionGranted) {
+          process.exit(1);
+        }
         break;
       }
 

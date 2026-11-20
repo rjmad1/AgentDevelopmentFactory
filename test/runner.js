@@ -581,6 +581,81 @@ export function executeFullSuite(runLabel) {
     assert(threatRes.stdout.includes('Blueprint conforms to baseline OWASP Agentic Top 10 controls.'), 'Conforms to baseline');
   });
 
+  // TEST 21: Evals & Guardrails — 10-Layer Guardrail Policy Generator & YAML Spec (Section 4)
+  recordTest('21. (Evals & Guardrails) 10-Layer Guardrail Policy Generator & YAML Spec (Section 4)', () => {
+    const guardsRes = runCli([
+      'generate-guardrails',
+      '--revision', 'rev-001',
+      '--tier', 'T1',
+      '--store', testStoreDir,
+    ]);
+    assert(!guardsRes.failed, `generate-guardrails failed: ${guardsRes.stderr}`);
+    assert(guardsRes.stdout.includes('[GUARDRAIL POLICY GENERATED (Section 4.3)]'), 'Must contain policy header');
+    assert(guardsRes.stdout.includes('risk_tier: T1'), 'Policy must reflect T1 risk tier');
+    assert(guardsRes.stdout.includes('pii_redaction: true'), 'Must enforce PII redaction (G1/G5)');
+    assert(guardsRes.stdout.includes('escalation:'), 'Must configure G8 escalation');
+    assert(guardsRes.stdout.includes('to: human_queue'), 'Escalates to human_queue');
+    assert(guardsRes.stdout.includes('memory:'), 'Configures G9 memory');
+    assert(guardsRes.stdout.includes('tenant_isolation: true'), 'Enforces tenant isolation');
+  });
+
+  // TEST 22: Evals & Guardrails — SEC-01..10 Adversarial Security Suite (Section 5)
+  recordTest('22. (Evals & Guardrails) SEC-01..10 Adversarial Security Suite (Section 5)', () => {
+    const secRes = runCli([
+      'sec-evals',
+      '--revision', 'rev-001',
+      '--tier', 'T0',
+      '--store', testStoreDir,
+    ]);
+    assert(!secRes.failed, `sec-evals failed: ${secRes.stderr}`);
+    assert(secRes.stdout.includes('[ADVERSARIAL SECURITY SUITE REPORT (Section 5)]'), 'Must contain SEC report header');
+    assert(secRes.stdout.includes('Tests Passed:        10 / 10'), 'All 10 adversarial tests must pass for baseline');
+    assert(secRes.stdout.includes('Verdict:             PASSED (ZERO CRITICAL FAILURES)'), 'Zero critical failures required');
+    assert(secRes.stdout.includes('SEC-01 (CRITICAL): Direct prompt injection'), 'SEC-01 verified');
+    assert(secRes.stdout.includes('SEC-06 (CRITICAL): Data exfiltration & credential disclosure'), 'SEC-06 verified');
+    assert(secRes.stdout.includes('SEC-07 (HIGH): Cross-tenant & cross-user isolation'), 'SEC-07 verified');
+  });
+
+  // TEST 23: Evals & Guardrails — 9 Release Gates Verifier & Self-Healing Retry Handshake (Section 6)
+  recordTest('23. (Evals & Guardrails) 9 Release Gates Verifier & Self-Healing Retry (Section 6)', () => {
+    // 1. T0 agent auto-promotes because Gate 8 permits sampled auto-signoff
+    const t0GatesRes = runCli([
+      'eval-gates',
+      '--revision', 'rev-001',
+      '--tier', 'T0',
+      '--store', testStoreDir,
+    ]);
+    assert(!t0GatesRes.failed, `eval-gates T0 failed: ${t0GatesRes.stderr}`);
+    assert(t0GatesRes.stdout.includes('Promotion Granted:   YES (PROMOTED)'), 'T0 must be promoted');
+    assert(t0GatesRes.stdout.includes('Verdict:             PROMOTED'), 'Verdict must be PROMOTED');
+    assert(t0GatesRes.stdout.includes('Gates Satisfied:     9 / 9'), 'All 9 release gates satisfied');
+
+    // 2. T1 agent without human review must be rejected / blocked at Gate 8
+    const t1BlockedRes = runCli([
+      'eval-gates',
+      '--revision', 'rev-001',
+      '--tier', 'T1',
+      '--retry', '1',
+      '--store', testStoreDir,
+    ]);
+    assert(t1BlockedRes.failed, 'eval-gates T1 without human review must fail release gate');
+    assert(t1BlockedRes.stdout.includes('Promotion Granted:   NO (BLOCKED)'), 'Promotion must be blocked');
+    assert(t1BlockedRes.stdout.includes('Verdict:             REJECTED_RETRY'), 'Must return REJECTED_RETRY for self-healing');
+    assert(t1BlockedRes.stdout.includes('Gate 8 [FAIL]: Human review'), 'Gate 8 must fail without token');
+
+    // 3. T1 agent with human review token confirmed -> PROMOTED
+    const t1ApprovedRes = runCli([
+      'eval-gates',
+      '--revision', 'rev-001',
+      '--tier', 'T1',
+      '--human-review',
+      '--store', testStoreDir,
+    ]);
+    assert(!t1ApprovedRes.failed, `eval-gates T1 with human review failed: ${t1ApprovedRes.stderr}`);
+    assert(t1ApprovedRes.stdout.includes('Promotion Granted:   YES (PROMOTED)'), 'T1 with human review must promote');
+    assert(t1ApprovedRes.stdout.includes('Verdict:             PROMOTED'), 'Verdict must be PROMOTED');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

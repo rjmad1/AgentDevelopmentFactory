@@ -22,10 +22,14 @@ from agent_factory.evals.runner import EvaluationRunner
 from agent_factory.remediation.engine import RemediationEngine
 from agent_factory.runtime.local_process import LocalProcessRuntime
 from agent_factory.runtime.base import ExecutionLimits
-from agent_factory.specs.schema import load_spec_from_yaml, save_spec_to_yaml, RiskClassification
+from agent_factory.specs.schema import load_spec_from_yaml, save_spec_to_yaml, RiskClassification, RiskTier
 from agent_factory.workbench.pattern_library import PatternLibrary, AgentPattern
 from agent_factory.workbench.skill_packager import SkillPackager
 from agent_factory.security.threat_modeler import AgentThreatModeler
+from agent_factory.evals.eval_catalogue import EvalCatalogue, EvalGenerator, ReliabilityCalculator
+from agent_factory.security.guardrail_engine import GuardrailEngine
+from agent_factory.security.adversarial_suite import AdversarialSuiteRunner
+from agent_factory.evals.release_gates import ReleaseGateVerifier
 
 
 FACTORY_ROOT = Path("D:/1_Hermes Working Folder_Directory/1_Projects/Agent Development Factory")
@@ -306,6 +310,53 @@ def cmd_package_skill(args):
     print(json.dumps({"status": "SUCCESS", "skill_name": res["skill_name"], "skill_md": str(res["skill_md_path"]), "sha256": res["sha256"]}, indent=2))
 
 
+def cmd_guardrails(args):
+    target = Path(args.target)
+    if target.exists() and (target.suffix in [".yaml", ".yml"]):
+        spec = load_spec_from_yaml(target)
+    else:
+        intake = RequestIntake.process_request(args.target)
+        spec = intake.spec
+    policy = GuardrailEngine.generate_policy(spec)
+    if args.yaml:
+        print(GuardrailEngine.serialize_policy_yaml(policy))
+    else:
+        audit = GuardrailEngine.audit_guardrail_coverage(spec, policy)
+        print(json.dumps(audit, indent=2))
+
+
+def cmd_eval_catalogue(args):
+    entries = EvalCatalogue.list_all()
+    out = [e.model_dump(mode="json") for e in entries]
+    print(json.dumps(out, indent=2))
+
+
+def cmd_sec_suite(args):
+    target = Path(args.target)
+    if target.exists() and (target.suffix in [".yaml", ".yml"]):
+        spec = load_spec_from_yaml(target)
+    else:
+        intake = RequestIntake.process_request(args.target)
+        spec = intake.spec
+    res = AdversarialSuiteRunner.evaluate_agent(spec)
+    print(json.dumps(res.model_dump(mode="json"), indent=2))
+
+
+def cmd_eval_gates(args):
+    target = Path(args.target)
+    if target.exists() and (target.suffix in [".yaml", ".yml"]):
+        spec = load_spec_from_yaml(target)
+    else:
+        intake = RequestIntake.process_request(args.target)
+        spec = intake.spec
+    report = ReleaseGateVerifier.evaluate_release(
+        spec=spec,
+        human_review_confirmed=args.human_review,
+        retry_attempt=args.retry,
+    )
+    print(json.dumps(report.model_dump(mode="json"), indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Agent Development Factory CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -388,6 +439,28 @@ def main():
     p_skill.add_argument("--output", default=None, help="Output directory")
     p_skill.add_argument("--name", default=None, help="Optional skill name")
     p_skill.set_defaults(func=cmd_package_skill)
+
+    # guardrails
+    p_guards = subparsers.add_parser("guardrails", help="Generate or audit 10-layer guardrail policy (Section 4)")
+    p_guards.add_argument("target", help="Agent YAML file or brief text")
+    p_guards.add_argument("--yaml", action="store_true", help="Output canonical Section 4.3 YAML policy")
+    p_guards.set_defaults(func=cmd_guardrails)
+
+    # eval-catalogue
+    p_cat = subparsers.add_parser("eval-catalogue", help="List EV-01 to EV-15 evaluation catalogue (Section 3)")
+    p_cat.set_defaults(func=cmd_eval_catalogue)
+
+    # sec-suite
+    p_sec = subparsers.add_parser("sec-suite", help="Run SEC-01 to SEC-10 adversarial security suite (Section 5)")
+    p_sec.add_argument("target", help="Agent YAML file or brief text")
+    p_sec.set_defaults(func=cmd_sec_suite)
+
+    # eval-gates
+    p_gates = subparsers.add_parser("eval-gates", help="Evaluate 9 release gates before promotion (Section 6)")
+    p_gates.add_argument("target", help="Agent YAML file or brief text")
+    p_gates.add_argument("--human-review", action="store_true", help="Assert human review sign-off confirmed")
+    p_gates.add_argument("--retry", type=int, default=1, help="Current automated retry attempt count")
+    p_gates.set_defaults(func=cmd_eval_gates)
 
     args = parser.parse_args()
     args.func(args)
