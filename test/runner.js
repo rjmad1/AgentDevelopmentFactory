@@ -511,6 +511,76 @@ export function executeFullSuite(runLabel) {
     assert(doctorRes.stdout.includes('Project Constitution'), 'Checks constitution');
   });
 
+  // TEST 18: Layer 1 Intake — Solution Complexity Triage (S1/S2 Simplicity)
+  recordTest('18. (Layer 1 Intake) Solution Complexity Triage (S1/S2 Simplicity)', () => {
+    // 1. Static deterministic data task -> NO_AGENT
+    const noAgentRes = runCli([
+      'triage-solution',
+      '--brief', 'Parse timestamp and sort array of ints',
+    ]);
+    assert(!noAgentRes.failed, `triage-solution NO_AGENT failed: ${noAgentRes.stderr}`);
+    assert(noAgentRes.stdout.includes('Solution Type:       NO_AGENT'), 'Must classify as NO_AGENT');
+    assert(noAgentRes.stdout.includes('Token Multiplier:    0x'), 'Token multiplier must be 0x');
+
+    // 2. Ambiguous semantic task -> AUTONOMOUS_AGENT
+    const agentRes = runCli([
+      'triage-solution',
+      '--brief', 'Extract sentiment and classify customer support tickets into categories',
+    ]);
+    assert(!agentRes.failed, `triage-solution AUTONOMOUS_AGENT failed: ${agentRes.stderr}`);
+    assert(agentRes.stdout.includes('Solution Type:       AUTONOMOUS_AGENT'), 'Must classify as AUTONOMOUS_AGENT');
+    assert(agentRes.stdout.includes('Token Multiplier:    2.5x'), 'Token multiplier must be 2.5x');
+
+    // 3. Complex multi-agent task -> MULTI_AGENT_SYSTEM
+    const multiRes = runCli([
+      'triage-solution',
+      '--brief', 'Build multi-agent swarm hierarchy with planner and subagents',
+    ]);
+    assert(!multiRes.failed, `triage-solution MULTI_AGENT_SYSTEM failed: ${multiRes.stderr}`);
+    assert(multiRes.stdout.includes('Solution Type:       MULTI_AGENT_SYSTEM'), 'Must classify as MULTI_AGENT_SYSTEM');
+    assert(multiRes.stdout.includes('Token Multiplier:    15x'), 'Token multiplier must be 15x');
+  });
+
+  // TEST 19: Layer 1 Intake — Token and Cost Feasibility Estimator (S5 Anthropic Benchmark)
+  recordTest('19. (Layer 1 Intake) Token and Cost Feasibility Estimator (S5)', () => {
+    // 1. No agent task -> 0 projected tokens
+    const estZeroRes = runCli([
+      'estimate-cost',
+      '--brief', 'Parse timestamp and sort array of ints',
+      '--tokens', '1500',
+    ]);
+    assert(!estZeroRes.failed, `estimate-cost zero failed: ${estZeroRes.stderr}`);
+    assert(estZeroRes.stdout.includes('Projected Tokens:    ~0'), 'Projected tokens must be ~0');
+    assert(estZeroRes.stdout.includes('Status:              OPTIMAL_ZERO_COST'), 'Status must be OPTIMAL_ZERO_COST');
+    assert(estZeroRes.stdout.includes('Feasible:            YES'), 'Feasible must be YES');
+
+    // 2. Multi-agent system -> ~15x projection triggering warning
+    const estMultiRes = runCli([
+      'estimate-cost',
+      '--brief', 'Build multi-agent swarm hierarchy with planner and subagents',
+      '--tokens', '1500',
+    ]);
+    assert(!estMultiRes.failed, `estimate-cost multi failed: ${estMultiRes.stderr}`);
+    assert(estMultiRes.stdout.includes('Projected Tokens:    ~22500'), 'Projected tokens must be ~22500 (~15x)');
+    assert(estMultiRes.stdout.includes('Status:              HIGH_TOKEN_WARNING'), 'Status must be HIGH_TOKEN_WARNING');
+    assert(estMultiRes.stdout.includes('Feasible:            YES'), 'Feasible must be YES');
+  });
+
+  // TEST 20: Layer 6 Security — OWASP Agentic Top 10 Threat Modeler (S18)
+  recordTest('20. (Layer 6 Security) Agent Blueprint Threat Modeler (OWASP S18)', () => {
+    // Test rev-001 (baseline compliant blueprint)
+    const threatRes = runCli([
+      'threat-model',
+      '--revision', 'rev-001',
+      '--store', testStoreDir,
+    ]);
+    assert(!threatRes.failed, `threat-model failed: ${threatRes.stderr}`);
+    assert(threatRes.stdout.includes('[THREAT-MODEL REPORT]'), 'Stdout must contain threat report header');
+    assert(threatRes.stdout.includes('Revision:            rev-001'), 'Must evaluate rev-001');
+    assert(threatRes.stdout.includes('Status:              PASSED (LOW RISK)'), 'rev-001 must pass low risk');
+    assert(threatRes.stdout.includes('Blueprint conforms to baseline OWASP Agentic Top 10 controls.'), 'Conforms to baseline');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

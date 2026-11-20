@@ -25,6 +25,9 @@ The `core.js` module provides the foundational deterministic engine for the Agen
 | [`scaffoldRequirementsTemplate`](#scaffoldrequirementstemplate) | `function scaffoldRequirementsTemplate({ outputPath, title = 'Autonomous Analytical Processing Agent', author = 'Admin', })` | Domain function: `scaffoldRequirementsTemplate`. |
 | [`importMcpToolDefinition`](#importmcptooldefinition) | `function importMcpToolDefinition({ mcpSchemaPath, registryPath = null, effectLevel = 'READ_PUBLIC', })` | Domain function: `importMcpToolDefinition`. |
 | [`runDoctorCheck`](#rundoctorcheck) | `function runDoctorCheck({ projectRoot = null } = {})` | Domain function: `runDoctorCheck`. |
+| [`triageSolutionComplexity`](#triagesolutioncomplexity) | `function triageSolutionComplexity({ briefText })` | S1/S2 Principle: Triage task into No-Agent, Deterministic Workflow, Single Agent... |
+| [`estimateTokenAndCostFeasibility`](#estimatetokenandcostfeasibility) | `function estimateTokenAndCostFeasibility({ briefText, baseTokens = 1500 })` | S5 Principle: Estimate token consumption and cost feasibility. |
+| [`evaluateAgentThreatModel`](#evaluateagentthreatmodel) | `function evaluateAgentThreatModel({ manifestPath })` | S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests. |
 
 ---
 
@@ -197,6 +200,58 @@ function runDoctorCheck({ projectRoot = null } = {})
 ```
 
 Domain function: `runDoctorCheck`.
+
+---
+
+### `triageSolutionComplexity`
+
+```javascript
+function triageSolutionComplexity({ briefText })
+```
+
+S1/S2 Principle: Triage task into No-Agent, Deterministic Workflow, Single Agent, or Multi-Agent.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.briefText - Brief content string`
+
+**Returns:** `{Object} Triage recommendation`
+
+---
+
+### `estimateTokenAndCostFeasibility`
+
+```javascript
+function estimateTokenAndCostFeasibility({ briefText, baseTokens = 1500 })
+```
+
+S5 Principle: Estimate token consumption and cost feasibility.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.briefText`
+* `{number} [options.baseTokens=1500]`
+
+**Returns:** `{Object} Feasibility and cost estimate`
+
+---
+
+### `evaluateAgentThreatModel`
+
+```javascript
+function evaluateAgentThreatModel({ manifestPath })
+```
+
+S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests.
+
+**Parameters:**
+
+* `{Object} options`
+* `{string} options.manifestPath`
+
+**Returns:** `{Object} Threat evaluation report`
 
 ---
 

@@ -1242,3 +1242,126 @@ export function runDoctorCheck({ projectRoot = null } = {}) {
     diagnostics,
   };
 }
+
+/**
+ * S1/S2 Principle: Triage task into No-Agent, Deterministic Workflow, Single Agent, or Multi-Agent.
+ * @param {Object} options
+ * @param {string} options.briefText - Brief content string
+ * @returns {Object} Triage recommendation
+ */
+export function triageSolutionComplexity({ briefText }) {
+  const lower = (briefText || '').toLowerCase();
+  if (['regex', 'calculate sum', 'sql query', 'csv to json', 'parse timestamp', 'math formula'].some(k => lower.includes(k))) {
+    return {
+      solutionType: 'NO_AGENT',
+      reasoning: 'Task has zero semantic ambiguity and can be resolved deterministically without an LLM.',
+      tokenMultiplier: 0.0,
+      recommendedPattern: 'deterministic_script',
+      simplicityRationale: 'S1/S2: Zero token expenditure and zero latency variance. Avoid unnecessary agent abstraction.',
+    };
+  }
+  if (['multi-agent', 'team of agents', 'critic and generator', 'swarm', 'parallel fleet', 'specialist roles'].some(k => lower.includes(k))) {
+    return {
+      solutionType: 'MULTI_AGENT_SYSTEM',
+      reasoning: 'Task specifies independent peer agents, adversarial verification, or fanned-out specialist roles.',
+      tokenMultiplier: 15.0,
+      recommendedPattern: 'orchestrator_worker',
+      simplicityRationale: 'S5: High token cost (~15x chat baseline). Verify high-value justification before deployment.',
+    };
+  }
+  if (['step 1', 'pipeline', 'etl', 'sequential', 'daily report pipeline', 'download and extract'].some(k => lower.includes(k))) {
+    return {
+      solutionType: 'DETERMINISTIC_WORKFLOW',
+      reasoning: 'Task follows a fixed sequence of known operational steps with predictable control flow.',
+      tokenMultiplier: 1.0,
+      recommendedPattern: 'prompt_chain',
+      simplicityRationale: 'S1/S2: Fixed DAG reduces tool execution failures and context window drift.',
+    };
+  }
+  return {
+    solutionType: 'AUTONOMOUS_AGENT',
+    reasoning: 'Task requires dynamic tool invocation, exploratory data retrieval, or variable decision paths.',
+    tokenMultiplier: 2.5,
+    recommendedPattern: 'single_agent',
+    simplicityRationale: 'S1/S2: Bounded single agent with discrete tool effect permissions.',
+  };
+}
+
+/**
+ * S5 Principle: Estimate token consumption and cost feasibility.
+ * @param {Object} options
+ * @param {string} options.briefText
+ * @param {number} [options.baseTokens=1500]
+ * @returns {Object} Feasibility and cost estimate
+ */
+export function estimateTokenAndCostFeasibility({ briefText, baseTokens = 1500 }) {
+  const triage = triageSolutionComplexity({ briefText });
+  const projectedTokens = Math.round(baseTokens * triage.tokenMultiplier);
+  const tokenBudget = 8000;
+  const isFeasible = projectedTokens <= 50000;
+  let status = 'FEASIBLE';
+  let recommendation = `Solution type '${triage.solutionType}' is within acceptable token boundaries (~${projectedTokens} tokens).`;
+
+  if (triage.solutionType === 'NO_AGENT') {
+    status = 'OPTIMAL_ZERO_COST';
+    recommendation = 'Execute via pure standard library script; bypass LLM entirely.';
+  } else if (projectedTokens > tokenBudget * 2) {
+    status = 'HIGH_TOKEN_WARNING';
+    recommendation = `Multi-agent architecture projected at ~${projectedTokens} tokens (~15x baseline). Consider simplifying to single agent.`;
+  }
+
+  return {
+    tokenBudget,
+    projectedTokensPerRun: projectedTokens,
+    projectedCostUsd: 0.0,
+    isFeasible,
+    feasibilityStatus: status,
+    recommendation,
+    triage,
+  };
+}
+
+/**
+ * S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests.
+ * @param {Object} options
+ * @param {string} options.manifestPath
+ * @returns {Object} Threat evaluation report
+ */
+export function evaluateAgentThreatModel({ manifestPath }) {
+  const manifest = JSON.parse(fs.readFileSync(path.resolve(manifestPath), 'utf-8'));
+  const findings = [];
+  let score = 0.0;
+
+  // ASI01: Goal Hijacking
+  if (manifest.unresolvedItems && manifest.unresolvedItems.length > 2) {
+    findings.push({
+      category: 'ASI01: Ambiguous Goal Hijacking Surface',
+      riskLevel: 'MEDIUM',
+      description: `Revision contains ${manifest.unresolvedItems.length} unresolved questions which may lead to prompt hijacking.`,
+      remediation: 'Resolve remaining questions before executing in production.'
+    });
+    score += 2.0;
+  }
+
+  // ASI02: Excessive Agency / Unchecked effects
+  if (manifest.requirements && manifest.requirements.some(r => /delete|spend|publish/i.test(r.statement || ''))) {
+    findings.push({
+      category: 'ASI02: Tool Misuse & Excessive Agency Risk',
+      riskLevel: 'HIGH',
+      description: 'Requirements contain destructive or publishing verbs. Requires human approval gate token.',
+      remediation: 'Ensure elevated effect levels are gated behind ApprovalGate.',
+    });
+    score += 3.5;
+  }
+
+  const passed = score < 4.0;
+  return {
+    revisionId: manifest.revisionId || 'unknown',
+    riskScore: Number(score.toFixed(1)),
+    passed,
+    findings,
+    recommendation: passed
+      ? 'Blueprint conforms to baseline OWASP Agentic Top 10 controls.'
+      : 'Remediate security findings before deployment.',
+  };
+}

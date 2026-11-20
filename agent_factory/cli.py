@@ -23,6 +23,9 @@ from agent_factory.remediation.engine import RemediationEngine
 from agent_factory.runtime.local_process import LocalProcessRuntime
 from agent_factory.runtime.base import ExecutionLimits
 from agent_factory.specs.schema import load_spec_from_yaml, save_spec_to_yaml, RiskClassification
+from agent_factory.workbench.pattern_library import PatternLibrary, AgentPattern
+from agent_factory.workbench.skill_packager import SkillPackager
+from agent_factory.security.threat_modeler import AgentThreatModeler
 
 
 FACTORY_ROOT = Path("D:/1_Hermes Working Folder_Directory/1_Projects/Agent Development Factory")
@@ -259,6 +262,50 @@ def cmd_run(args):
     print(json.dumps(res.model_dump(mode="json"), indent=2))
 
 
+def cmd_triage(args):
+    res = RequestIntake.triage_solution_complexity(args.prompt)
+    print(json.dumps(res.model_dump(mode="json"), indent=2))
+
+
+def cmd_estimate(args):
+    res = RequestIntake.estimate_feasibility_and_cost(args.prompt, base_tokens=args.tokens)
+    print(json.dumps(res.model_dump(mode="json"), indent=2))
+
+
+def cmd_clarify(args):
+    res = RequestIntake.clarify_intent(args.prompt)
+    print(json.dumps(res.model_dump(mode="json"), indent=2))
+
+
+def cmd_patterns(args):
+    patterns = PatternLibrary.list_patterns()
+    out = [p.model_dump(mode="json") for p in patterns]
+    print(json.dumps(out, indent=2))
+
+
+def cmd_threat_model(args):
+    target = Path(args.target)
+    if target.exists() and (target.suffix in [".yaml", ".yml"]):
+        spec = load_spec_from_yaml(target)
+    else:
+        intake = RequestIntake.process_request(args.target)
+        spec = intake.spec
+    report = AgentThreatModeler.evaluate_blueprint(spec)
+    print(json.dumps(report.model_dump(mode="json"), indent=2))
+
+
+def cmd_package_skill(args):
+    target = Path(args.target)
+    if target.exists() and (target.suffix in [".yaml", ".yml"]):
+        spec = load_spec_from_yaml(target)
+    else:
+        intake = RequestIntake.process_request(args.target)
+        spec = intake.spec
+    out_dir = Path(args.output) if args.output else FACTORY_ROOT / ".hermes" / "skills"
+    res = SkillPackager.package_as_skill(spec, out_dir, skill_name=args.name)
+    print(json.dumps({"status": "SUCCESS", "skill_name": res["skill_name"], "skill_md": str(res["skill_md_path"]), "sha256": res["sha256"]}, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Agent Development Factory CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -309,6 +356,38 @@ def main():
     p_run.add_argument("--outdir", default=None)
     p_run.add_argument("--threshold", type=float, default=3.0)
     p_run.set_defaults(func=cmd_run)
+
+    # triage
+    p_triage = subparsers.add_parser("triage", help="Triage request into No-Agent, Workflow, Agent, or Multi-Agent (S1/S2)")
+    p_triage.add_argument("prompt", help="Task requirement prompt")
+    p_triage.set_defaults(func=cmd_triage)
+
+    # estimate
+    p_est = subparsers.add_parser("estimate", help="Estimate token and cost feasibility (S5)")
+    p_est.add_argument("prompt", help="Task requirement prompt")
+    p_est.add_argument("--tokens", type=int, default=1500)
+    p_est.set_defaults(func=cmd_estimate)
+
+    # clarify
+    p_clarify = subparsers.add_parser("clarify", help="Clarify intent and missing specifications (Layer 1)")
+    p_clarify.add_argument("prompt", help="Task brief")
+    p_clarify.set_defaults(func=cmd_clarify)
+
+    # patterns
+    p_patt = subparsers.add_parser("patterns", help="List Pattern Library architectures (S1/S2)")
+    p_patt.set_defaults(func=cmd_patterns)
+
+    # threat-model
+    p_threat = subparsers.add_parser("threat-model", help="Evaluate blueprint against OWASP Agentic Top 10 (S18)")
+    p_threat.add_argument("target", help="Agent YAML file or brief text")
+    p_threat.set_defaults(func=cmd_threat_model)
+
+    # package-skill
+    p_skill = subparsers.add_parser("package-skill", help="Package agent as portable SKILL.md (S8)")
+    p_skill.add_argument("target", help="Agent YAML file or brief text")
+    p_skill.add_argument("--output", default=None, help="Output directory")
+    p_skill.add_argument("--name", default=None, help="Optional skill name")
+    p_skill.set_defaults(func=cmd_package_skill)
 
     args = parser.parse_args()
     args.func(args)

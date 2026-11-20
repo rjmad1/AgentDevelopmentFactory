@@ -30,6 +30,13 @@ No row on this page claims a test result. The last full verification run is reco
 | Immutable revision store preserving the original brief bytes | ✅ | `src/cli.js init-revision` |
 | Requirement triage into `CONFIRMED` / `PROPOSED` / `UNRESOLVED` | ✅ | `src/core.js` |
 | Append-only check event stream + history consistency verification | ✅ | `src/cli.js run-check`, `verify-consistency` |
+| Universal MCP Tool Schema Importer | ✅ | `src/cli.js import-mcp-tool`, `src/core.js importMcpToolSchema` |
+| Universal Agent Spec YAML compiler & Spec Compliance | ✅ | `src/cli.js export-agent-spec`, `src/core.js exportAgentSpecYaml` |
+| Automated Requirements Scaffolder & Confirmation Rigor | ✅ | `src/cli.js scaffold-requirements`, `src/core.js scaffoldRequirementsTemplate` |
+| Zero-Install Diagnostic Doctor & Port Canary | ✅ | `src/cli.js doctor`, `src/core.js runPlatformDoctor` |
+| Solution Complexity Triage (S1/S2 Simplicity Rule) | ✅ | `src/cli.js triage-solution`, `src/core.js triageSolutionComplexity` |
+| Token & Cost Feasibility Estimator (S5 Anthropic Benchmark) | ✅ | `src/cli.js estimate-cost`, `src/core.js estimateTokenAndCostFeasibility` |
+| OWASP Agentic Top 10 Threat Modeler (ASI01-ASI05) | ✅ | `src/cli.js threat-model`, `src/core.js evaluateAgentThreatModel` |
 
 ### Control plane (Tier 2, Python)
 
@@ -44,13 +51,19 @@ No row on this page claims a test result. The last full verification run is reco
 | Secret redaction | ✅ | `agent_factory/security/redactor.py` |
 | Capability registry with verification status and quarantine | 🟡 — no schemas, effects or targets on a record | `agent_factory/registry/capability_registry.py` |
 | Skill quarantine and security findings | ✅ | `agent_factory/security/` |
+| Layer 1 Solution Complexity Triage (No-Agent, Workflow, Agent, Multi-Agent) | ✅ | `agent_factory/control_plane/intake.py` |
+| Layer 1 Token & Cost Feasibility Estimator (15x multi-agent multiplier) | ✅ | `agent_factory/control_plane/intake.py` |
+| Layer 1 Intent Capture & Clarification Engine | ✅ | `agent_factory/control_plane/intake.py` |
+| Layer 2 Agent Pattern Library & A2A Topology Generator | ✅ | `agent_factory/workbench/pattern_library.py` |
+| Layer 2 Skill Packaging (conforming to agentskills.io S8 specification) | ✅ | `agent_factory/workbench/skill_packager.py` |
+| Layer 6 OWASP Top 10 for Agentic Applications Threat Modeler | ✅ | `agent_factory/security/threat_modeler.py` |
 
 ### Workbench and runtime
 
 | Capability | Status | Where |
 |---|---|---|
 | Ephemeral isolated workspace provisioning | ✅ | `agent_factory/workbench/workspace.py` |
-| Code and test synthesis | 🔴 **Blocking defect** — emits one hardcoded `DataAnomalyAnalyzer` CSV agent regardless of the brief | `agent_factory/workbench/code_generator.py`, `test_generator.py` |
+| Code and test synthesis | ✅ | Pattern-driven generator synthesizing architecture-specific implementations (`router`, `orchestrator_worker`, `evaluator_optimizer`, `prompt_chain`, `data_processor`) in `agent_factory/workbench/code_generator.py` |
 | Sandboxed local OS process execution with wall-clock limit | ✅ | `agent_factory/runtime/local_process.py` |
 | Deterministic graders (exit code, file existence, byte size, JSON structure, Markdown structure, secret leak) | ✅ | `agent_factory/evals/graders.py` |
 | Evaluation runner | 🟡 — real process execution, but a single hardcoded case set | `agent_factory/evals/runner.py` |

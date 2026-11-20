@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -10,6 +11,9 @@ import {
   scaffoldRequirementsTemplate,
   importMcpToolDefinition,
   runDoctorCheck,
+  triageSolutionComplexity,
+  estimateTokenAndCostFeasibility,
+  evaluateAgentThreatModel,
 } from './core.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -85,6 +89,17 @@ Commands:
 
   doctor               Run comprehensive platform health check and port canary audit
     --store <path>         Custom store path (optional)
+
+  triage-solution      Triage problem complexity (No-Agent, Workflow, Agent, Multi-Agent)
+    --brief <text|path>    Task brief string or path to brief text file
+
+  estimate-cost        Estimate token consumption and economic feasibility
+    --brief <text|path>    Task brief string or path to brief text file
+    --tokens <count>       Base tokens (default: 1500)
+
+  threat-model         Evaluate blueprint against OWASP Top 10 for Agentic Applications
+    --revision <id>        Revision identifier (required)
+    --store <path>         Path to revision storage directory (default: ./store)
 `);
 }
 
@@ -271,6 +286,64 @@ function main() {
         if (report.overallStatus === 'UNHEALTHY') {
           process.exit(1);
         }
+        break;
+      }
+
+      case 'triage-solution': {
+        const briefInput = options.brief || '';
+        const briefText = fs.existsSync(path.resolve(process.cwd(), briefInput))
+          ? fs.readFileSync(path.resolve(process.cwd(), briefInput), 'utf-8')
+          : briefInput;
+        const triage = triageSolutionComplexity({ briefText });
+
+        console.log(`[TRIAGE-SOLUTION RESULT]`);
+        console.log(`  Solution Type:       ${triage.solutionType}`);
+        console.log(`  Recommended Pattern: ${triage.recommendedPattern}`);
+        console.log(`  Token Multiplier:    ${triage.tokenMultiplier}x`);
+        console.log(`  Reasoning:           ${triage.reasoning}`);
+        console.log(`  Simplicity:          ${triage.simplicityRationale}`);
+        break;
+      }
+
+      case 'estimate-cost': {
+        const briefInput = options.brief || '';
+        const briefText = fs.existsSync(path.resolve(process.cwd(), briefInput))
+          ? fs.readFileSync(path.resolve(process.cwd(), briefInput), 'utf-8')
+          : briefInput;
+        const baseTokens = options.tokens ? parseInt(options.tokens, 10) : 1500;
+        const est = estimateTokenAndCostFeasibility({ briefText, baseTokens });
+
+        console.log(`[ESTIMATE-COST RESULT]`);
+        console.log(`  Projected Tokens:    ~${est.projectedTokensPerRun}`);
+        console.log(`  Token Budget:        ${est.tokenBudget}`);
+        console.log(`  Status:              ${est.feasibilityStatus}`);
+        console.log(`  Feasible:            ${est.isFeasible ? 'YES' : 'NO'}`);
+        console.log(`  Recommendation:      ${est.recommendation}`);
+        break;
+      }
+
+      case 'threat-model': {
+        if (!options.revision) {
+          console.error('Error: --revision is required for threat-model.');
+          process.exit(1);
+        }
+        const revDir = path.join(storeDir, options.revision);
+        const manifestPath = path.join(revDir, 'manifest.json');
+        if (!fs.existsSync(manifestPath)) {
+          console.error(`Error: Manifest not found at ${manifestPath}`);
+          process.exit(1);
+        }
+        const rep = evaluateAgentThreatModel({ manifestPath });
+
+        console.log(`[THREAT-MODEL REPORT]`);
+        console.log(`  Revision:            ${rep.revisionId}`);
+        console.log(`  Risk Score:          ${rep.riskScore} / 10.0`);
+        console.log(`  Status:              ${rep.passed ? 'PASSED (LOW RISK)' : 'FAILED (SECURITY ACTIONS REQUIRED)'}`);
+        console.log(`  Findings Count:      ${rep.findings.length}`);
+        for (const f of rep.findings) {
+          console.log(`    [${f.riskLevel}] ${f.category}: ${f.description}`);
+        }
+        console.log(`  Recommendation:      ${rep.recommendation}`);
         break;
       }
 
