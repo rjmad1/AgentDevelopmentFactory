@@ -1,0 +1,337 @@
+{
+  "$defs": {
+    "AcceptanceSpec": {
+      "properties": {
+        "suite": {
+          "description": "Evaluation benchmark suite path or ID",
+          "title": "Suite",
+          "type": "string"
+        },
+        "required_checks": {
+          "description": "Mandatory quality checks",
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Checks",
+          "type": "array"
+        },
+        "minimum_efficacy": {
+          "default": 0.95,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Minimum Efficacy",
+          "type": "number"
+        },
+        "minimum_safety": {
+          "default": 1.0,
+          "description": "Safety must always be 1.0 (zero tolerance)",
+          "maximum": 1.0,
+          "minimum": 1.0,
+          "title": "Minimum Safety",
+          "type": "number"
+        }
+      },
+      "required": [
+        "suite"
+      ],
+      "title": "AcceptanceSpec",
+      "type": "object"
+    },
+    "DenialAction": {
+      "enum": [
+        "stop_and_report",
+        "quarantine",
+        "human_escalate"
+      ],
+      "title": "DenialAction",
+      "type": "string"
+    },
+    "EffectLevel": {
+      "enum": [
+        "READ_PUBLIC",
+        "READ_PRIVATE",
+        "WRITE_LOCAL_DRAFT",
+        "CHANGE_ACCOUNT",
+        "SEND_PUBLISH",
+        "SPEND_DELETE"
+      ],
+      "title": "EffectLevel",
+      "type": "string"
+    },
+    "InputParameter": {
+      "properties": {
+        "type": {
+          "description": "Data type: string, integer, float, boolean, list, object, file",
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "default": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "InputParameter",
+      "type": "object"
+    },
+    "LimitsSpec": {
+      "properties": {
+        "max_steps": {
+          "default": 20,
+          "description": "Maximum agent execution steps",
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Max Steps",
+          "type": "integer"
+        },
+        "max_wall_time_seconds": {
+          "default": 60,
+          "description": "Execution timeout in seconds",
+          "maximum": 3600,
+          "minimum": 5,
+          "title": "Max Wall Time Seconds",
+          "type": "integer"
+        },
+        "max_tokens": {
+          "default": 8000,
+          "description": "Maximum tokens per run",
+          "maximum": 128000,
+          "minimum": 100,
+          "title": "Max Tokens",
+          "type": "integer"
+        },
+        "paid_spend_ceiling": {
+          "default": 0.0,
+          "description": "Ceiling for paid external API spend ($0 = free only)",
+          "minimum": 0.0,
+          "title": "Paid Spend Ceiling",
+          "type": "number"
+        },
+        "max_parallel_workers": {
+          "default": 1,
+          "description": "Parallel worker limit",
+          "maximum": 16,
+          "minimum": 1,
+          "title": "Max Parallel Workers",
+          "type": "integer"
+        }
+      },
+      "title": "LimitsSpec",
+      "type": "object"
+    },
+    "OutputParameter": {
+      "properties": {
+        "type": {
+          "description": "Data type: file, markdown, json, text",
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "OutputParameter",
+      "type": "object"
+    },
+    "PolicySpec": {
+      "properties": {
+        "mode": {
+          "default": "draft_only",
+          "description": "Operating mode: draft_only, read_only, full_autonomous",
+          "title": "Mode",
+          "type": "string"
+        },
+        "data_classification": {
+          "default": "public_or_synthetic",
+          "description": "Data sensitivity tier",
+          "title": "Data Classification",
+          "type": "string"
+        },
+        "permitted_tools": {
+          "description": "Allowlist of tool IDs",
+          "items": {
+            "type": "string"
+          },
+          "title": "Permitted Tools",
+          "type": "array"
+        },
+        "permitted_effects": {
+          "description": "Permitted authority boundaries",
+          "items": {
+            "$ref": "#/$defs/EffectLevel"
+          },
+          "title": "Permitted Effects",
+          "type": "array"
+        },
+        "secrets": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "default": "none",
+          "description": "Named secret references only; never raw secrets",
+          "title": "Secrets"
+        },
+        "on_denial": {
+          "$ref": "#/$defs/DenialAction",
+          "default": "stop_and_report",
+          "description": "Action taken when a tool/guard denies access"
+        }
+      },
+      "title": "PolicySpec",
+      "type": "object"
+    },
+    "StateSpec": {
+      "properties": {
+        "durable_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Durable Fields",
+          "type": "array"
+        }
+      },
+      "title": "StateSpec",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "description": "Specification schema version",
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "agent_id": {
+      "description": "Unique machine-readable agent identifier",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "version": {
+      "default": "1.0.0",
+      "description": "Semantic version string",
+      "title": "Version",
+      "type": "string"
+    },
+    "owner": {
+      "default": "Admin",
+      "description": "Owner or stakeholder name",
+      "title": "Owner",
+      "type": "string"
+    },
+    "purpose": {
+      "description": "Clear statement of agent objective",
+      "minLength": 10,
+      "title": "Purpose",
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/InputParameter"
+      },
+      "title": "Inputs",
+      "type": "object"
+    },
+    "outputs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/OutputParameter"
+      },
+      "title": "Outputs",
+      "type": "object"
+    },
+    "policy": {
+      "$ref": "#/$defs/PolicySpec"
+    },
+    "limits": {
+      "$ref": "#/$defs/LimitsSpec"
+    },
+    "state": {
+      "$ref": "#/$defs/StateSpec"
+    },
+    "acceptance": {
+      "$ref": "#/$defs/AcceptanceSpec"
+    },
+    "targets": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Targets",
+      "type": "object"
+    }
+  },
+  "required": [
+    "agent_id",
+    "purpose",
+    "acceptance"
+  ],
+  "title": "UniversalAgentSpec",
+  "type": "object"
+}

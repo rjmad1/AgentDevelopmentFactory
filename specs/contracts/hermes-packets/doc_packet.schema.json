@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HermesCommunicatorDocPacket",
+  "description": "Minimal extraction of code exports, CLI help signatures, and changelog mutations delivered to Hermes Communicator to maintain documentation parallelly.",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "timestamp",
+    "git_head",
+    "cli_help_text",
+    "exported_core_functions",
+    "recent_changelog_diff"
+  ],
+  "properties": {
+    "packet_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "git_head": {
+      "type": "string"
+    },
+    "cli_help_text": {
+      "type": "string"
+    },
+    "exported_core_functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "signature"],
+        "properties": {
+          "name": { "type": "string" },
+          "signature": { "type": "string" },
+          "doc": { "type": "string" }
+        }
+      }
+    },
+    "recent_changelog_diff": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
