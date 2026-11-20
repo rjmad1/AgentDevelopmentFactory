@@ -24,5 +24,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Run CI Suite (Dual Repeatable Tests + Contract Lint)
+      - name: Run CI Suite (Dual Repeatable Tests + Contract Lint + Evals)
+        env:
+          LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+          LANGCHAIN_PROJECT: ${{ secrets.LANGCHAIN_PROJECT }}
         run: npm run ci

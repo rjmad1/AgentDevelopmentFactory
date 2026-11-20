@@ -1,0 +1,66 @@
+site_name: Agent Development Factory
+site_description: Meta-product that transforms workflow briefs into inspectable, portable, and verifiable Agent Build Packs.
+site_author: Raja Jeevan Kumar Maduri
+repo_url: https://github.com/rjmad1/AgentDevelopmentFactory
+repo_name: rjmad1/AgentDevelopmentFactory
+site_url: https://rjmad1.github.io/AgentDevelopmentFactory/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.arithmatex:
+      generic: true
+  - tables
+  - attr_list
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Overview: index.md
+  - Architecture & Governance:
+      - Product Contract: factory_product_contract.md
+      - Capability & Acceptance Map: factory_capability_and_acceptance_map.md
+      - Development Pipeline Playbook: DEVELOPMENT_PIPELINE.md
+      - Persona Opportunity Map: factory_persona_opportunity_map.md
+  - Walkthroughs:
+      - Paper Interaction Walkthrough: factory_paper_interaction_walkthrough.md
+  - API Reference:
+      - Core Engine: api/core.md
+      - CLI Reference: api/cli.md

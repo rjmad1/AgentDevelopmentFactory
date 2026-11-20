@@ -54,10 +54,17 @@ function scanDirJson(dirRel) {
 checkJsSyntax('src/core.js');
 checkJsSyntax('src/cli.js');
 checkJsSyntax('test/runner.js');
+checkJsSyntax('test/evals/runner.js');
+checkJsSyntax('test/evals/langsmith-client.js');
+checkJsSyntax('scripts/generate-api-docs.js');
+checkJsSyntax('scripts/bundle-critic-packet.js');
+checkJsSyntax('scripts/bundle-verifier-packet.js');
+checkJsSyntax('scripts/bundle-doc-packet.js');
 
-// 2. Check JSON files in fixtures and schemas
+// 2. Check JSON files in fixtures, schemas, and evals
 scanDirJson('fixtures');
 scanDirJson('schemas');
+scanDirJson('test/evals');
 checkJsonSyntax('package.json');
 
 console.log('======================================================================');

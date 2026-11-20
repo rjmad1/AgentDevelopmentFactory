@@ -1,16 +1,18 @@
 {
   "name": "agent-development-factory",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "private": true,
   "description": "Agent Development Factory: Bounded authoring engine, verifiable evidence ledger, and parallel agent pipeline",
   "scripts": {
     "test": "node test/runner.js",
     "lint": "node scripts/lint-contracts.js",
+    "docs:gen": "node scripts/generate-api-docs.js",
+    "eval": "node test/evals/runner.js",
     "packet:critic": "node scripts/bundle-critic-packet.js",
     "packet:verifier": "node scripts/bundle-verifier-packet.js",
     "packet:doc": "node scripts/bundle-doc-packet.js",
     "packets": "npm run packet:critic && npm run packet:verifier && npm run packet:doc",
-    "ci": "node test/runner.js && node scripts/lint-contracts.js"
+    "ci": "node test/runner.js && node scripts/lint-contracts.js && node test/evals/runner.js && node scripts/generate-api-docs.js"
   }
 }
