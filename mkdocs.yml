@@ -1,0 +1,92 @@
+site_name: Agent Development Factory
+site_description: Autonomous, Vendor-Agnostic Agent Development Factory & Zero-Cost CI/CD Pipeline
+site_url: https://rjmad1.github.io/AgentDevelopmentFactory/
+repo_name: rjmad1/AgentDevelopmentFactory
+repo_url: https://github.com/rjmad1/AgentDevelopmentFactory
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [.]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: true
+            merge_init_into_class: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+
+nav:
+  - Overview: index.md
+  - Architecture:
+      - Master Architecture: architecture/master.md
+      - Three-Plane Model: architecture/three_plane.md
+      - Component Architecture: architecture/components.md
+      - Evaluation Framework: architecture/evaluations.md
+      - Security & Policies: architecture/security.md
+  - Verification & CI/CD:
+      - Zero-Cost CI/CD Pipeline: verification/pipeline.md
+      - Deep Evaluator & Gates: verification/deep_evaluator.md
+      - LangSmith Free Tier Telemetry: verification/langsmith.md
+  - Guides & Runbooks:
+      - Getting Started: guides/getting_started.md
+      - Operations Runbook: guides/operations.md
+      - Recovery Runbook: guides/recovery.md
+  - API Reference:
+      - Control Plane: api/control_plane.md
+      - Specifications & Schema: api/specs.md
+      - Workbench: api/workbench.md
+      - Evaluations & Graders: api/evals.md
+      - Runtime & Process: api/runtime.md
+      - Security & Redaction: api/security.md
+      - Registry & Discovery: api/registry.md
+      - Provider Adapters: api/adapters.md
+      - CLI: api/cli.md
+  - Authoring Slice:
+      - Product Contract: authoring/contract.md
+      - Persona & Opportunities: authoring/persona_map.md
+      - Acceptance Map: authoring/acceptance_map.md

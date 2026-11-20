@@ -1,0 +1,308 @@
+{
+  "cap_runtime_python": {
+    "id": "cap_runtime_python",
+    "kind": "RUNTIME",
+    "name": "python",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "Python Execution Environment",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Python315\\python.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.760798+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_tool_git": {
+    "id": "cap_tool_git",
+    "kind": "TOOL",
+    "name": "git",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "Git Version Control",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Program Files\\Git\\cmd\\git.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.783534+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_tool_uv": {
+    "id": "cap_tool_uv",
+    "kind": "TOOL",
+    "name": "uv",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "uv Fast Python Package Manager",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Users\\rajaj\\.local\\bin\\uv.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.787868+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_runtime_node": {
+    "id": "cap_runtime_node",
+    "kind": "RUNTIME",
+    "name": "node",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "Node.js JavaScript Runtime",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Program Files\\nodejs\\node.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.791722+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_runtime_docker": {
+    "id": "cap_runtime_docker",
+    "kind": "RUNTIME",
+    "name": "docker",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "Docker Container Engine",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.797477+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_provider_ollama": {
+    "id": "cap_provider_ollama",
+    "kind": "PROVIDER",
+    "name": "ollama",
+    "version": "system_installed",
+    "provider": "host_os",
+    "description": "Ollama Local Inference CLI",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Users\\rajaj\\AppData\\Local\\Programs\\Ollama\\ollama.EXE"
+    },
+    "registered_at": "2026-11-03T06:06:35.803658+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "shutil.which found executable on host PATH"
+  },
+  "cap_harness_hermes_agent": {
+    "id": "cap_harness_hermes_agent",
+    "kind": "HARNESS",
+    "name": "hermes-agent",
+    "version": "v0.22.6",
+    "provider": "nousresearch",
+    "description": "Hermes Agent coordinating execution harness",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "READ_PUBLIC",
+      "WRITE_LOCAL_DRAFT"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "path": "C:\\Users\\rajaj\\.local\\bin\\hermes.CMD",
+      "install_dir": "C:\\Users\\rajaj\\AppData\\Local\\hermes\\hermes-agent",
+      "commit": "f0d94882e89a"
+    },
+    "registered_at": "2026-11-03T06:06:35.808081+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "hermes --version returned v0.22.6 (2026.9.24)"
+  },
+  "cap_runtime_local_process": {
+    "id": "cap_runtime_local_process",
+    "kind": "RUNTIME",
+    "name": "local_process",
+    "version": "1.0.0",
+    "provider": "factory_core",
+    "description": "Standalone Python Subprocess Runtime with timeout & sandboxing",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "READ_PUBLIC",
+      "WRITE_LOCAL_DRAFT"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "portability_level": "P4"
+    },
+    "registered_at": "2026-11-03T06:06:35.809458+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "Verified factory core subprocess execution capability"
+  },
+  "cap_provider_omniroute": {
+    "id": "cap_provider_omniroute",
+    "kind": "PROVIDER",
+    "name": "OmniRoute Gateway",
+    "version": "1.0.0",
+    "provider": "omniroute_local",
+    "description": "Local multi-provider model routing gateway (OpenAI-compatible)",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "endpoint": "http://127.0.0.1:20128/v1",
+      "port": 20128
+    },
+    "registered_at": "2026-11-03T06:06:35.813122+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "TCP port 20128 probe succeeded"
+  },
+  "cap_model_omniroute_hermes_reasoning": {
+    "id": "cap_model_omniroute_hermes_reasoning",
+    "kind": "MODEL",
+    "name": "hermes-reasoning",
+    "version": "1.0.0",
+    "provider": "omniroute",
+    "description": "Primary reasoning model routed via OmniRoute",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [
+      "cap_provider_omniroute"
+    ],
+    "metadata": {
+      "gateway": "http://127.0.0.1:20128/v1",
+      "context_window": 32768,
+      "supports_tools": true
+    },
+    "registered_at": "2026-11-03T06:06:35.814794+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "Hermes primary model configured to hermes-reasoning via omniroute"
+  },
+  "cap_provider_freellmapi": {
+    "id": "cap_provider_freellmapi",
+    "kind": "PROVIDER",
+    "name": "FreeLLMAPI",
+    "version": "1.0.0",
+    "provider": "freellmapi_local",
+    "description": "Local free-capacity LLM API gateway (Port 31415)",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "endpoint": "http://127.0.0.1:31415/v1",
+      "port": 31415
+    },
+    "registered_at": "2026-11-03T06:06:35.816858+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "TCP port 31415 probe succeeded"
+  },
+  "cap_tool_read_local_csv": {
+    "id": "cap_tool_read_local_csv",
+    "kind": "TOOL",
+    "name": "read_local_csv",
+    "version": "1.0.0",
+    "provider": "factory_core",
+    "description": "Reads and parses local CSV tabular datasets",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "READ_PUBLIC"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "effects": [
+        "READ_PUBLIC"
+      ]
+    },
+    "registered_at": "2026-11-03T06:06:35.818347+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "Factory core standard verified tool implementation"
+  },
+  "cap_tool_compute_statistics": {
+    "id": "cap_tool_compute_statistics",
+    "kind": "TOOL",
+    "name": "compute_statistics",
+    "version": "1.0.0",
+    "provider": "factory_core",
+    "description": "Calculates column statistics, null counts, and Z-score outliers",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "READ_PUBLIC"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "effects": [
+        "READ_PUBLIC"
+      ]
+    },
+    "registered_at": "2026-11-03T06:06:35.819574+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "Factory core standard verified tool implementation"
+  },
+  "cap_tool_write_workspace_artifact": {
+    "id": "cap_tool_write_workspace_artifact",
+    "kind": "TOOL",
+    "name": "write_workspace_artifact",
+    "version": "1.0.0",
+    "provider": "factory_core",
+    "description": "Writes output reports to workspace artifacts directory",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "WRITE_LOCAL_DRAFT"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "effects": [
+        "WRITE_LOCAL_DRAFT"
+      ]
+    },
+    "registered_at": "2026-11-03T06:06:35.821622+00:00",
+    "last_verified_at": null,
+    "verification_evidence": "Factory core standard verified tool implementation"
+  }
+}

@@ -1,6 +1,33 @@
+# Dependencies
 node_modules/
+.venv/
+venv/
+env/
+
+# Test runs & transient stores
 test-runs/
 test-store/
 review-*/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+*.coverage
+htmlcov/
+.tox/
+
+# Builds & Documentation
+site/
+dist/
+build/
+*.egg-info/
+
+# Databases & Runtime State (transient)
+data/*.db
+data/*.sqlite
+data/*.jsonl
+
+# Logs & OS artifacts
 *.log
 .DS_Store
+Thumbs.db

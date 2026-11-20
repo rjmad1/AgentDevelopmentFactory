@@ -1,109 +1,199 @@
-# Agent Development Factory (Authoring Slice)
+# Agent Development Factory
 
-The **Agent Development Factory** is a meta-product that transforms business-workflow briefs into inspectable, portable, and verifiable Agent Build Packs.
+[![Zero-Cost CI/CD](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml/badge.svg)](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml)
+[![Pages Deployment](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml/badge.svg?branch=gh-pages)](https://rjmad1.github.io/AgentDevelopmentFactory/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 20+](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs--material-purple.svg)](https://rjmad1.github.io/AgentDevelopmentFactory/)
 
-This repository contains the bounded first **Authoring Slice** — a zero-dependency, pure Node.js CLI that exercises the foundational lifecycle:
+**Agent Development Factory** is an enterprise-grade meta-product that transforms business-workflow briefs into inspectable, portable, safe, and verifiable **Agent Build Packs**.
 
-$$\text{Brief} \longrightarrow \text{Structured Requirements} \longrightarrow \text{Inspectable Specification \& Manifest} \longrightarrow \text{Append-Only Evidence Ledger} \longrightarrow \text{Immutable Revisions}$$
-
----
-
-## Key Invariants & Architectural Capabilities
-
-1. **Explicit Triaged Requirements Ledger:**
-   - **CONFIRMED:** Requires explicit supplied human confirmation assertions (`assertionType: "SUPPLIED_HUMAN_ASSERTION"`, `authenticated: false`). The CLI records supplied assertions for provenance; it does not authenticate human identity or assert unverified executive approvals.
-   - **PROPOSED:** Inferred defaults or template-suggested rules, explicitly tagged with inference rationale and kept awaiting human sign-off.
-   - **UNRESOLVED:** Explicit open ambiguities and candidate choices. The Factory strictly refuses to silently invent business rules or fill gaps with hidden defaults.
-
-2. **Immutable Revisions by Policy:**
-   - Snapshots are created exclusively and immutably (`exclusive` filesystem directory creation).
-   - Revisions link to optional parent revisions via SHA-256 dependency chains.
-   - A subsequent revision (`rev-002`) cannot mutate or overwrite any artifact in a prior revision (`rev-001`).
-
-3. **Append-Only Evidence Ledger & Divergence Detection:**
-   - `check_events.jsonl` serves as the authoritative append-only log of check executions.
-   - `evidence.json` serves as the materialized ledger recording check definitions, initial statuses (`NOT RUN` / `BLOCKED`), execution counts, and run histories.
-   - `verifyEvidenceConsistency()` performs line-by-line parity auditing between the event log and ledger, detecting and reporting discrepancies without silent repair or truncation.
-
-4. **Checker Implementation Dependencies & Invalidation:**
-   - Check definitions record the SHA-256 of the checker engine rules and version (`0.3.0`).
-   - If either artifact inputs or the checker implementation change, active applicability is automatically invalidated to `STALE` while preserving immutable historical execution logs.
-
-5. **Real Filesystem Containment:**
-   - `assertRealFsContainment()` resolves native filesystem paths (`realpath`) and walks ancestor directories to trap and reject symbolic link, directory junction, or path traversal escapes.
+Designed under a **Zero-Cost Software Architecture**, the factory integrates **GitHub Actions** as its central automation engine, executes automated verification test suites using **Deep Evaluator** and **LangSmith's Free Tier**, and employs **MkDocs** with the **mkdocstrings** plugin to auto-generate API documentation directly from source code docstrings, syncing them continuously to **GitHub Pages**.
 
 ---
 
-## Directory Structure
+## 🏛️ System Architecture
+
+The factory enforces strict separation of responsibilities across a **Three-Plane Architecture**, paired with a fast, deterministic Authoring Slice:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        1. CONTROL PLANE                                │
+│  - Request Intake & Semantic Classification                            │
+│  - Universal Agent Specification (agent.yaml / Pydantic v2)            │
+│  - Finite State Machine Orchestrator (11 Lifecycle Stages)             │
+│  - Risk-Based Human Approval Enforcement (Low / Medium / High)         │
+│  - Append-Only Task Ledger & Audit Event Stream                        │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │ Dispatches Tasks / Injects Config
+                                   ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        2. WORKBENCH PLANE                              │
+│  - Isolated Workspace Sandbox (Ephemeral Directory Containment)        │
+│  - Deterministic Agent Code Generator                                  │
+│  - Automated Test Suite Synthesizer (pytest fixtures & contracts)      │
+│  - Candidate Release Packager & Checksum Hasher                        │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │ Emits Artifacts & Candidate Code
+                                   ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                 3. VERIFICATION & RUNTIME PLANE                        │
+│  - Sandboxed Subprocess Runtime (Timeouts, Quotas, Streaming)          │
+│  - Multi-Metric Graders (ExitCode, Markdown, JSON, Secret Leakage)     │
+│  - Deep Evaluator & LangSmith Free Tier Observability                  │
+│  - Automated Self-Healing Remediation Loop (Max 3 Diagnostic Retries)  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ Zero-Cost CI/CD Automation Pipeline
+
+Continuous verification and documentation are executed on GitHub-hosted runners at zero software cost:
+
+```mermaid
+flowchart LR
+    Push["git push / PR"] --> GA["GitHub Actions Runner\n(ubuntu-latest)"]
+    GA --> VJob["verify Job"]
+    GA --> DJob["docs Job\n(on push main)"]
+    
+    subgraph VJob["Automated Verification & Evals"]
+        NTest["13-Test Repeatable Suite\n(Node.js Authoring Slice)"]
+        PyLint["Syntax Compilation\n(python -m py_compile)"]
+        PyTest["28-Test Pytest Suite\n(Control Plane, Security, Runtime)"]
+        DeepEval["Deep Evaluator\n(scripts/run_evals.py)"]
+        LangSmith["LangSmith Free Tier Tracing\n(5,000 monthly traces)"]
+        NTest --> PyLint --> PyTest --> DeepEval --> LangSmith
+    end
+
+    subgraph DJob["Evergreen Documentation"]
+        MkBuild["MkDocs + mkdocstrings\n(Extracts Python API docs)"]
+        GHPages["GitHub Pages Deployment\n(https://rjmad1.github.io/AgentDevelopmentFactory/)"]
+        MkBuild --> GHPages
+    end
+
+    VJob -->|All Gates Pass| DJob
+```
+
+### Automation Invariants
+1. **Zero Software Cost:** Leverages free public GitHub Actions runners and LangSmith's Free Developer Tier (5,000 monthly traces).
+2. **Quality Gate Enforcement:** Pull requests and pushes are gated on strict score thresholds (Efficacy $\ge 0.95$, Safety $= 1.00$, Cost $= \$0.00$).
+3. **Evergreen Documentation:** Any update to Python docstrings immediately propagates to GitHub Pages.
+
+---
+
+## 🎯 Verification Quality Gates & Deep Evaluator
+
+Every candidate agent undergoes deterministic multi-metric evaluation via `scripts/run_evals.py`:
+
+| Quality Metric | Formula / Standard | Threshold | Enforced Behavior |
+|---|---|---|---|
+| **Efficacy** | $0.4 \times \text{Completion} + 0.3 \times \text{Schema} + 0.3 \times \text{Accuracy}$ | $\ge 0.95$ | Fails pipeline if artifacts or structure deviate |
+| **Safety** | Regex scan for raw credentials (`sk-*`, `AKIA*`) | $= 1.00$ | Zero tolerance: aborts immediately on leak |
+| **Efficiency / Cost** | Runtime execution latency & token spend | $\$0.00$ | Validates zero-cost execution envelope |
+
+### LangSmith Free Tier Telemetry
+- **Cloud Mode:** When `LANGSMITH_API_KEY` is configured in repository secrets, evaluation runs and step metadata are recorded in LangSmith project `agent-development-factory`.
+- **Local Fallback:** When run offline or in fork PRs without secrets, the adapter falls back cleanly to local Deep Evaluator mode with zero failures.
+
+---
+
+## 📚 Evergreen Documentation Engine (MkDocs + `mkdocstrings`)
+
+The documentation engine automatically inspects Python modules to build an interactive documentation portal:
+
+- **Source:** Code docstrings in `agent_factory/` formatted with Google/PEP 257 conventions.
+- **Theme:** `mkdocs-material` with dark/light mode toggle and responsive mobile design.
+- **API Coverage:** Full reference pages for Control Plane, Specs, Workbench, Evaluations, Runtime, Security, Registry, and Adapters.
+- **Live URL:** [https://rjmad1.github.io/AgentDevelopmentFactory/](https://rjmad1.github.io/AgentDevelopmentFactory/)
+
+---
+
+## 📁 Repository Directory Structure
 
 ```
 .
-├── src/
-│   ├── core.js           # Core authoring engine, hashing, containment & evidence
-│   └── cli.js            # Standalone Node.js CLI
-├── fixtures/             # Synthetic test briefs and structured requirements
-│   ├── synthetic_brief_v1.txt
-│   ├── synthetic_requirements_v1.json
-│   ├── synthetic_requirements_v2.json
-│   ├── synthetic_requirements_unconfirmed.json
-│   └── synthetic_requirements_forbidden_name.json
-├── test/
-│   └── runner.js         # 13-test repeatable verification test suite
-├── docs/                 # Product contracts and planning architecture
-├── package.json
-└── README.md
+├── .github/
+│   └── workflows/
+│       └── pipeline.yml       # Central GitHub Actions automation engine
+├── agent_factory/             # Core Python Agent Development Factory
+│   ├── adapters/              # Provider adapters (OmniRoute, Hermes, Base)
+│   ├── control_plane/         # Intake, lifecycle FSM, orchestrator, task ledger
+│   ├── evals/                 # Graders, metrics, Deep Evaluator, LangSmith adapter
+│   ├── registry/              # Capability registry, environment discovery
+│   ├── remediation/           # Automated diagnostic & repair engine
+│   ├── runtime/               # Local process runner, sandboxing, timeouts
+│   ├── security/              # Secret redactor, approval gate, AST quarantine
+│   ├── specs/                 # Pydantic v2 schemas and validation rules
+│   ├── workbench/             # Workspace provisioner, code & test generators
+│   └── cli.py                 # Factory CLI interface
+├── deployments/               # Synthesized agent deployments
+├── docs/                      # Technical documentation & authoring contracts
+│   ├── api/                   # mkdocstrings auto-generated API pages
+│   ├── architecture/          # Architecture blueprints & three-plane specifications
+│   ├── authoring/             # Authoring slice contracts and acceptance maps
+│   ├── guides/                # Operations and recovery runbooks
+│   └── verification/          # CI/CD, Deep Evaluator, and LangSmith documentation
+├── fixtures/                  # Synthetic test briefs and requirement JSONs
+├── reports/                   # Evaluation results and verification ledgers
+├── scripts/
+│   └── run_evals.py           # Deep Evaluator and LangSmith evaluation runner
+├── src/                       # Node.js Authoring Slice engine & CLI
+├── test/                      # Repeatable 13-test Authoring Slice runner
+├── tests/                     # 28-test Pytest unit & integration test suite
+├── mkdocs.yml                 # MkDocs + mkdocstrings configuration
+├── pytest.ini                 # Pytest runner configuration
+├── requirements.txt           # Python dependencies
+└── package.json               # Node.js authoring slice metadata
 ```
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
-- Node.js (v20+ or v26+)
-- Zero external package dependencies (uses `node:fs`, `node:path`, `node:crypto`, `node:child_process`).
+### 1. Installation
 
-### Running the CLI
-
-#### 1. Initialize a Revision
 ```bash
-node src/cli.js init-revision \
-  --brief fixtures/synthetic_brief_v1.txt \
-  --requirements fixtures/synthetic_requirements_v1.json \
-  --revision-id rev-001
+# Clone repository
+git clone https://github.com/rjmad1/AgentDevelopmentFactory.git
+cd AgentDevelopmentFactory
+
+# Setup Python 3.11 virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-#### 2. Run Static Validation Checks
+### 2. Execute Verification Suites
+
+Run the Python automated test suite:
 ```bash
-node src/cli.js run-check --revision rev-001 --check CHK-STATIC-SCHEMA
-node src/cli.js run-check --revision rev-001 --check CHK-REQUIREMENTS-TRIAGE
+pytest
 ```
 
-#### 3. Inspect Revision & Verify Consistency
-```bash
-node src/cli.js inspect --revision rev-001
-node src/cli.js verify-consistency --revision rev-001
-```
-
-#### 4. Initialize Child Revision with Parent Link
-```bash
-node src/cli.js init-revision \
-  --brief fixtures/synthetic_brief_v1.txt \
-  --requirements fixtures/synthetic_requirements_v2.json \
-  --revision-id rev-002 \
-  --parent-rev rev-001
-```
-
----
-
-## Running the Automated Test Suite
-
-Run the full 13-test suite (executed twice across separate fresh stores to verify repeatability):
+Run the Node.js repeatable authoring slice test runner:
 ```bash
 node test/runner.js
 ```
 
+### 3. Run Automated Deep Evaluator
+
+```bash
+python scripts/run_evals.py
+```
+
+### 4. Build and Preview Documentation
+
+```bash
+mkdocs serve
+```
+Browse to `http://localhost:8000` to explore the live API reference and architectural documentation.
+
 ---
 
-## Boundary Notice
+## 📄 License
 
-This authoring slice implements static data flow, document generation, and evidence ledger mechanics. It produces **no executable agent code, live tool adapters, or candidate runners**. Supervised runtime evaluation is in v1 product scope, but is held as a `BLOCKED` prerequisite in this authoring slice.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

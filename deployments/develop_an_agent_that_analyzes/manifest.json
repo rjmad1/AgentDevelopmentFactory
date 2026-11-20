@@ -1,0 +1,13 @@
+{
+  "manifest_version": "1.0",
+  "agent_id": "develop_an_agent_that_analyzes",
+  "version": "1.0.0",
+  "created_at": "2026-11-03T06:07:08.906755+00:00",
+  "owner": "Raja",
+  "approval_token": "AUTO_APPROVED_LOW_RISK",
+  "evaluation_scores": {
+    "efficacy": 1.0,
+    "safety": 1.0
+  },
+  "file_count": 11
+}

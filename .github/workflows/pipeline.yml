@@ -1,0 +1,117 @@
+name: Zero-Cost CI/CD Pipeline & Evergreen Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  verify:
+    name: Automated Verification & Deep Evaluator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (Authoring Slice Test Runner)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Authoring Slice Repeatable Test Suite
+        run: |
+          echo "=== RUNNING AUTHORING SLICE 13-TEST SUITE ==="
+          node test/runner.js
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Syntax & Lint Verification
+        run: |
+          echo "=== VALIDATING PYTHON SYNTAX VIA PY_COMPILE ==="
+          python -m py_compile $(git ls-files '*.py')
+
+      - name: Run Automated Pytest Suite
+        run: |
+          echo "=== RUNNING 28-TEST UNIT & INTEGRATION SUITE ==="
+          pytest -v
+
+      - name: Run Deep Evaluator & LangSmith Free Tier Telemetry
+        env:
+          LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+          LANGSMITH_PROJECT: "agent-development-factory"
+          LANGCHAIN_TRACING_V2: "true"
+        run: |
+          echo "=== EXECUTING DEEP EVALUATOR VERIFICATION SUITE ==="
+          python scripts/run_evals.py
+
+      - name: Upload Evaluation Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-reports
+          path: reports/
+          retention-days: 14
+
+  docs:
+    name: Build & Deploy Documentation to GitHub Pages
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Documentation Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build MkDocs Site with mkdocstrings
+        run: |
+          echo "=== BUILDING EVERGREEN DOCUMENTATION ==="
+          mkdocs build --strict
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

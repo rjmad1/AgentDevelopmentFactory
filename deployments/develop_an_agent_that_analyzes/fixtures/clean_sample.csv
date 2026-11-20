@@ -1,0 +1,11 @@
+id,transaction_amount,account_status,city
+1,100.50,active,New York
+2,102.20,active,London
+3,98.40,active,Tokyo
+4,105.10,active,Paris
+5,99.80,active,Berlin
+6,101.00,active,Singapore
+7,103.50,active,Sydney
+8,97.90,active,Toronto
+9,104.20,active,Amsterdam
+10,100.00,active,Seoul

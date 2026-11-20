@@ -1,0 +1,14 @@
+# Agent Development Factory Core & Verification Dependencies
+pydantic>=2.5.0
+pyyaml>=6.0.1
+pytest>=7.4.0
+
+# Documentation Engine (MkDocs + mkdocstrings)
+mkdocs>=1.5.3
+mkdocs-material>=9.5.17
+mkdocstrings>=0.24.0
+mkdocstrings-python>=1.9.0
+pymdown-extensions>=10.7
+
+# Optional Observability & Linters
+ruff>=0.3.0

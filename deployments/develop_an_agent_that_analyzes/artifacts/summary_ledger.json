@@ -1,0 +1,62 @@
+{
+  "total_rows": 10,
+  "column_count": 4,
+  "columns": {
+    "id": {
+      "total_entries": 10,
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "is_numeric": true,
+      "mean": 5.5,
+      "std_dev": 2.8723,
+      "min": 1.0,
+      "max": 10.0
+    },
+    "transaction_amount": {
+      "total_entries": 10,
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "is_numeric": true,
+      "mean": 1590.2,
+      "std_dev": 4469.9337,
+      "min": 97.0,
+      "max": 15000.0
+    },
+    "account_status": {
+      "total_entries": 10,
+      "null_count": 1,
+      "null_percentage": 10.0,
+      "is_numeric": false
+    },
+    "city": {
+      "total_entries": 10,
+      "null_count": 1,
+      "null_percentage": 10.0,
+      "is_numeric": false
+    }
+  },
+  "anomaly_count": 3,
+  "anomalies": [
+    {
+      "type": "STATISTICAL_OUTLIER",
+      "column": "transaction_amount",
+      "row_index": 10,
+      "value": 15000.0,
+      "z_score": 3.0,
+      "severity": "MEDIUM"
+    },
+    {
+      "type": "MISSING_DATA",
+      "column": "account_status",
+      "count": 1,
+      "severity": "MEDIUM"
+    },
+    {
+      "type": "MISSING_DATA",
+      "column": "city",
+      "count": 1,
+      "severity": "MEDIUM"
+    }
+  ],
+  "analyzed_at": "2026-11-20T02:46:58.981704+00:00"
+}

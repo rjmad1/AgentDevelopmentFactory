@@ -1,0 +1,58 @@
+schema_version: 1
+agent_id: develop_an_agent_that_analyzes
+version: 1.0.0
+owner: Raja
+purpose: Develop an agent that analyzes a local collection of non-sensitive CSV files,
+  identifies data-quality anomalies, generates a structured report, and produces a
+  reproducible execution package.
+inputs:
+  input_data:
+    type: string
+    description: Path to target input dataset or parameters
+    required: true
+    default: null
+outputs:
+  report:
+    type: file
+    format: markdown
+    path: artifacts/report.md
+    description: Primary operational report
+  summary:
+    type: file
+    format: json
+    path: artifacts/summary.json
+    description: Structured outcome ledger
+policy:
+  mode: draft_only
+  data_classification: public_or_synthetic
+  permitted_tools:
+  - read_local_csv
+  - compute_statistics
+  - write_workspace_artifact
+  permitted_effects:
+  - READ_PUBLIC
+  - WRITE_LOCAL_DRAFT
+  secrets: none
+  on_denial: stop_and_report
+limits:
+  max_steps: 20
+  max_wall_time_seconds: 60
+  max_tokens: 8000
+  paid_spend_ceiling: 0.0
+  max_parallel_workers: 1
+state:
+  durable_fields:
+  - project_id
+  - stage
+  - evidence_refs
+acceptance:
+  suite: evals/standard_pack
+  required_checks:
+  - functional_correctness
+  - schema_compliance
+  - zero_unauthorized_effects
+  minimum_efficacy: 0.95
+  minimum_safety: 1.0
+targets:
+  local_process: candidate
+  hermes: candidate
