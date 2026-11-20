@@ -1,0 +1,53 @@
+[
+  {
+    "id": "REQ-001",
+    "title": "Triage Category Classification",
+    "statement": "The triage agent must categorize incoming inbound inquiries into exactly one of: Billing, Integration, or Outage.",
+    "status": "CONFIRMED",
+    "category": "functional",
+    "confirmation": {
+      "assertionType": "SUPPLIED_HUMAN_ASSERTION",
+      "authenticated": false,
+      "confirmedBy": "Synthetic-Reviewer-Alpha",
+      "confirmedAt": "2026-11-20T06:00:00Z",
+      "synthetic": true,
+      "note": "Validated in synthetic domain review."
+    }
+  },
+  {
+    "id": "REQ-002",
+    "title": "High-Priority SLA Routing Threshold",
+    "statement": "Billing inquiries marked urgent should be prioritized within a 15-minute response window.",
+    "status": "PROPOSED",
+    "category": "performance",
+    "proposedBy": "Factory-Inference-Engine",
+    "rationale": "Inferred from standard enterprise support tier templates. Awaiting human confirmation."
+  },
+  {
+    "id": "REQ-003",
+    "title": "Unsupported Language Handling",
+    "statement": "Handling policy for incoming inquiries in languages other than English.",
+    "status": "UNRESOLVED",
+    "category": "exception-handling",
+    "question": "When no translation tool is available, should foreign language inquiries be assigned to a general human review queue or sent an automated unsupported language response?",
+    "options": [
+      "Route directly to general human exception queue",
+      "Send automated multi-lingual notification asking for English resubmission"
+    ]
+  },
+  {
+    "id": "REQ-004",
+    "title": "Emergency Outage Alerting Dispatch",
+    "statement": "Any inquiry categorized as Outage must trigger a mock pager alert without requiring account validation.",
+    "status": "CONFIRMED",
+    "category": "boundary",
+    "confirmation": {
+      "assertionType": "SUPPLIED_HUMAN_ASSERTION",
+      "authenticated": false,
+      "confirmedBy": "Synthetic-Architect-Beta",
+      "confirmedAt": "2026-11-20T06:05:00Z",
+      "synthetic": true,
+      "note": "Approved mandatory safety routing rule."
+    }
+  }
+]

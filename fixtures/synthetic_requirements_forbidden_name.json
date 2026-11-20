@@ -1,0 +1,16 @@
+[
+  {
+    "id": "REQ-BAD-02",
+    "title": "Improper Authentication Claim",
+    "statement": "This fixture improperly claims verified human identity instead of remaining an unauthenticated assertion.",
+    "status": "CONFIRMED",
+    "category": "functional",
+    "confirmation": {
+      "assertionType": "SUPPLIED_HUMAN_ASSERTION",
+      "authenticated": true,
+      "confirmedBy": "Unverified-External-User",
+      "confirmedAt": "2026-11-20T06:00:00Z",
+      "synthetic": true
+    }
+  }
+]

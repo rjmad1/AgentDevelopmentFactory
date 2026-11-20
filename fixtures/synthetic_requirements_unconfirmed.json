@@ -1,0 +1,9 @@
+[
+  {
+    "id": "REQ-BAD-01",
+    "title": "Unconfirmed Promotion",
+    "statement": "An automated inference engine marked this requirement confirmed without human sign-off.",
+    "status": "CONFIRMED",
+    "category": "functional"
+  }
+]

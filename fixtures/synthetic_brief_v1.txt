@@ -1,0 +1,16 @@
+Synthetic Business Workflow Brief: Inbound Partner Inquiry Triage
+
+Context:
+A high-growth B2B fintech company receives incoming inquiries via an unauthenticated partner webhook.
+Inquiries vary across technical integration queries, billing tier disputes, and emergency outage reports.
+
+Intended Agent Behavior:
+1. Parse incoming partner payload and categorize into Billing, Integration, or Outage.
+2. If Billing, extract customer account identifier and route to partner tier queues.
+3. High priority billing issues must be flagged with SLA response thresholds.
+4. Outages must trigger emergency on-call alerting.
+
+Operational Boundaries & Constraints:
+- No automated database writes or financial refunds.
+- Unrecognized message formats must NOT be silently dropped or guessed.
+- Tools: Mock CRM lookup tool and Mock Pager tool only. No live external network connectivity.
