@@ -1,8 +1,9 @@
 site_name: Agent Development Factory
-site_description: Autonomous, Vendor-Agnostic Agent Development Factory & Zero-Cost CI/CD Pipeline
-site_url: https://rjmad1.github.io/AgentDevelopmentFactory/
+site_description: Meta-product transforming workflow briefs into inspectable, portable, safe, and verifiable Agent Build Packs.
+site_author: Raja Jeevan Kumar Maduri
 repo_name: rjmad1/AgentDevelopmentFactory
 repo_url: https://github.com/rjmad1/AgentDevelopmentFactory
+site_url: https://rjmad1.github.io/AgentDevelopmentFactory/
 edit_uri: edit/main/docs/
 
 theme:
@@ -47,7 +48,11 @@ plugins:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -56,13 +61,28 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
   - tables
   - attr_list
   - md_in_html
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Overview: index.md
-  - Architecture:
+  - Product Contracts & SDD:
+      - Product Contract: factory_product_contract.md
+      - Capability & Acceptance Map: factory_capability_and_acceptance_map.md
+      - Persona Opportunity Map: factory_persona_opportunity_map.md
+      - Paper Interaction Walkthrough: factory_paper_interaction_walkthrough.md
+      - Development Pipeline Playbook: DEVELOPMENT_PIPELINE.md
+      - Autonomous Engineering Loop: AUTONOMOUS_LOOP.md
+  - Platform Architecture:
       - Master Architecture: architecture/master.md
       - Three-Plane Model: architecture/three_plane.md
       - Component Architecture: architecture/components.md
@@ -72,12 +92,10 @@ nav:
       - Zero-Cost CI/CD Pipeline: verification/pipeline.md
       - Deep Evaluator & Gates: verification/deep_evaluator.md
       - LangSmith Free Tier Telemetry: verification/langsmith.md
-  - Guides & Runbooks:
-      - Getting Started: guides/getting_started.md
-      - Operations Runbook: guides/operations.md
-      - Recovery Runbook: guides/recovery.md
   - API Reference:
-      - Control Plane: api/control_plane.md
+      - Authoring Core Engine (JS): api/core.md
+      - CLI Reference: api/cli.md
+      - Control Plane (Python): api/control_plane.md
       - Specifications & Schema: api/specs.md
       - Workbench: api/workbench.md
       - Evaluations & Graders: api/evals.md
@@ -85,8 +103,7 @@ nav:
       - Security & Redaction: api/security.md
       - Registry & Discovery: api/registry.md
       - Provider Adapters: api/adapters.md
-      - CLI: api/cli.md
-  - Authoring Slice:
-      - Product Contract: authoring/contract.md
-      - Persona & Opportunities: authoring/persona_map.md
-      - Acceptance Map: authoring/acceptance_map.md
+  - Guides & Operations:
+      - Getting Started: guides/getting_started.md
+      - Operations Runbook: guides/operations.md
+      - Recovery Runbook: guides/recovery.md

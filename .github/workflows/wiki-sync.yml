@@ -1,0 +1,48 @@
+name: Auto-Sync GitHub Wiki
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - '.github/workflows/wiki-sync.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-wiki:
+    name: Sync Documentation to Wiki
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v4
+
+      - name: Checkout Wiki Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Documents into Wiki
+        run: |
+          cp docs/factory_product_contract.md wiki/Product-Contract.md
+          cp docs/factory_capability_and_acceptance_map.md wiki/Capability-and-Acceptance-Map.md
+          cp docs/factory_paper_interaction_walkthrough.md wiki/Paper-Interaction-Walkthrough.md
+          cp docs/factory_persona_opportunity_map.md wiki/Persona-Opportunity-Map.md
+          cp docs/DEVELOPMENT_PIPELINE.md wiki/Development-Pipeline-and-Hermes-Playbook.md
+          if [ -f docs/api/core.md ]; then cp docs/api/core.md wiki/CLI-and-API-Reference.md; fi
+          cd wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No documentation changes detected. Wiki is up to date."
+          else
+            git commit -m "docs(wiki): autonomous sync from main [skip ci]"
+            git push origin master
+          fi

@@ -1,36 +1,53 @@
 # Agent Development Factory
 
-[![Zero-Cost CI/CD](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml/badge.svg)](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml)
-[![Pages Deployment](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/pipeline.yml/badge.svg?branch=gh-pages)](https://rjmad1.github.io/AgentDevelopmentFactory/)
+[![Zero-Cost CI/CD](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/ci.yml/badge.svg)](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/ci.yml)
+[![Pages Deployment](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/docs.yml/badge.svg?branch=gh-pages)](https://rjmad1.github.io/AgentDevelopmentFactory/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js 18+](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Code Style](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-**Agent Development Factory** is an enterprise-grade meta-product that transforms business-workflow briefs into inspectable, portable, safe, and verifiable **Agent Build Packs**.
+Welcome to the **Agent Development Factory** documentation portal.
 
-The platform is designed under a **Zero-Cost Software Architecture**, pairing GitHub Actions automation, Deep Evaluator local quality gates, LangSmith Free Tier telemetry, and evergreen MkDocs documentation deployed directly to GitHub Pages.
+The Factory transforms natural-language workflow briefs into inspectable, portable, safe, and verifiable **Agent Build Packs**, backed by an append-only evidence ledger, deterministic verification gates, and an asynchronous multi-agent pipeline.
+
+$$\text{Brief} \longrightarrow \text{Structured Requirements} \longrightarrow \text{Inspectable Specification \& Manifest} \longrightarrow \text{Append-Only Evidence Ledger} \longrightarrow \text{Deterministic Verification \& Build}$$
 
 ---
 
-## 🏛️ Architecture Highlights
+## 🏛️ Tri-Tier & Three-Plane Architecture
 
-The factory operates a **Three-Plane Architecture** that enforces strict separation of responsibilities:
+The factory operates a dual-tier modular architecture that enforces strict separation of responsibilities:
+
+1. **Tier 1 — Fast Authoring & Triage Front-End (`src/core.js`, `src/cli.js`)**:
+   - Zero-dependency Node.js CLI.
+   - Lexical and real filesystem containment validation.
+   - Deterministic SHA-256 requirement triage (`CONFIRMED`, `PROPOSED`, `UNRESOLVED`).
+   - Append-only check event stream (`check_events.jsonl`) and immutable revision store.
+2. **Tier 2 — Industrial Execution & Verification Back-End (`agent_factory/`)**:
+   - Three-Plane Architecture (Control Plane, Workbench Plane, Runtime & Verification Plane).
+   - Universal Agent Spec validation (Pydantic & JSONSchema).
+   - Ephemeral isolated workspaces and code/test synthesis.
+   - Deep Evaluator local grading and LangSmith Free Tier telemetry.
+3. **Tier 3 — Autonomous Fleet Governance (`.hermes/AUTONOMOUS_FLEET.md`, `scripts/`)**:
+   - Watcher loop (`scripts/autonomous-loop.js`) and pre-commit hooks.
+   - Deterministic packet bundlers for Critic, Verifier, and Documentation agents.
+   - GitHub Actions CI/CD and automated Wiki sync.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                       CONTROL PLANE                         │
-│  - Request Intake & Triage                                  │
+│              AUTHORING & CONTROL PLANE (Tier 1 & 2)         │
+│  - Brief Intake, Triage (CONFIRMED / PROPOSED)              │
+│  - Immutable Revision Stores (SHA-256)                      │
 │  - Task Ledger (Append-Only Event Stream)                   │
 │  - Orchestrator Engine & State Transitions                  │
 └──────────────────────────────┬──────────────────────────────┘
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      WORKBENCH PLANE                        │
+│                 WORKBENCH PLANE (Execution)                 │
 │  - Ephemeral Isolated Workspaces                            │
-│  - Deterministic Code Generator                             │
-│  - Test Suite Synthesizer                                   │
-│  - Candidate Release Packager                               │
+│  - Deterministic Code Generator & Test Synthesizer          │
+│  - Candidate Release Packager & Checksum Verifier           │
 └──────────────────────────────┬──────────────────────────────┘
                                │
                                ▼
@@ -38,59 +55,52 @@ The factory operates a **Three-Plane Architecture** that enforces strict separat
 │                 VERIFICATION & RUNTIME PLANE                │
 │  - Sandboxed Local Process Execution                        │
 │  - Multi-Metric Graders (ExitCode, Markdown, JSON, AST)     │
-│  - Deep Evaluator & LangSmith Free Tier Observability       │
-│  - Self-Healing Remediation Loop (Max 3 Attempts)           │
+│  - Deep Evaluator & LangSmith Observability                 │
+│  - Self-Healing Remediation Loop                            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 Key Capabilities
+## 📚 Quick Navigation
 
-1. **Deterministic Verification Engine (Deep Evaluator)**:
-   Every agent candidate is rigorously evaluated against discrete quality gates: Efficacy ($\ge 0.95$), Safety ($= 1.00$, zero unredacted secrets), and Cost ($\$0.00$ software cost).
-2. **LangSmith Free Tier Integration**:
-   Native telemetry adapter capturing execution traces, inputs, outputs, and quality vectors into LangSmith Developer Tier (5,000 monthly traces at zero cost), with automatic offline fallback to local Deep Evaluator mode.
-3. **Automated Source Documentation (`mkdocstrings`)**:
-   Evergreen API documentation generated directly from Python source code type annotations and docstrings, continuously deployed to GitHub Pages on every push.
-4. **Append-Only Evidence Ledger**:
-   Cryptographic hashing (SHA-256) of requirements, specifications, artifacts, and test runs ensures full reproducibility and auditability without state loss.
-5. **Defense-in-Depth Security**:
-   Automated secret redactor, AST quarantine sandbox, and approval gates for elevated-effect operations (filesystem write, network, process execution).
+### Product Contracts & Specifications
+* **[Product Contract](factory_product_contract.md)**: Reconciled v1 scope, supervised evaluation capability, multi-dimensional evidence architecture, and hard disqualification gates.
+* **[Capability & Acceptance Map](factory_capability_and_acceptance_map.md)**: Core capabilities, inputs/outputs, user decision points, and observable criteria.
+* **[Paper Interaction Walkthrough](factory_paper_interaction_walkthrough.md)**: Concrete interaction dialogue tracing intake, clarification, spec sign-off, and revision cycles.
+* **[Development Pipeline Playbook](DEVELOPMENT_PIPELINE.md)**: The Tri-Tier architecture, Hermes agent fleet, ZipAI token protocol, and developer SOP.
+* **[Persona Opportunity Map](factory_persona_opportunity_map.md)**: Persona analysis, Builderpack competitive assessment, and progressive disclosure model.
+
+### API & Engine References
+* **[Authoring Core API (`src/core.js`)](api/core.md)**: Zero-dependency hashing, containment, and triage engine.
+* **[Command-Line Interfaces](api/cli.md)**: Usage guides for both Node.js and Python CLIs.
+* **[Control Plane API](api/control_plane.md)**: Intake, lifecycle, orchestrator, and task ledger.
+* **[Evaluations API](api/evals.md)**: Deep Evaluator, LangSmith adapter, metrics, and test runner.
+* **[Security Architecture](api/security.md)**: Quarantine sandbox, approval gates, and secret redactor.
 
 ---
 
 ## 📦 Quick Start
 
-### 1. Installation
-Clone the repository and set up a virtual environment:
-
+### 1. Authoring CLI (Node.js)
 ```bash
-git clone https://github.com/rjmad1/AgentDevelopmentFactory.git
-cd AgentDevelopmentFactory
+# Run integrity tests
+node test/runner.js
+
+# Initialize a new revision
+node src/cli.js init-revision --brief fixtures/sample_brief.txt --requirements fixtures/sample_reqs.json --revision-id rev-001
+```
+
+### 2. Platform Back-End (Python)
+```bash
+# Set up Python virtual environment
 python -m venv .venv
-source .venv/bin/activate  # Or .venv\Scripts\activate on Windows
+.venv\Scripts\activate
 pip install -r requirements.txt
-```
 
-### 2. Run Test Suite
-Run the full 28-test verification suite:
-
-```bash
+# Run Python verification suite
 pytest tests/
-```
 
-### 3. Run Automated Deep Evaluator
-Evaluate deployed agents against quality gates:
-
-```bash
+# Run automated Deep Evaluator
 python scripts/run_evals.py
 ```
-
-### 4. Build & Preview Documentation
-Launch local documentation server:
-
-```bash
-mkdocs serve
-```
-Visit `http://127.0.0.1:8000` to browse live documentation.

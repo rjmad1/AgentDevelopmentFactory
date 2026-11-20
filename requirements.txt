@@ -1,6 +1,7 @@
 # Agent Development Factory Core & Verification Dependencies
 pydantic>=2.5.0
 pyyaml>=6.0.1
+jsonschema>=4.20.0
 pytest>=7.4.0
 
 # Documentation Engine (MkDocs + mkdocstrings)

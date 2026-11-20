@@ -4,10 +4,12 @@ node_modules/
 venv/
 env/
 
-# Test runs & transient stores
+# Test runs, transient stores & review artifacts
+store/
 test-runs/
 test-store/
 review-*/
+.hermes/packets/
 .pytest_cache/
 __pycache__/
 *.py[cod]
