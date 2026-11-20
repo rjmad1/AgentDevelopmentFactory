@@ -58,6 +58,7 @@ nav:
       - Product Contract: factory_product_contract.md
       - Capability & Acceptance Map: factory_capability_and_acceptance_map.md
       - Development Pipeline Playbook: DEVELOPMENT_PIPELINE.md
+      - Autonomous Engineering Loop: AUTONOMOUS_LOOP.md
       - Persona Opportunity Map: factory_persona_opportunity_map.md
   - Walkthroughs:
       - Paper Interaction Walkthrough: factory_paper_interaction_walkthrough.md

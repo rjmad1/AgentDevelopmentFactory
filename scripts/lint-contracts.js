@@ -60,6 +60,8 @@ checkJsSyntax('scripts/generate-api-docs.js');
 checkJsSyntax('scripts/bundle-critic-packet.js');
 checkJsSyntax('scripts/bundle-verifier-packet.js');
 checkJsSyntax('scripts/bundle-doc-packet.js');
+checkJsSyntax('scripts/autonomous-loop.js');
+checkJsSyntax('scripts/setup-hooks.js');
 
 // 2. Check JSON files in fixtures, schemas, and evals
 scanDirJson('fixtures');
