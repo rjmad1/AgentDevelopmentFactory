@@ -1,0 +1,11 @@
+{
+  "name": "factory-authoring-slice",
+  "version": "0.3.0",
+  "type": "module",
+  "private": true,
+  "description": "Bounded Factory authoring slice: brief to inspectable spec, manifest and append-only evidence ledger",
+  "scripts": {
+    "test": "node test/runner.js",
+    "cli": "node src/cli.js"
+  }
+}
