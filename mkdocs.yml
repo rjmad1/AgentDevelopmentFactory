@@ -77,6 +77,8 @@ nav:
   - Overview: index.md
   - Product Contracts & SDD:
       - Capability Roadmap: ROADMAP.md
+      - Capability Map (Reading List): ADF_Capability_Map_Roadmap.md
+      - Evals & Guardrails Spec: adf-evals-and-guardrails.md
       - Product Contract: factory_product_contract.md
       - Capability & Acceptance Map: factory_capability_and_acceptance_map.md
       - Persona Opportunity Map: factory_persona_opportunity_map.md

@@ -21,6 +21,10 @@ The `core.js` module provides the foundational deterministic engine for the Agen
 | [`initRevision`](#initrevision) | `function initRevision({ storeDir, revisionId, parentRevisionId = null, briefPath, requirementsPath, })` | Domain function: `initRevision`. |
 | [`runCheck`](#runcheck) | `function runCheck({ storeDir, revisionId, checkId, failIntentionally = false, customCheckerImplementationHash = null, })` | Domain function: `runCheck`. |
 | [`inspectRevision`](#inspectrevision) | `function inspectRevision({ storeDir, revisionId })` | Domain function: `inspectRevision`. |
+| [`exportAgentYamlSpec`](#exportagentyamlspec) | `function exportAgentYamlSpec({ storeDir, revisionId, outputPath = null, })` | Domain function: `exportAgentYamlSpec`. |
+| [`scaffoldRequirementsTemplate`](#scaffoldrequirementstemplate) | `function scaffoldRequirementsTemplate({ outputPath, title = 'Autonomous Analytical Processing Agent', author = 'Admin', })` | Domain function: `scaffoldRequirementsTemplate`. |
+| [`importMcpToolDefinition`](#importmcptooldefinition) | `function importMcpToolDefinition({ mcpSchemaPath, registryPath = null, effectLevel = 'READ_PUBLIC', })` | Domain function: `importMcpToolDefinition`. |
+| [`runDoctorCheck`](#rundoctorcheck) | `function runDoctorCheck({ projectRoot = null } = {})` | Domain function: `runDoctorCheck`. |
 
 ---
 
@@ -153,6 +157,46 @@ function inspectRevision({ storeDir, revisionId })
 ```
 
 Domain function: `inspectRevision`.
+
+---
+
+### `exportAgentYamlSpec`
+
+```javascript
+function exportAgentYamlSpec({ storeDir, revisionId, outputPath = null, })
+```
+
+Domain function: `exportAgentYamlSpec`.
+
+---
+
+### `scaffoldRequirementsTemplate`
+
+```javascript
+function scaffoldRequirementsTemplate({ outputPath, title = 'Autonomous Analytical Processing Agent', author = 'Admin', })
+```
+
+Domain function: `scaffoldRequirementsTemplate`.
+
+---
+
+### `importMcpToolDefinition`
+
+```javascript
+function importMcpToolDefinition({ mcpSchemaPath, registryPath = null, effectLevel = 'READ_PUBLIC', })
+```
+
+Domain function: `importMcpToolDefinition`.
+
+---
+
+### `runDoctorCheck`
+
+```javascript
+function runDoctorCheck({ projectRoot = null } = {})
+```
+
+Domain function: `runDoctorCheck`.
 
 ---
 

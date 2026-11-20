@@ -304,5 +304,43 @@
     "registered_at": "2026-11-03T06:06:35.821622+00:00",
     "last_verified_at": null,
     "verification_evidence": "Factory core standard verified tool implementation"
+  },
+  "cap_tool_csv_statistical_profiler": {
+    "id": "cap_tool_csv_statistical_profiler",
+    "kind": "TOOL",
+    "name": "csv_statistical_profiler",
+    "version": "1.0.0",
+    "provider": "mcp_importer",
+    "description": "Calculates variance, standard deviation, and identifies statistical outliers in numerical datasets.",
+    "license": "MIT",
+    "status": "ACTIVE",
+    "security_classification": "INTERNAL",
+    "permissions_required": [
+      "READ_PUBLIC"
+    ],
+    "resource_requirements": {},
+    "dependencies": [],
+    "metadata": {
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "dataset_path": {
+            "type": "string",
+            "description": "Path to input CSV or Parquet dataset"
+          },
+          "confidence_interval": {
+            "type": "number",
+            "default": 0.99
+          }
+        },
+        "required": [
+          "dataset_path"
+        ]
+      },
+      "imported_from": "sample_mcp_tool.json"
+    },
+    "registered_at": "2026-11-20T15:20:06.583Z",
+    "last_verified_at": "2026-11-20T15:20:06.584Z",
+    "verification_evidence": "Imported via ADF MCP Tool Importer (SHA: b5adbd706d010a60)"
   }
 }

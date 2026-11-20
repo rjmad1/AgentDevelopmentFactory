@@ -18,25 +18,10 @@ $$\text{Brief} \longrightarrow \text{Structured Requirements} \longrightarrow \t
 
 The factory operates a dual-tier modular architecture that enforces strict separation of responsibilities:
 
-1. **Tier 1 — Fast Authoring & Triage Front-End (`src/core.js`, `src/cli.js`)**:
-   - Zero-dependency Node.js CLI.
-   - Lexical and real filesystem containment validation.
-   - Deterministic SHA-256 requirement triage (`CONFIRMED`, `PROPOSED`, `UNRESOLVED`).
-   - Append-only check event stream (`check_events.jsonl`) and immutable revision store.
-2. **Tier 2 — Industrial Execution & Verification Back-End (`agent_factory/`)**:
-   - Three-Plane Architecture (Control Plane, Workbench Plane, Runtime & Verification Plane).
-   - Universal Agent Spec validation (Pydantic & JSONSchema).
-   - Ephemeral isolated workspaces and code/test synthesis.
-   - Deep Evaluator local grading and LangSmith Free Tier telemetry.
-3. **Tier 3 — Autonomous Fleet Governance (`.hermes/AUTONOMOUS_FLEET.md`, `scripts/`)**:
-   - Watcher loop (`scripts/autonomous-loop.js`) and pre-commit hooks.
-   - Deterministic packet bundlers for Critic, Verifier, and Documentation agents.
-   - GitHub Actions CI/CD and automated Wiki sync.
-
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│              AUTHORING & CONTROL PLANE (Tier 1 & 2)         │
-│  - Brief Intake, Triage (CONFIRMED / PROPOSED)              │
+│                 CONTROL PLANE (Governance)                  │
+│  - Request Intake & Triage (CONFIRMED vs PROPOSED)          │
 │  - Immutable Revision Stores (SHA-256)                      │
 │  - Task Ledger (Append-Only Event Stream)                   │
 │  - Orchestrator Engine & State Transitions                  │
@@ -65,7 +50,8 @@ The factory operates a dual-tier modular architecture that enforces strict separ
 ## 📚 Quick Navigation
 
 ### Product Contracts & Specifications
-* **[Capability Roadmap](ROADMAP.md)**: Honest implemented / planned / pending status for every capability, measured against Baseline v1.0.0 (ADF-001…ADF-040).
+* **[Capability Roadmap](ADF_Capability_Map_Roadmap.md)**: Honest implemented / planned / pending status for every capability, measured against Baseline v1.0.0 (ADF-001…ADF-040).
+* **[Evals and Guardrails Specification](adf-evals-and-guardrails.md)**: Operating spec for evals, guardrails, and release criteria.
 * **[Product Contract](factory_product_contract.md)**: Reconciled v1 scope, supervised evaluation capability, multi-dimensional evidence architecture, and hard disqualification gates.
 * **[Capability & Acceptance Map](factory_capability_and_acceptance_map.md)**: Core capabilities, inputs/outputs, user decision points, and observable criteria.
 * **[Paper Interaction Walkthrough](factory_paper_interaction_walkthrough.md)**: Concrete interaction dialogue tracing intake, clarification, spec sign-off, and revision cycles.
@@ -74,7 +60,7 @@ The factory operates a dual-tier modular architecture that enforces strict separ
 
 ### API & Engine References
 * **[Authoring Core API (`src/core.js`)](api/core.md)**: Zero-dependency hashing, containment, and triage engine.
-* **[Command-Line Interfaces](api/cli.md)**: Usage guides for both Node.js and Python CLIs.
+* **[Command-Line Interfaces](api/cli.md)**: Complete usage guides for both Node.js and Python CLIs.
 * **[Control Plane API](api/control_plane.md)**: Intake, lifecycle, orchestrator, and task ledger.
 * **[Evaluations API](api/evals.md)**: Deep Evaluator, LangSmith adapter, metrics, and test runner.
 * **[Security Architecture](api/security.md)**: Quarantine sandbox, approval gates, and secret redactor.
@@ -88,8 +74,17 @@ The factory operates a dual-tier modular architecture that enforces strict separ
 # Run integrity tests
 node test/runner.js
 
+# Run doctor diagnostic
+node src/cli.js doctor
+
+# Scaffold new requirements template
+node src/cli.js scaffold-requirements --output ./requirements.json
+
 # Initialize a new revision
-node src/cli.js init-revision --brief fixtures/sample_brief.txt --requirements fixtures/sample_reqs.json --revision-id rev-001
+node src/cli.js init-revision --brief fixtures/synthetic_brief_v1.txt --requirements fixtures/synthetic_requirements_v1.json --revision-id rev-001
+
+# Export Universal Agent Spec YAML
+node src/cli.js export-agent-spec --revision rev-001
 ```
 
 ### 2. Platform Back-End (Python)

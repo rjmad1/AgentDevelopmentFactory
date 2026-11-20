@@ -106,101 +106,249 @@ fs.writeFileSync(path.join(apiDocsDir, 'core.md'), coreMd, 'utf-8');
 console.log(`[PASS] Generated: docs/api/core.md (${functions.length} functions documented)`);
 
 // Generate docs/api/cli.md
-const cliMd = `# Command-Line Interface (\`src/cli.js\`)
+const cliLines = [
+  '# Command-Line Interfaces (CLI Reference)',
+  '',
+  'The Agent Development Factory provides two command-line interfaces corresponding to its dual-tier architecture:',
+  '1. **Authoring Front-End CLI (`node src/cli.js`):** Zero-dependency Node.js CLI for requirement triage, immutable revision creation, spec export, MCP tool intake, and evidence verification.',
+  '2. **Factory Back-End CLI (`python -m agent_factory.cli`):** Industrial Python CLI for lifecycle orchestration, workspace synthesis, execution sandboxing, and evaluation gates.',
+  '',
+  '---',
+  '',
+  '## 1. Authoring Front-End CLI (`src/cli.js`)',
+  '',
+  'The Factory authoring slice provides a zero-dependency CLI for initializing immutable revisions, running deterministic verification checks, exporting Universal Agent YAML specifications, importing Model Context Protocol (MCP) tools, and platform diagnostics.',
+  '',
+  '### Synopsis',
+  '',
+  '```bash',
+  'node src/cli.js <command> [options]',
+  '```',
+  '',
+  '---',
+  '',
+  '### Commands',
+  '',
+  '#### `init-revision`',
+  'Initializes a new immutable revision from a raw brief and structured requirements JSON.',
+  '',
+  '```bash',
+  'node src/cli.js init-revision \\',
+  '  --brief <path-to-brief.txt> \\',
+  '  --requirements <path-to-requirements.json> \\',
+  '  --revision-id <revision-identifier> \\',
+  '  [--parent-rev <parent-revision-id>] \\',
+  '  [--store <custom-store-path>]',
+  '```',
+  '',
+  '**Options:**',
+  '* `--brief <path>`: Path to brief text file.',
+  '* `--requirements <path>`: Path to structured requirements JSON.',
+  '* `--revision-id <id>`: 1-64 alphanumeric identifier without path traversal.',
+  '* `--parent-rev <id>`: Optional parent revision ID.',
+  '* `--store <path>`: Custom storage directory (defaults to `./store`).',
+  '',
+  '---',
+  '',
+  '#### `run-check`',
+  'Executes a deterministic check and records the outcome to `check_events.jsonl` and `evidence.json`.',
+  '',
+  '```bash',
+  'node src/cli.js run-check \\',
+  '  --revision <revision-id> \\',
+  '  --check <check-id> \\',
+  '  [--store <custom-store-path>]',
+  '```',
+  '',
+  '**Available Checks:**',
+  '* `CHK-STATIC-SCHEMA`: Verifies syntax and schema alignment.',
+  '* `CHK-REQUIREMENTS-TRIAGE`: Validates requirement confirmation assertions and flags inferred defaults.',
+  '* `CHK-SPEC-COMPLIANCE`: Validates exported Universal Agent Spec conformity against schema.',
+  '* `CHK-TOKEN-BUDGET`: Verifies context window consumption does not exceed 8,000 tokens.',
+  '',
+  '---',
+  '',
+  '#### `inspect`',
+  'Displays metadata, requirement counts, and check statuses for a given revision.',
+  '',
+  '```bash',
+  'node src/cli.js inspect --revision <revision-id> [--store <path>]',
+  '```',
+  '',
+  '---',
+  '',
+  '#### `verify-consistency`',
+  'Performs an audit between the append-only event log (`check_events.jsonl`) and the materialized ledger (`evidence.json`).',
+  '',
+  '```bash',
+  'node src/cli.js verify-consistency --revision <revision-id> [--store <path>]',
+  '```',
+  '',
+  '---',
+  '',
+  '#### `scaffold-requirements`',
+  'Generates a pre-formatted, valid requirements JSON template with triaged confirmation sections.',
+  '',
+  '```bash',
+  'node src/cli.js scaffold-requirements --output <path> [--title <title>] [--author <author>]',
+  '```',
+  '',
+  '---',
+  '',
+  '#### `export-agent-spec`',
+  'Compiles an immutable revision manifest into a Pydantic-compliant Universal Agent Specification YAML (`agent.yaml`).',
+  '',
+  '```bash',
+  'node src/cli.js export-agent-spec --revision <revision-id> [--output <output-path>] [--store <store-dir>]',
+  '```',
+  '',
+  '---',
+  '',
+  '#### `import-mcp-tool`',
+  'Ingests a Model Context Protocol (MCP) tool schema definition and registers it into the factory capability registry with typed effect permissions.',
+  '',
+  '```bash',
+  'node src/cli.js import-mcp-tool --schema <mcp-tool.json> [--registry <custom-registry.json>] [--effect <effect-level>]',
+  '```',
+  '',
+  '---',
+  '',
+  '#### `doctor`',
+  'Runs platform diagnostics checking Node runtime, Python virtual environment, Specify CLI presence, core schemas, filesystem containment, and port listeners.',
+  '',
+  '```bash',
+  'node src/cli.js doctor',
+  '```',
+  '',
+  '---',
+  '',
+  '## 2. Factory Back-End CLI (`agent_factory.cli`)',
+  '',
+  'The Agent Development Factory Command Line Interface (`agent-factory` / `python -m agent_factory.cli`) provides commands for request intake, workspace building, evaluation runs, and candidate packaging.',
+  '',
+  '### Synopsis',
+  '',
+  '```bash',
+  'python -m agent_factory.cli <command> [options]',
+  '```',
+  '',
+  '### Python Module Reference',
+  '',
+  '::: agent_factory.cli',
+  '    options:',
+  '      show_root_heading: true',
+  '      show_source: true',
+];
 
-The Factory authoring slice provides a zero-dependency CLI for initializing immutable revisions, running deterministic verification checks, and auditing evidence logs.
-
----
-
-## Synopsis
-
-\`\`\`bash
-node src/cli.js <command> [options]
-\`\`\`
-
----
-
-## Commands
-
-### \`init-revision\`
-Initializes a new immutable revision from a raw brief and structured requirements JSON.
-
-\`\`\`bash
-node src/cli.js init-revision \\
-  --brief <path-to-brief.txt> \\
-  --requirements <path-to-requirements.json> \\
-  --revision-id <revision-identifier> \\
-  [--parent-rev <parent-revision-id>] \\
-  [--store-dir <custom-store-path>]
-\`\`\`
-
-**Options:**
-* \`--brief <path>\`: Path to brief text file.
-* \`--requirements <path>\`: Path to structured requirements JSON.
-* \`--revision-id <id>\`: 1-64 alphanumeric identifier without path traversal.
-* \`--parent-rev <id>\`: Optional parent revision ID.
-* \`--store-dir <path>\`: Custom storage directory (defaults to \`./store\`).
-
----
-
-### \`run-check\`
-Executes a deterministic check and records the outcome to \`check_events.jsonl\` and \`evidence.json\`.
-
-\`\`\`bash
-node src/cli.js run-check \\
-  --revision <revision-id> \\
-  --check <check-id> \\
-  [--store-dir <custom-store-path>]
-\`\`\`
-
-**Available Checks:**
-* \`CHK-STATIC-SCHEMA\`: Verifies syntax and schema alignment.
-* \`CHK-REQUIREMENTS-TRIAGE\`: Validates requirement confirmation assertions and flags inferred defaults.
-
----
-
-### \`inspect\`
-Displays metadata, requirement counts, and check statuses for a given revision.
-
-\`\`\`bash
-node src/cli.js inspect --revision <revision-id> [--store-dir <path>]
-\`\`\`
-
----
-
-### \`verify-consistency\`
-Performs an audit between the append-only event log (\`check_events.jsonl\`) and the materialized ledger (\`evidence.json\`).
-
-\`\`\`bash
-node src/cli.js verify-consistency --revision <revision-id> [--store-dir <path>]
-\`\`\`
-`;
-
-fs.writeFileSync(path.join(apiDocsDir, 'cli.md'), cliMd, 'utf-8');
-console.log(`[PASS] Generated: docs/api/cli.md`);
+fs.writeFileSync(path.join(apiDocsDir, 'cli.md'), cliLines.join('\n') + '\n', 'utf-8');
+console.log('[PASS] Generated: docs/api/cli.md');
 
 // Generate docs/index.md for MkDocs landing page
-const indexMd = `# Agent Development Factory Documentation
+const indexLines = [
+  '# Agent Development Factory',
+  '',
+  '[![Zero-Cost CI/CD](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/ci.yml/badge.svg)](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/ci.yml)',
+  '[![Pages Deployment](https://github.com/rjmad1/AgentDevelopmentFactory/actions/workflows/docs.yml/badge.svg?branch=gh-pages)](https://rjmad1.github.io/AgentDevelopmentFactory/)',
+  '[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)',
+  '[![Node.js 18+](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)',
+  '[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)',
+  '',
+  'Welcome to the **Agent Development Factory** documentation portal.',
+  '',
+  'The Factory transforms natural-language workflow briefs into inspectable, portable, safe, and verifiable **Agent Build Packs**, backed by an append-only evidence ledger, deterministic verification gates, and an asynchronous multi-agent pipeline.',
+  '',
+  '$$\\text{Brief} \\longrightarrow \\text{Structured Requirements} \\longrightarrow \\text{Inspectable Specification \\& Manifest} \\longrightarrow \\text{Append-Only Evidence Ledger} \\longrightarrow \\text{Deterministic Verification \\& Build}$$',
+  '',
+  '---',
+  '',
+  '## 🏛️ Tri-Tier & Three-Plane Architecture',
+  '',
+  'The factory operates a dual-tier modular architecture that enforces strict separation of responsibilities:',
+  '',
+  '```text',
+  '┌─────────────────────────────────────────────────────────────┐',
+  '│                 CONTROL PLANE (Governance)                  │',
+  '│  - Request Intake & Triage (CONFIRMED vs PROPOSED)          │',
+  '│  - Immutable Revision Stores (SHA-256)                      │',
+  '│  - Task Ledger (Append-Only Event Stream)                   │',
+  '│  - Orchestrator Engine & State Transitions                  │',
+  '└──────────────────────────────┬──────────────────────────────┘',
+  '                               │',
+  '                               ▼',
+  '┌─────────────────────────────────────────────────────────────┐',
+  '│                 WORKBENCH PLANE (Execution)                 │',
+  '│  - Ephemeral Isolated Workspaces                            │',
+  '│  - Deterministic Code Generator & Test Synthesizer          │',
+  '│  - Candidate Release Packager & Checksum Verifier           │',
+  '└──────────────────────────────┬──────────────────────────────┘',
+  '                               │',
+  '                               ▼',
+  '┌─────────────────────────────────────────────────────────────┐',
+  '│                 VERIFICATION & RUNTIME PLANE                │',
+  '│  - Sandboxed Local Process Execution                        │',
+  '│  - Multi-Metric Graders (ExitCode, Markdown, JSON, AST)     │',
+  '│  - Deep Evaluator & LangSmith Observability                 │',
+  '│  - Self-Healing Remediation Loop                            │',
+  '└─────────────────────────────────────────────────────────────┘',
+  '```',
+  '',
+  '---',
+  '',
+  '## 📚 Quick Navigation',
+  '',
+  '### Product Contracts & Specifications',
+  '* **[Capability Roadmap](ADF_Capability_Map_Roadmap.md)**: Honest implemented / planned / pending status for every capability, measured against Baseline v1.0.0 (ADF-001…ADF-040).',
+  '* **[Evals and Guardrails Specification](adf-evals-and-guardrails.md)**: Operating spec for evals, guardrails, and release criteria.',
+  '* **[Product Contract](factory_product_contract.md)**: Reconciled v1 scope, supervised evaluation capability, multi-dimensional evidence architecture, and hard disqualification gates.',
+  '* **[Capability & Acceptance Map](factory_capability_and_acceptance_map.md)**: Core capabilities, inputs/outputs, user decision points, and observable criteria.',
+  '* **[Paper Interaction Walkthrough](factory_paper_interaction_walkthrough.md)**: Concrete interaction dialogue tracing intake, clarification, spec sign-off, and revision cycles.',
+  '* **[Development Pipeline Playbook](DEVELOPMENT_PIPELINE.md)**: The Tri-Tier architecture, Hermes agent fleet, ZipAI token protocol, and developer SOP.',
+  '* **[Persona Opportunity Map](factory_persona_opportunity_map.md)**: Persona analysis, Builderpack competitive assessment, and progressive disclosure model.',
+  '',
+  '### API & Engine References',
+  '* **[Authoring Core API (`src/core.js`)](api/core.md)**: Zero-dependency hashing, containment, and triage engine.',
+  '* **[Command-Line Interfaces](api/cli.md)**: Complete usage guides for both Node.js and Python CLIs.',
+  '* **[Control Plane API](api/control_plane.md)**: Intake, lifecycle, orchestrator, and task ledger.',
+  '* **[Evaluations API](api/evals.md)**: Deep Evaluator, LangSmith adapter, metrics, and test runner.',
+  '* **[Security Architecture](api/security.md)**: Quarantine sandbox, approval gates, and secret redactor.',
+  '',
+  '---',
+  '',
+  '## 📦 Quick Start',
+  '',
+  '### 1. Authoring CLI (Node.js)',
+  '```bash',
+  '# Run integrity tests',
+  'node test/runner.js',
+  '',
+  '# Run doctor diagnostic',
+  'node src/cli.js doctor',
+  '',
+  '# Scaffold new requirements template',
+  'node src/cli.js scaffold-requirements --output ./requirements.json',
+  '',
+  '# Initialize a new revision',
+  'node src/cli.js init-revision --brief fixtures/synthetic_brief_v1.txt --requirements fixtures/synthetic_requirements_v1.json --revision-id rev-001',
+  '',
+  '# Export Universal Agent Spec YAML',
+  'node src/cli.js export-agent-spec --revision rev-001',
+  '```',
+  '',
+  '### 2. Platform Back-End (Python)',
+  '```bash',
+  '# Set up Python virtual environment',
+  'python -m venv .venv',
+  '.venv\\Scripts\\activate',
+  'pip install -r requirements.txt',
+  '',
+  '# Run Python verification suite',
+  'pytest tests/',
+  '',
+  '# Run automated Deep Evaluator',
+  'python scripts/run_evals.py',
+  '```',
+];
 
-Welcome to the **Agent Development Factory** documentation portal.
-
-The Factory transforms natural-language workflow briefs into inspectable, portable, and verifiable **Agent Build Packs**, backed by an append-only evidence ledger and an asynchronous multi-agent pipeline.
-
-$$\\text{Brief} \\longrightarrow \\text{Structured Requirements} \\longrightarrow \\text{Inspectable Specification \\& Manifest} \\longrightarrow \\text{Append-Only Evidence Ledger} \\longrightarrow \\text{Immutable Revisions}$$
-
----
-
-## Quick Navigation
-
-* **[Product Contract](factory_product_contract.md)**: Reconciled v1 scope, supervised evaluation capability, multi-dimensional evidence architecture, and hard disqualification gates.
-* **[Capability & Acceptance Map](factory_capability_and_acceptance_map.md)**: 6 core capabilities, inputs/outputs, user decision points, and observable criteria.
-* **[Paper Interaction Walkthrough](factory_paper_interaction_walkthrough.md)**: Concrete interaction dialogue tracing intake, clarification, spec sign-off, Branch A (untested export), Branch B (supervised evaluation), and revision cycles.
-* **[Development Pipeline Playbook](DEVELOPMENT_PIPELINE.md)**: The Tri-Tier architecture, Hermes agent fleet, ZipAI token protocol, and developer SOP.
-* **[Persona Opportunity Map](factory_persona_opportunity_map.md)**: Persona analysis, Builderpack competitive assessment, and progressive disclosure model.
-* **[Core API Reference](api/core.md)**: Exported functions in \`src/core.js\`.
-* **[CLI Reference](api/cli.md)**: Command-line interface usage in \`src/cli.js\`.
-`;
-
-fs.writeFileSync(path.join(projectRoot, 'docs', 'index.md'), indexMd, 'utf-8');
-console.log(`[PASS] Generated: docs/index.md`);
+fs.writeFileSync(path.join(projectRoot, 'docs', 'index.md'), indexLines.join('\n') + '\n', 'utf-8');
+console.log('[PASS] Generated: docs/index.md');
 console.log('================================================================');

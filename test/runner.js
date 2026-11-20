@@ -392,6 +392,125 @@ export function executeFullSuite(runLabel) {
     assert(schemaCheck.status === 'PASSED', 'Historical record in rev-001 remains intact as PASSED');
   });
 
+  // TEST 14: Ergonomics & Intake — Requirements Scaffolder & Confirmation Rigor
+  recordTest('14. (Ergonomics) Automated Requirements Scaffolder & Confirmation Rigor', () => {
+    const scaffoldPath = path.join(currentRunDir, 'scaffolded_requirements.json');
+    const scaffoldRes = runCli([
+      'scaffold-requirements',
+      '--output', scaffoldPath,
+      '--title', 'Test Auto Scaffolder Agent',
+      '--author', 'Test Engineer',
+    ]);
+    assert(!scaffoldRes.failed, `scaffold-requirements failed: ${scaffoldRes.stderr}`);
+    assert(fs.existsSync(scaffoldPath), 'Scaffolded requirements file must exist on disk');
+
+    const content = JSON.parse(fs.readFileSync(scaffoldPath, 'utf-8'));
+    assert(Array.isArray(content) && content.length >= 3, 'Must contain template requirements array');
+    const confirmedItem = content.find(r => r.status === 'CONFIRMED');
+    assert(confirmedItem && confirmedItem.confirmation, 'Confirmed item must have confirmation');
+    assert(confirmedItem.confirmation.authenticated === false, 'authenticated must be false');
+
+    // Verify scaffolded requirements can be used to cleanly initialize a revision
+    const initRes = runCli([
+      'init-revision',
+      '--brief', path.join(fixturesDir, 'synthetic_brief_v1.txt'),
+      '--requirements', scaffoldPath,
+      '--revision-id', 'rev-scaffold-test',
+      '--store', testStoreDir,
+    ]);
+    assert(!initRes.failed, `init-revision with scaffolded requirements failed: ${initRes.stderr}`);
+    const revDir = path.join(testStoreDir, 'rev-scaffold-test');
+    assert(fs.existsSync(path.join(revDir, 'manifest.json')), 'Manifest created for scaffolded revision');
+  });
+
+  // TEST 15: Portability & Compilation — Universal Agent Spec YAML Compiler
+  recordTest('15. (Portability) Universal Agent Spec YAML Compiler & Spec Compliance', () => {
+    const yamlExportPath = path.join(testStoreDir, 'rev-001', 'exported_agent.yaml');
+    const exportRes = runCli([
+      'export-agent-spec',
+      '--revision', 'rev-001',
+      '--output', yamlExportPath,
+      '--store', testStoreDir,
+    ]);
+    assert(!exportRes.failed, `export-agent-spec failed: ${exportRes.stderr}`);
+    assert(fs.existsSync(yamlExportPath), 'Exported YAML must exist on disk');
+
+    const yamlContent = fs.readFileSync(yamlExportPath, 'utf-8');
+    assert(yamlContent.includes('schema_version: 1'), 'YAML must specify schema_version: 1');
+    assert(yamlContent.includes('agent_id: "rev_001"'), 'YAML must specify agent_id rev_001');
+    assert(yamlContent.includes('policy:'), 'YAML must contain policy section');
+    assert(yamlContent.includes('limits:'), 'YAML must contain limits section');
+
+    // Run CHK-SPEC-COMPLIANCE and CHK-TOKEN-BUDGET
+    const specComplianceRes = runCli([
+      'run-check',
+      '--revision', 'rev-001',
+      '--check', 'CHK-SPEC-COMPLIANCE',
+      '--store', testStoreDir,
+    ]);
+    assert(!specComplianceRes.failed, `CHK-SPEC-COMPLIANCE failed: ${specComplianceRes.stderr}`);
+
+    const tokenBudgetRes = runCli([
+      'run-check',
+      '--revision', 'rev-001',
+      '--check', 'CHK-TOKEN-BUDGET',
+      '--store', testStoreDir,
+    ]);
+    assert(!tokenBudgetRes.failed, `CHK-TOKEN-BUDGET failed: ${tokenBudgetRes.stderr}`);
+  });
+
+  // TEST 16: Connectivity & Ecosystem — Universal MCP Tool Schema Importer
+  recordTest('16. (Ecosystem) Universal MCP Tool Schema Importer', () => {
+    const mcpFixturePath = path.join(currentRunDir, 'test_mcp_tool.json');
+    const testRegistryPath = path.join(currentRunDir, 'test_capability_registry.json');
+
+    // Prepare isolated capability registry copy
+    const masterRegistryPath = path.join(projectRoot, 'data', 'capability_registry.json');
+    fs.copyFileSync(masterRegistryPath, testRegistryPath);
+
+    // Prepare sample MCP tool schema
+    const sampleTool = {
+      name: 'isolated_unit_test_tool',
+      description: 'Calculates fast vector similarity metrics in isolated memory.',
+      parameters: {
+        type: 'object',
+        properties: {
+          embedding_a: { type: 'array', items: { type: 'number' } },
+          embedding_b: { type: 'array', items: { type: 'number' } },
+        },
+        required: ['embedding_a', 'embedding_b'],
+      },
+    };
+    fs.writeFileSync(mcpFixturePath, JSON.stringify(sampleTool, null, 2), 'utf-8');
+
+    const importRes = runCli([
+      'import-mcp-tool',
+      '--schema', mcpFixturePath,
+      '--registry', testRegistryPath,
+      '--effect', 'READ_PUBLIC',
+    ]);
+    assert(!importRes.failed, `import-mcp-tool failed: ${importRes.stderr}`);
+
+    const updatedRegistry = JSON.parse(fs.readFileSync(testRegistryPath, 'utf-8'));
+    const registered = updatedRegistry.cap_tool_isolated_unit_test_tool;
+    assert(registered, 'Imported tool must exist in registry under cap_tool_isolated_unit_test_tool');
+    assert(registered.name === 'isolated_unit_test_tool', 'Registered name must match');
+    assert(registered.kind === 'TOOL', 'Kind must be TOOL');
+    assert(registered.permissions_required.includes('READ_PUBLIC'), 'Permissions required must include READ_PUBLIC');
+    assert(registered.metadata.parameters.properties.embedding_a, 'Schema parameters preserved');
+  });
+
+  // TEST 17: Ergonomics & Tooling — Zero-Install Diagnostic Doctor
+  recordTest('17. (Ergonomics) Zero-Install Diagnostic Doctor', () => {
+    const doctorRes = runCli(['doctor']);
+    assert(!doctorRes.failed, `doctor command failed: ${doctorRes.stderr}`);
+    assert(doctorRes.stdout.includes('AGENT DEVELOPMENT FACTORY — PLATFORM DOCTOR'), 'Stdout must contain header');
+    assert(doctorRes.stdout.includes('Overall Health: HEALTHY'), 'Overall health must be HEALTHY');
+    assert(doctorRes.stdout.includes('Node.js Runtime:'), 'Checks Node.js runtime');
+    assert(doctorRes.stdout.includes('Filesystem Containment Security:'), 'Checks containment guard');
+    assert(doctorRes.stdout.includes('Project Constitution'), 'Checks constitution');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

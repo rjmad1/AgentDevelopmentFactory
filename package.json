@@ -16,6 +16,8 @@
     "ci": "node test/runner.js && node scripts/lint-contracts.js && node test/evals/runner.js && node scripts/generate-api-docs.js",
     "watch": "node scripts/autonomous-loop.js",
     "auto": "node scripts/autonomous-loop.js --once",
-    "setup:hooks": "node scripts/setup-hooks.js"
+    "setup:hooks": "node scripts/setup-hooks.js",
+    "doctor": "node src/cli.js doctor",
+    "maturity": "node scripts/evaluate-product-maturity.js"
   }
 }

@@ -31,6 +31,8 @@ jobs:
       - name: Sync Documents into Wiki
         run: |
           cp docs/ROADMAP.md wiki/Roadmap.md
+          if [ -f docs/ADF_Capability_Map_Roadmap.md ]; then cp docs/ADF_Capability_Map_Roadmap.md wiki/Capability-Map-Reading-List.md; fi
+          if [ -f docs/adf-evals-and-guardrails.md ]; then cp docs/adf-evals-and-guardrails.md wiki/Evals-and-Guardrails-Spec.md; fi
           cp docs/factory_product_contract.md wiki/Product-Contract.md
           cp docs/factory_capability_and_acceptance_map.md wiki/Capability-and-Acceptance-Map.md
           cp docs/factory_paper_interaction_walkthrough.md wiki/Paper-Interaction-Walkthrough.md

@@ -1,7 +1,16 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initRevision, runCheck, inspectRevision, verifyEvidenceConsistency } from './core.js';
+import {
+  initRevision,
+  runCheck,
+  inspectRevision,
+  verifyEvidenceConsistency,
+  exportAgentYamlSpec,
+  scaffoldRequirementsTemplate,
+  importMcpToolDefinition,
+  runDoctorCheck,
+} from './core.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,6 +67,24 @@ Commands:
   verify-consistency   Audit consistency between check_events.jsonl and evidence.json
     --revision <id>        Revision identifier (required)
     --store <path>         Path to revision storage directory (default: ./store)
+
+  scaffold-requirements Scaffold a verified structured requirements template
+    --output <path>        Path to write generated requirements JSON (required)
+    --title <title>        Workflow title (optional)
+    --author <name>        Author or stakeholder name (optional)
+
+  export-agent-spec    Export revision to Universal Agent Spec (agent.yaml)
+    --revision <id>        Revision identifier (required)
+    --output <path>        Custom output path (default: <store>/<revision>/agent.yaml)
+    --store <path>         Path to revision storage directory (default: ./store)
+
+  import-mcp-tool      Import Model Context Protocol (MCP) tool schema into Capability Registry
+    --schema <path>        Path to MCP tool schema JSON (required)
+    --registry <path>      Custom registry path (default: data/capability_registry.json)
+    --effect <level>       Permission effect level (default: READ_PUBLIC)
+
+  doctor               Run comprehensive platform health check and port canary audit
+    --store <path>         Custom store path (optional)
 `);
 }
 
@@ -158,6 +185,90 @@ function main() {
         console.log(JSON.stringify(report, null, 2));
 
         if (!report.isConsistent) {
+          process.exit(1);
+        }
+        break;
+      }
+
+      case 'scaffold-requirements': {
+        if (!options.output) {
+          console.error('Error: --output is required for scaffold-requirements.');
+          process.exit(1);
+        }
+
+        const result = scaffoldRequirementsTemplate({
+          outputPath: path.resolve(process.cwd(), options.output),
+          title: options.title || 'Autonomous Analytical Processing Agent',
+          author: options.author || 'Admin',
+        });
+
+        console.log(`[SCAFFOLD-REQUIREMENTS SUCCESS]`);
+        console.log(`  Output Path:   ${result.outputPath}`);
+        console.log(`  Items Count:   ${result.requirementsCount}`);
+        console.log(`  SHA-256:       ${result.sha256}`);
+        break;
+      }
+
+      case 'export-agent-spec': {
+        if (!options.revision) {
+          console.error('Error: --revision is required for export-agent-spec.');
+          process.exit(1);
+        }
+
+        const outputPath = options.output ? path.resolve(process.cwd(), options.output) : null;
+        const result = exportAgentYamlSpec({
+          storeDir,
+          revisionId: options.revision,
+          outputPath,
+        });
+
+        console.log(`[EXPORT-AGENT-SPEC SUCCESS]`);
+        console.log(`  Agent ID:      ${result.agentId}`);
+        console.log(`  Revision:      ${result.revisionId}`);
+        console.log(`  Output Path:   ${result.outputPath}`);
+        console.log(`  Spec SHA-256:  ${result.sha256}`);
+        break;
+      }
+
+      case 'import-mcp-tool': {
+        if (!options.schema) {
+          console.error('Error: --schema is required for import-mcp-tool.');
+          process.exit(1);
+        }
+
+        const mcpSchemaPath = path.resolve(process.cwd(), options.schema);
+        const registryPath = options.registry ? path.resolve(process.cwd(), options.registry) : null;
+        const effectLevel = options.effect || 'READ_PUBLIC';
+
+        const result = importMcpToolDefinition({
+          mcpSchemaPath,
+          registryPath,
+          effectLevel,
+        });
+
+        console.log(`[IMPORT-MCP-TOOL SUCCESS]`);
+        console.log(`  Capability ID: ${result.capabilityId}`);
+        console.log(`  Tool Name:     ${result.toolName}`);
+        console.log(`  Effect Level:  ${result.effectLevel}`);
+        console.log(`  Registry:      ${result.registryPath}`);
+        break;
+      }
+
+      case 'doctor': {
+        const root = path.resolve(__dirname, '..');
+        const report = runDoctorCheck({ projectRoot: root });
+
+        console.log(`\n==================================================`);
+        console.log(`AGENT DEVELOPMENT FACTORY — PLATFORM DOCTOR`);
+        console.log(`Overall Health: ${report.overallStatus} (${report.passedChecks}/${report.totalChecks} checks passing)`);
+        console.log(`==================================================`);
+        for (const d of report.diagnostics) {
+          const badge = d.status === 'PASS' ? '[PASS]' : (d.status === 'WARN' ? '[WARN]' : '[FAIL]');
+          console.log(`${badge} ${d.component}: ${d.details}`);
+        }
+        console.log(`==================================================\n`);
+
+        if (report.overallStatus === 'UNHEALTHY') {
           process.exit(1);
         }
         break;
