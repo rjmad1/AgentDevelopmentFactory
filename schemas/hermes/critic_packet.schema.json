@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HermesCriticReviewPacket",
+  "description": "Surgical context packet delivered to Hermes Critic for code review, boundary validation, and minimalism checks without ingesting full repository history.",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "timestamp",
+    "git_head",
+    "changed_files",
+    "unified_diff",
+    "test_summary",
+    "review_focus"
+  ],
+  "properties": {
+    "packet_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "git_head": {
+      "type": "string"
+    },
+    "changed_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "unified_diff": {
+      "type": "string"
+    },
+    "test_summary": {
+      "type": "object",
+      "required": ["passed", "failed", "blocked"],
+      "properties": {
+        "passed": { "type": "integer" },
+        "failed": { "type": "integer" },
+        "blocked": { "type": "integer" },
+        "run_id": { "type": "string" }
+      }
+    },
+    "referenced_requirements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "review_focus": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "over_engineering_and_abstractions",
+          "security_boundaries_and_sanitization",
+          "spec_to_code_drift",
+          "reversibility_and_immutability",
+          "test_authenticity"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HermesVerifierEvidencePacket",
+  "description": "Deterministic evidence package delivered to Hermes Verifier to audit logged execution output against claimed status without hallucinating pass/fail states.",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "timestamp",
+    "git_head",
+    "manifest_snapshot",
+    "execution_metrics",
+    "checker_implementation_hash",
+    "unverified_assumptions"
+  ],
+  "properties": {
+    "packet_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "git_head": {
+      "type": "string"
+    },
+    "manifest_snapshot": {
+      "type": "object"
+    },
+    "execution_metrics": {
+      "type": "object",
+      "required": ["total_runs", "latest_run_id", "passed", "failed"],
+      "properties": {
+        "total_runs": { "type": "integer" },
+        "latest_run_id": { "type": "string" },
+        "passed": { "type": "integer" },
+        "failed": { "type": "integer" },
+        "log_hash": { "type": "string" }
+      }
+    },
+    "checker_implementation_hash": {
+      "type": "string"
+    },
+    "unverified_assumptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

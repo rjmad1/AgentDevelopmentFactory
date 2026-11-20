@@ -1,6 +1,8 @@
 node_modules/
+store/
 test-runs/
 test-store/
 review-*/
+.hermes/packets/
 *.log
 .DS_Store
