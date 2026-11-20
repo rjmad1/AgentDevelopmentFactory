@@ -53,3 +53,9 @@ Discrepancies identified between specifications and the codebase are classified 
 * **Classification:** Implemented Differently from Documented Intent (Cat 4).
 * **Observed Reality:** The Node.js authoring CLI outputs Markdown specifications and JSON manifests for newly drafted agents, but does not yet emit the exact Pydantic-compatible `agent.yaml` consumed by `agent_factory.control_plane.intake`.
 * **Remediation:** Formally specify the bridge contract in `specs/contracts/README.md` and feature spec `specs/features/001-bounded-authoring-slice/`.
+
+---
+
+## 3. Successor Report
+
+Gaps measured against the external **Agent Development Factory Baseline v1.0.0** requirement set (ADF-001 … ADF-040) are recorded separately in [`06-baseline-v1.0.0-delta.md`](06-baseline-v1.0.0-delta.md), which extends this report rather than superseding it. The capability status derived from it is published at [`docs/ROADMAP.md`](../../docs/ROADMAP.md).

@@ -65,6 +65,7 @@ The factory operates a dual-tier modular architecture that enforces strict separ
 ## 📚 Quick Navigation
 
 ### Product Contracts & Specifications
+* **[Capability Roadmap](ROADMAP.md)**: Honest implemented / planned / pending status for every capability, measured against Baseline v1.0.0 (ADF-001…ADF-040).
 * **[Product Contract](factory_product_contract.md)**: Reconciled v1 scope, supervised evaluation capability, multi-dimensional evidence architecture, and hard disqualification gates.
 * **[Capability & Acceptance Map](factory_capability_and_acceptance_map.md)**: Core capabilities, inputs/outputs, user decision points, and observable criteria.
 * **[Paper Interaction Walkthrough](factory_paper_interaction_walkthrough.md)**: Concrete interaction dialogue tracing intake, clarification, spec sign-off, and revision cycles.

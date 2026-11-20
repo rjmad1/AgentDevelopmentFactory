@@ -26,7 +26,8 @@ specs/
 │   ├── 02-specification-register.md      # Master specification inventory (33+ specs)
 │   ├── 03-implementation-traceability.md # Requirements-to-code traceability matrix
 │   ├── 04-specification-gaps.md          # Architectural gap & discrepancy report
-│   └── 05-quality-assessment.md          # Specification quality scorecard
+│   ├── 05-quality-assessment.md          # Specification quality scorecard
+│   └── 06-baseline-v1.0.0-delta.md       # ADF-001..040 baseline delta & remediation order
 ├── governance/             # Binding SDD governance policies & standards
 │   ├── specification-management-policy.md# Authoring rules, reviews, change controls
 │   ├── specification-lifecycle.md         # Lifecycle state definitions

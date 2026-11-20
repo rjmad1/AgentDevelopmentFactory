@@ -30,6 +30,7 @@ jobs:
 
       - name: Sync Documents into Wiki
         run: |
+          cp docs/ROADMAP.md wiki/Roadmap.md
           cp docs/factory_product_contract.md wiki/Product-Contract.md
           cp docs/factory_capability_and_acceptance_map.md wiki/Capability-and-Acceptance-Map.md
           cp docs/factory_paper_interaction_walkthrough.md wiki/Paper-Interaction-Walkthrough.md
