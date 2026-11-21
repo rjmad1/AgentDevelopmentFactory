@@ -1,0 +1,2689 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Meta-product transforming workflow briefs into inspectable, portable, safe, and verifiable Agent Build Packs.">
+      
+      
+        <meta name="author" content="Raja Jeevan Kumar Maduri">
+      
+      
+        <link rel="canonical" href="https://rjmad1.github.io/AgentDevelopmentFactory/factory_product_contract/">
+      
+      
+        <link rel="prev" href="../adf-evals-and-guardrails/">
+      
+      
+        <link rel="next" href="../factory_capability_and_acceptance_map/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Product Contract - Agent Development Factory</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-development-factory-product-contract" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Agent Development Factory" class="md-header__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Agent Development Factory
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Product Contract
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ROADMAP/" class="md-tabs__link">
+          
+  
+  
+  Product Contracts & SDD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture/master/" class="md-tabs__link">
+          
+  
+  
+  Platform Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../verification/pipeline/" class="md-tabs__link">
+          
+  
+  
+  Verification & CI/CD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/core/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/getting_started/" class="md-tabs__link">
+          
+  
+  
+  Guides & Operations
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Agent Development Factory" class="md-nav__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Agent Development Factory
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contracts & SDD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Product Contracts & SDD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ADF_Capability_Map_Roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Map (Reading List)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adf-evals-and-guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals & Guardrails Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contract
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-architectural-intersection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Architectural Intersection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The Architectural Intersection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-documented-reference-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Documented Reference Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-proposed-factory-synthesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Proposed Factory Synthesis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-reference-characteristics-not-inherited-boundary-distinctions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Reference Characteristics NOT Inherited (Boundary Distinctions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-end-to-end-factory-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The End-to-End Factory Journey
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The End-to-End Factory Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stage-1-idea-intake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 1: Idea Intake
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-2-clarification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2: Clarification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-3-specification-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 3: Specification Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-4-inspectable-agent-pack-compilation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 4: Inspectable Agent Pack Compilation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-5-supervised-evaluation-evidence-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 5: Supervised Evaluation &amp; Evidence Review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-6-revision-invalidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 6: Revision &amp; Invalidation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-reusable-capability-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Reusable Capability Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Reusable Capability Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-mandatory-contract-schema-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Mandatory Contract Schema Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-visibility-of-requirement-to-capability-mismatches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Visibility of Requirement-to-Capability Mismatches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-diverse-users-the-collaborative-backbone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Diverse Users &amp; The Collaborative Backbone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Diverse Users &amp; The Collaborative Backbone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-persona-matrix-guidance-technical-depth-handoff-concepts-proposed-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Persona Matrix: Guidance, Technical Depth &amp; Handoff Concepts (Proposed Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-evidence-change-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Evidence &amp; Change Governance Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Evidence &amp; Change Governance Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-multi-dimensional-evidence-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Multi-Dimensional Evidence Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-preservation-of-historical-results-version-linkage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Preservation of Historical Results &amp; Version Linkage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-auditable-evidence-standard-bounded-claims" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Auditable Evidence Standard &amp; Bounded Claims
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-automatic-disqualification-invariants-hard-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Automatic Disqualification Invariants (Hard Failures)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-planning-governance-ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Planning Governance Ledger
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Planning Governance Ledger">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-confirmed-direction-approved-scope-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Confirmed Direction (Approved Scope Decisions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-proposed-technical-defaults-working-hypotheses-not-formally-approved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Proposed Technical Defaults (Working Hypotheses — Not Formally Approved)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-unresolved-owner-choices-explicitly-preserved-for-future-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Unresolved Owner Choices (Explicitly Preserved for Future Decision)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factory_capability_and_acceptance_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability & Acceptance Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factory_persona_opportunity_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persona Opportunity Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factory_paper_interaction_walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interaction Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DEVELOPMENT_PIPELINE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Pipeline Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AUTONOMOUS_LOOP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Engineering Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Platform Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Platform Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/master/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/three_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-Plane Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/evaluations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Policies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification & CI/CD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification & CI/CD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zero-Cost CI/CD Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/deep_evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Evaluator & Gates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/langsmith/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Free Tier Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authoring Core Engine (JS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/control_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Plane (Python)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specifications & Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/workbench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workbench
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluations & Graders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime & Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Redaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registry & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provider Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides & Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides & Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recovery Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-architectural-intersection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Architectural Intersection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The Architectural Intersection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-documented-reference-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Documented Reference Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-proposed-factory-synthesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Proposed Factory Synthesis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-reference-characteristics-not-inherited-boundary-distinctions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Reference Characteristics NOT Inherited (Boundary Distinctions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-end-to-end-factory-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The End-to-End Factory Journey
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The End-to-End Factory Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stage-1-idea-intake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 1: Idea Intake
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-2-clarification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2: Clarification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-3-specification-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 3: Specification Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-4-inspectable-agent-pack-compilation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 4: Inspectable Agent Pack Compilation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-5-supervised-evaluation-evidence-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 5: Supervised Evaluation &amp; Evidence Review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stage-6-revision-invalidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 6: Revision &amp; Invalidation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-reusable-capability-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Reusable Capability Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Reusable Capability Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-mandatory-contract-schema-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Mandatory Contract Schema Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-visibility-of-requirement-to-capability-mismatches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Visibility of Requirement-to-Capability Mismatches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-diverse-users-the-collaborative-backbone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Diverse Users &amp; The Collaborative Backbone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Diverse Users &amp; The Collaborative Backbone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-persona-matrix-guidance-technical-depth-handoff-concepts-proposed-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Persona Matrix: Guidance, Technical Depth &amp; Handoff Concepts (Proposed Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-evidence-change-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Evidence &amp; Change Governance Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Evidence &amp; Change Governance Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-multi-dimensional-evidence-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Multi-Dimensional Evidence Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-preservation-of-historical-results-version-linkage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Preservation of Historical Results &amp; Version Linkage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-auditable-evidence-standard-bounded-claims" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Auditable Evidence Standard &amp; Bounded Claims
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-automatic-disqualification-invariants-hard-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Automatic Disqualification Invariants (Hard Failures)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-planning-governance-ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Planning Governance Ledger
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Planning Governance Ledger">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-confirmed-direction-approved-scope-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Confirmed Direction (Approved Scope Decisions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-proposed-technical-defaults-working-hypotheses-not-formally-approved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Proposed Technical Defaults (Working Hypotheses — Not Formally Approved)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-unresolved-owner-choices-explicitly-preserved-for-future-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Unresolved Owner Choices (Explicitly Preserved for Future Decision)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="agent-development-factory-product-contract">Agent Development Factory: Product Contract<a class="headerlink" href="#agent-development-factory-product-contract" title="Permanent link">&para;</a></h1>
+<p><strong>Document Status:</strong> Product Planning Contract (Reconciled with Confirmed v1 Supervised Evaluation Scope)<br />
+<strong>Document Date:</strong> November 20, 2026<br />
+<strong>Audience:</strong> For Raja's Review &amp; Architectural Alignment<br />
+<strong>Foundational Invariant:</strong> The product is the <strong>Factory</strong> (the system that clarifies, specifies, packages, evaluates, and revises agents). Benchmark workflows (support triage, research, extraction) are evaluation test inputs, not the product definition.</p>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>GOVERNANCE &amp; PLANNING INVARIANT</strong><br />
+This contract establishes product planning definitions, interface contracts, and evidence governance only. It incorporates the newly confirmed v1 scope for supervised evaluation capability (product scope approval only; does not require evaluation prior to pack export or authorize any evaluation now). It does <strong>not</strong> authorize code execution, test runs, environment provisioning, account connection, spending, deployment, or access to held builds and derivative materials. Neither Spec Kit nor Builderpack establishes validated market demand, working runtime compatibility, or product uniqueness.</p>
+</blockquote>
+<hr />
+<h2 id="1-the-architectural-intersection">1. The Architectural Intersection<a class="headerlink" href="#1-the-architectural-intersection" title="Permanent link">&para;</a></h2>
+<p>The Factory is designed at the structural intersection of <strong>specification discipline</strong> (derived from GitHub Spec Kit) and <strong>reusable capability modularity</strong> (derived from Builderpack's action/tool pattern).</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph SK["GitHub Spec Kit (Discipline)"]
+        SK1["Requirements Constitution"]
+        SK2["Spec-Driven Development (spec.md)"]
+        SK3["Checklists as Unit Tests of Intent"]
+        SK4["Intentional Idea Assessment"]
+    end
+
+    subgraph BP["Builderpack (Modularity)"]
+        BP1["Typed Inputs &amp; Outputs"]
+        BP2["Action/Tool Dual Modality"]
+        BP3["Asynchronous Execution"]
+        BP4["Composability across Steps"]
+    end
+
+    subgraph ADF["Agent Development Factory"]
+        ADF1["1. Clarify Brief &amp; Bounds"]
+        ADF2["2. Formal Requirements Contract"]
+        ADF3["3. Reusable Tool Contracts"]
+        ADF4["4. Inspectable Agent Pack"]
+        ADF5["5. Auditable Evidence Manifest"]
+        ADF6["6. Controlled Revision &amp; Invalidation"]
+    end
+
+    SK --&gt; ADF
+    BP --&gt; ADF</code></pre>
+<h3 id="11-documented-reference-capabilities">1.1 Documented Reference Capabilities<a class="headerlink" href="#11-documented-reference-capabilities" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>GitHub Spec Kit (<code>github/spec-kit</code>, <code>github.github.com/spec-kit/</code>, read 20 Nov 2026):</strong></li>
+<li><em>Constitution as Root Anchor:</em> <code>.specify/memory/constitution.md</code> sets project guidelines, principles, and architectural rules against which subsequent specs are evaluated. Crucially, the constitution is <strong>amendable and versioned</strong> (containing formal amendment procedures, version increments, and sync impact analysis), providing a stable yet evolving governance baseline.</li>
+<li><em>Spec-Driven Development (SDD):</em> Clear separation between <em>what</em> to build (<code>spec.md</code> user scenarios and requirements) and <em>how</em> to build (<code>plan.md</code> technical architecture).</li>
+<li><em>Checklists as "Unit Tests of Requirements":</em> <code>templates/commands/checklist.md</code> evaluates specification clarity, completeness, and consistency before any code is generated.</li>
+<li><em>Idea Assessment Lifecycle:</em> Structured 5-stage gating (<code>intake</code> <span class="arithmatex">\(\to\)</span> <code>research</code> <span class="arithmatex">\(\to\)</span> <code>define</code> <span class="arithmatex">\(\to\)</span> <code>shape</code> <span class="arithmatex">\(\to\)</span> <code>decide</code>) outputting evidence-backed <code>go</code>, <code>needs-clarification</code>, or <code>kill</code> recommendations.</li>
+<li><em>Extensible Layering:</em> Presets, overlays, and local overrides that modify templates without forking core logic.</li>
+<li><strong>Builderpack (<code>builderpack.com/docs</code>, <code>builderpack.com/actions</code>, read 20 Nov 2026):</strong></li>
+<li><em>Dual-Modality Capability Units:</em> Modular actions that function interchangeably as deterministic workflow automation steps or autonomous agent-callable tools within HubSpot.</li>
+<li><em>Typed Parameter Contracts:</em> Explicit input definitions (literal strings, CRM property tokens, prior step outputs) with fixed-choice enumerations and required/optional constraints.</li>
+<li><em>Asynchronous Processing:</em> Structured execution pattern where background research operations resolve cleanly without stalling orchestration threads.</li>
+<li><em>Explicit Output Tokens:</em> Granular output schemas mapped directly into subsequent execution nodes or state variables.</li>
+</ul>
+<h3 id="12-proposed-factory-synthesis">1.2 Proposed Factory Synthesis<a class="headerlink" href="#12-proposed-factory-synthesis" title="Permanent link">&para;</a></h3>
+<p>The Factory synthesizes these two paradigms into an integrated agent authoring lifecycle:
+* It applies <strong>Spec Kit's specification rigor</strong> to agent definition: extracting explicit data boundaries, prohibited actions, and observable acceptance criteria before prompting or coding begins.
+* It applies <strong>Builderpack's capability contract</strong> to tool design: treating every agent capability as an isolated, typed, and permission-bounded block that declares its dependencies, error behaviors, and data flow.
+* It binds them together with an <strong>auditable evidence manifest</strong> that distinguishes generated assets from executed, verified outcomes.</p>
+<h3 id="13-reference-characteristics-not-inherited-boundary-distinctions">1.3 Reference Characteristics NOT Inherited (Boundary Distinctions)<a class="headerlink" href="#13-reference-characteristics-not-inherited-boundary-distinctions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Reference Characteristic</th>
+<th style="text-align: left;">Why the Factory Distinguishes / Does Not Inherit It</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Spec Kit: Repository Workflow Focus</strong></td>
+<td style="text-align: left;">Spec Kit's reference workflows and templates focus on software engineering features in Git repositories. The Factory adapts its specification discipline specifically to agent systems—defining prompt boundaries, model-context limits, non-deterministic reasoning loops, tool permissions, and adversarial guardrails.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Spec Kit: Checklist Conflation</strong></td>
+<td style="text-align: left;">In Spec Kit, passing a <code>requirements.md</code> checklist verifies that requirements are well-written and consistent. The Factory treats requirement consistency as a check on specification quality, <strong>never</strong> as proof of functional agent execution or formal verification.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Builderpack: HubSpot Platform Coupling</strong></td>
+<td style="text-align: left;">Builderpack's public documentation describes an action pack configured specifically for HubSpot portals (OAuth, CRM properties, Professional/Enterprise tiers). The Factory defines provider- and platform-agnostic capability contracts, defaulting to no specific CRM or vendor runtime.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Builderpack: Action Catalog vs. Factory Lifecycle</strong></td>
+<td style="text-align: left;">Builderpack provides a curated catalog of pre-built actions for HubSpot; its public docs do not establish whether it includes standalone evaluation suites or adversarial guardrails, nor do they establish an open tool marketplace. The Factory focuses on the <em>tooling lifecycle</em>—authoring, evaluating, packaging, and revising arbitrary agent capabilities with explicit failure modes and auditable evidence.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-the-end-to-end-factory-journey">2. The End-to-End Factory Journey<a class="headerlink" href="#2-the-end-to-end-factory-journey" title="Permanent link">&para;</a></h2>
+<p>The Factory lifecycle transitions an ambiguous concept into a verified, inspectable agent pack through six disciplined stages:</p>
+<pre class="mermaid"><code>flowchart TD
+    S1["1. Idea Intake"] --&gt; S2["2. Clarification"]
+    S2 --&gt; S3["3. Specification Contract"]
+    S3 --&gt; S4["4. Inspectable Agent Pack"]
+    S4 --&gt; S5["5. Supervised Evaluation &amp; Evidence Review"]
+    S5 &lt;--&gt; S6["6. Revision &amp; Invalidation"]</code></pre>
+<h3 id="stage-1-idea-intake">Stage 1: Idea Intake<a class="headerlink" href="#stage-1-idea-intake" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> Raw, unstructured natural-language brief, business pain point, operational sketch, or napkin idea.</li>
+<li><strong>Output Artifact:</strong> <code>idea_intake.md</code> (captured raw intent, requester identity, proposed domain, and initial stated goals).</li>
+<li><strong>Decision Owner:</strong> Agent Requester / Sponsor.</li>
+<li><strong>Observable Acceptance Criterion:</strong> Complete text capture without algorithmic distortion; the Factory acknowledges raw input without silently rewriting, assuming technical constraints, or committing to feasibility.</li>
+</ul>
+<h3 id="stage-2-clarification">Stage 2: Clarification<a class="headerlink" href="#stage-2-clarification" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> <code>idea_intake.md</code>.</li>
+<li><strong>Output Artifact:</strong> <code>clarification_record.md</code> structured into:</li>
+<li><code>[CONFIRMED REQUIREMENTS]</code>: Articulated, non-conflicting bounds.</li>
+<li><code>[PROPOSED DEFAULTS]</code>: Explicitly highlighted structural defaults suggested by the Factory.</li>
+<li><code>[CONSEQUENTIAL AMBIGUITIES]</code>: Explicit inquiries where business logic, permissions, or escalation thresholds conflict or require clarification.</li>
+<li><strong>Decision Owner:</strong> Agent Owner / Definer.</li>
+<li><strong>Observable Acceptance Criterion:</strong> The Factory surfaces consequential ambiguities (conflicting business rules, missing essential inputs, or ambiguous tool permissions) and presents explicit choices; it <strong>never silently invents</strong> default business policies, fallback credentials, or loose permissions.</li>
+</ul>
+<h3 id="stage-3-specification-contract">Stage 3: Specification Contract<a class="headerlink" href="#stage-3-specification-contract" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> Resolved <code>clarification_record.md</code> with explicit owner decisions.</li>
+<li><strong>Output Artifact:</strong> <code>spec.md</code> (The binding Requirements Contract) containing:</li>
+<li>Functional goals and observable acceptance criteria.</li>
+<li>Required tool contracts and external dependencies.</li>
+<li>Explicit Prohibited Action List (hard operational boundaries).</li>
+<li>Traceability Matrix:
+    $<span class="arithmatex">\(\text{Requirement ID(s)} \longleftrightarrow \text{Acceptance Criteria} \longleftrightarrow \text{Planned Artifact(s)} \longleftrightarrow \text{Evidence Record}\)</span>$</li>
+<li><strong>Decision Owner:</strong> Technical Planner / Solution Architect.</li>
+<li><strong>Observable Acceptance Criterion:</strong> Requirements link (via 1:1, 1:many, or many:many relationships as appropriate) to intended artifacts and observable validation checks. Unsupported integrations, missing external APIs, and contradictions are visibly flagged as unresolved blockers.</li>
+</ul>
+<h3 id="stage-4-inspectable-agent-pack-compilation">Stage 4: Inspectable Agent Pack Compilation<a class="headerlink" href="#stage-4-inspectable-agent-pack-compilation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> Signed-Off <code>spec.md</code>.</li>
+<li><strong>Output Artifact:</strong> <strong>Agent Build Pack</strong> (filesystem bundle):</li>
+<li><code>instructions.md</code>: Core system instructions, cleanly separated into model-agnostic business rules vs. target-specific platform adapters.</li>
+<li><code>tools/</code>: Declarative capability contracts (OpenAPI 3.1 / JSON Schema / MCP definitions).</li>
+<li><code>runtime/</code>: Scaffolding entrypoints, setup documentation, environment requirements, and explicit platform dependencies.</li>
+<li><code>tests/</code>: Factory-generated edge-case and failure-mode test suites.</li>
+<li><strong>Decision Owner:</strong> Integration Developer / Automation Assembler.</li>
+<li><strong>Observable Acceptance Criterion:</strong> The package is generated as an inspectable filesystem bundle with syntactically valid static assets; core business behavior is structurally separated from platform adapter logic; universal compatibility is not claimed. Mandatory container boot is <strong>not</strong> a condition of generating or exporting a pack. Boot checks, static linting, functional evaluations, and adversarial probes are distinct forms of evidence, not equivalent passes. Evaluation remains strictly optional for pack export; an untested pack can be inspected and exported with a clear <code>NOT RUN</code> status on its evaluation dimensions, never with a claim that it works.</li>
+</ul>
+<h3 id="stage-5-supervised-evaluation-evidence-review">Stage 5: Supervised Evaluation &amp; Evidence Review<a class="headerlink" href="#stage-5-supervised-evaluation-evidence-review" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> Compiled Agent Build Pack + Evaluation Configuration (scope, test cases, permissions, runtime parameters).</li>
+<li><strong>Factory Supervised-Evaluation Capability:</strong> A human supervisor:</li>
+<li>Reviews and scopes the evaluation plan, test cases, tool permissions, mock bindings, and execution conditions prior to any run.</li>
+<li>Can start, pause, stop, and inspect an evaluation run when separately authorized.</li>
+<li>Reviews recorded outcomes, error traces, and boundary compliance before signing off.</li>
+<li><strong>Export Optionality:</strong> Evaluation is strictly <strong>optional</strong> for pack export. An un-evaluated or partially evaluated pack can be exported provided all unevaluated dimensions are clearly labeled <code>NOT RUN</code>.</li>
+<li><strong>Output Artifact:</strong> Proposed Evidence Record (<code>audit_manifest.json</code>): Detailed record linking evaluated assets, model/configuration, external dependencies, and environment to logged outcomes across distinct evidence dimensions.</li>
+<li><strong>Decision Owner:</strong> Evaluation Supervisor / Approver.</li>
+<li><strong>Observable Acceptance Criterion:</strong> Traceable alignment between claimed results and physical execution logs. Any observed unauthorized tool action, defined confidentiality breach, boundary-breaking injection, or false verification claim rejects that evaluated pack, regardless of overall scores.</li>
+</ul>
+<h3 id="stage-6-revision-invalidation">Stage 6: Revision &amp; Invalidation<a class="headerlink" href="#stage-6-revision-invalidation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input:</strong> User feedback, modified requirements, newly discovered edge cases, or failing test traces.</li>
+<li><strong>Output Artifact:</strong> <code>revision_delta.md</code> (Versioned mutation record):</li>
+<li>Textual diff of changed requirements.</li>
+<li>State invalidation table: Records affected downstream code, adapters, and test evidence whose current applicability is updated to <code>STALE / INVALIDATED</code>.</li>
+<li><strong>Decision Owner:</strong> Joint: Agent Owner (for requirement changes) &amp; Technical Planner (for spec updates).</li>
+<li><strong>Observable Acceptance Criterion:</strong> Historical results are preserved in the audit log (an earlier pass on version X remains on record as having passed version X); mutating an upstream requirement updates the current applicability status of affected downstream evidence to <code>STALE / INVALIDATED</code> relative to the new version Y. Acceptance criteria are never silently relaxed to force a passing score.</li>
+</ul>
+<hr />
+<h2 id="3-reusable-capability-contract">3. Reusable Capability Contract<a class="headerlink" href="#3-reusable-capability-contract" title="Permanent link">&para;</a></h2>
+<p>Every tool, action, or integration block within an Agent Pack is governed by a declarative, machine-readable <strong>Capability Contract</strong> (<code>capability_contract.json</code> / <code>tool_definition.json</code>). It defaults to no specific CRM or vendor ecosystem.</p>
+<pre class="mermaid"><code>classDiagram
+    class CapabilityContract {
+        +String capability_id
+        +SemVer version
+        +String purpose_and_intent
+        +JSONSchema input_schema
+        +JSONSchema output_schema
+        +PermissionScope permissions
+        +DataBoundaryRules data_boundaries
+        +PlatformPrerequisites dependencies
+        +FailureModeCatalog failure_modes
+        +EvidenceStatus evidence_status
+    }</code></pre>
+<h3 id="31-mandatory-contract-schema-fields">3.1 Mandatory Contract Schema Fields<a class="headerlink" href="#31-mandatory-contract-schema-fields" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Identity &amp; Purpose:</strong></li>
+<li><code>capability_id</code>: Unique canonical name (e.g., <code>company_intelligence_lookup</code>).</li>
+<li><code>version</code>: Semantic version string (<code>major.minor.patch</code>).</li>
+<li><code>purpose_and_intent</code>: Unambiguous description of what the tool accomplishes and when an agent should invoke it.</li>
+<li><strong>Data Contracts:</strong></li>
+<li><code>input_schema</code>: Declarative schema (such as JSON Schema Draft 2020-12 or OpenAPI 3.1) defining all parameters, types, regex formats, fixed-choice enums, default values, and required fields.</li>
+<li><code>output_schema</code>: Declarative schema defining terminal response properties, output tokens, and payload structures.</li>
+<li><strong>Permissions &amp; Execution Boundaries:</strong></li>
+<li><code>permissions</code>: Explicit permission flags (e.g., <code>network_egress: true</code>, <code>filesystem_write: false</code>, <code>data_mutation: false</code>).</li>
+<li><code>data_boundaries</code>: Explicit data-handling constraints (e.g., prohibited PII passing, mandatory secret redaction, token masking rules).</li>
+<li><strong>Platform &amp; Runtime Dependencies:</strong></li>
+<li><code>dependencies</code>: Declared runtime prerequisites (e.g., required runtime version, network reachability, protocol support like MCP or HTTP REST).</li>
+<li><strong>Failure Modes &amp; Degradation Behaviors:</strong></li>
+<li><code>failure_modes</code>: Structured catalog of expected error conditions and mandatory recovery responses:<ul>
+<li><em>HTTP 429 / Rate Limit:</em> Declares backoff expectation or graceful user notification.</li>
+<li><em>HTTP 500 / Downstream Crash:</em> Declares fallback payload or explicit failure message (prohibits hallucinating mock success).</li>
+<li><em>Schema Mismatch / Malformed Output:</em> Declares immediate validation rejection.</li>
+</ul>
+</li>
+<li><strong>Multi-Dimensional Evidence Status:</strong></li>
+<li><code>evidence_status</code>: Status record tracking creation, execution outcome, assumption confidence, and current applicability.</li>
+</ol>
+<h3 id="32-visibility-of-requirement-to-capability-mismatches">3.2 Visibility of Requirement-to-Capability Mismatches<a class="headerlink" href="#32-visibility-of-requirement-to-capability-mismatches" title="Permanent link">&para;</a></h3>
+<p>The Factory defines capability contracts as standalone, local specifications without defaulting to HubSpot integration or presuming a commercial marketplace. When an agent specification requires an action that conflicts with an available capability contract, the Factory surfaces the mismatch in the trace matrix:
+* <strong>Parameter Type Clash:</strong> If <code>spec.md</code> specifies an integer account ID but the capability schema requires an alphanumeric string, the compiler raises a <code>SCHEMA_TYPE_MISMATCH</code> blocker.
+* <strong>Permission Deficit:</strong> If the agent brief requires creating an external record but the capability contract declares <code>data_mutation: false</code>, the Factory flags a <code>PERMISSION_BOUNDARY_VIOLATION</code>.
+* <strong>Missing Error Handling:</strong> If the brief requires uninterrupted uptime but the capability declares unhandled 500 crashes, the Factory flags an <code>UNMITIGATED_FAILURE_MODE</code>.</p>
+<hr />
+<h2 id="4-diverse-users-the-collaborative-backbone">4. Diverse Users &amp; The Collaborative Backbone<a class="headerlink" href="#4-diverse-users-the-collaborative-backbone" title="Permanent link">&para;</a></h2>
+<p>The Factory provides a single, unified architectural backbone while accommodating differentiated guidance, technical depth, and handoff mechanisms across diverse user roles. One individual may hold several roles (e.g., a solo founder acting as requester, planner, and developer). The Factory does <strong>not</strong> select a developer-only audience, a specific workflow, or a single runtime.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Backbone["Shared Architectural Backbone (All Users)"]
+        B1["Idea"] --&gt; B2["Clarify"] --&gt; B3["Specify"] --&gt; B4["Pack"] --&gt; B5["Supervised Evaluation"] --&gt; B6["Revise"]
+    end
+
+    subgraph Views["Differentiated Role Lenses (Proposed Options to Explore)"]
+        V1["Solo / Domain Creator: Guided Questioning + Assisted Handoff"]
+        V2["Owner / Planner / Dev Team: Multi-Role Handshakes + Diffs"]
+        V3["Automation Practitioner: Tool Typing + Reusable Block Composition"]
+        V4["Agency / Client: Boundary Isolation + Sign-Off Checkpoints"]
+        V5["Enterprise Reviewer: Compliance Scans + Disqualification Audit"]
+        V6["Learner / Mentor: Conceptual Explanations + Diagnostic Traces"]
+        V7["Contributor / Maintainer: Contract Verification + Schema Linting"]
+    end
+
+    Backbone --- Views</code></pre>
+<h3 id="41-persona-matrix-guidance-technical-depth-handoff-concepts-proposed-options">4.1 Persona Matrix: Guidance, Technical Depth &amp; Handoff Concepts (Proposed Options)<a class="headerlink" href="#41-persona-matrix-guidance-technical-depth-handoff-concepts-proposed-options" title="Permanent link">&para;</a></h3>
+<p><em>Note: The specific interaction modalities, UI views (such as Git-native reviews, parameter cards, white-labeled client packs, or compliance dashboards) described below are <strong>proposed design concepts to explore</strong>, not settled or approved product interfaces.</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">User Archetype</th>
+<th style="text-align: left;">Guidance Model</th>
+<th style="text-align: left;">Technical Depth Exposed</th>
+<th style="text-align: left;">Primary Handoff Mechanism (Proposed Concept)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Solo / Domain Creator</strong></td>
+<td style="text-align: left;">High guidance; conversational Socratic questioning to unpack implicit domain assumptions.</td>
+<td style="text-align: left;">Low-to-Medium; hides raw JSON Schema syntax, exposes parameter descriptions and plain-language boundaries.</td>
+<td style="text-align: left;">Exportable specification bundle with clear setup instructions for an external integrator.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Owner / Planner / Dev Team</strong></td>
+<td style="text-align: left;">Structured handshakes; owners clarify intent, planners structure contracts, devs inspect code.</td>
+<td style="text-align: left;">Full spectrum; role-based views dynamically expose requirements, state graphs, or raw code.</td>
+<td style="text-align: left;">Collaborative branch reviews (<code>spec.md</code> diffs, runtime entrypoint reviews, pull-request checks).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Automation Practitioner</strong></td>
+<td style="text-align: left;">Catalog-driven; focuses on connecting existing modular tools, mapping variables, and configuring tokens.</td>
+<td style="text-align: left;">Medium; exposes parameters, typed inputs/outputs, and connector configuration without raw code writing.</td>
+<td style="text-align: left;">Modular tool configurations, environment mappings, and runtime glue scripts for local orchestrators.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Agency &amp; Multi-Client Delivery</strong></td>
+<td style="text-align: left;">Template-driven; emphasizes reusable agency patterns with client-specific parameterization.</td>
+<td style="text-align: left;">High; inspects full codebase, prompts, and schema contracts.</td>
+<td style="text-align: left;">Client delivery pack containing signed specifications, recorded test logs, and maintenance runbooks.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Enterprise Platform &amp; Reviewers</strong></td>
+<td style="text-align: left;">Policy-driven; automated scanning against organizational compliance rules and data boundaries.</td>
+<td style="text-align: left;">Audit depth; focuses on security manifests, egress declarations, permission boundaries, and failure logs.</td>
+<td style="text-align: left;">Verifiable compliance and audit report (<code>compliance_report.md</code>) for infosec sign-off.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Learner &amp; Mentor</strong></td>
+<td style="text-align: left;">Pedagogical; provides inline explanations of <em>why</em> an ambiguity is problematic and <em>how</em> tools communicate.</td>
+<td style="text-align: left;">Progressive; starts with simple conceptual views and allows drilling down into underlying JSON/code.</td>
+<td style="text-align: left;">Guided sandbox review with detailed error annotations and recovery explanations.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Contributor &amp; Capability Author</strong></td>
+<td style="text-align: left;">Contract-first; strict linting of tool definitions, schema validity, and failure cataloging.</td>
+<td style="text-align: left;">Interface depth; focuses strictly on JSON Schema compliance, protocol adherence (MCP), and mock fixtures.</td>
+<td style="text-align: left;">Standalone Capability Contract bundle ready for inclusion into agent packs.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-evidence-change-governance-rules">5. Evidence &amp; Change Governance Rules<a class="headerlink" href="#5-evidence-change-governance-rules" title="Permanent link">&para;</a></h2>
+<p>To ensure complete epistemic honesty and prevent deceptive completeness, the Factory operates under strict evidence and mutation invariants.</p>
+<h3 id="51-multi-dimensional-evidence-architecture">5.1 Multi-Dimensional Evidence Architecture<a class="headerlink" href="#51-multi-dimensional-evidence-architecture" title="Permanent link">&para;</a></h3>
+<p>Rather than forcing all lifecycle information into a single mutually exclusive status tag, evidence is tracked across four distinct, complementary dimensions:</p>
+<ol>
+<li><strong>Artifact Creation Status:</strong></li>
+<li><code>GENERATED</code>: The file, prompt, or test stub exists on disk.</li>
+<li><code>NOT CREATED</code>: The artifact has not been authored or compiled.</li>
+<li><strong>Check Execution &amp; Outcome:</strong></li>
+<li><code>NOT RUN</code>: The check or validation case was defined, but was not executed in a runtime environment.</li>
+<li><code>EXECUTED-PASSED</code>: The check was executed in an authorized environment and all assertions passed with logged stdout/stderr and exit code 0.</li>
+<li><code>EXECUTED-FAILED</code>: The check was executed in an authorized environment and failed one or more assertions (raw failure trace retained).</li>
+<li><strong>Assumption Confidence:</strong></li>
+<li><code>VERIFIED</code>: The dependency, credential format, or external behavior has been empirically confirmed via test or verified schema.</li>
+<li><code>UNVERIFIED ASSUMPTION</code>: Any dependency, key format, runtime behavior, or environment prerequisite assumed by the Factory without empirical confirmation.</li>
+<li><strong>Current Applicability (Temporal Relevance):</strong></li>
+<li><code>CURRENT</code>: The evidence directly applies to the active, unmodified version of the specification and pack.</li>
+<li><code>STALE / INVALIDATED</code>: An upstream requirement or instruction has mutated since this check was performed, rendering the evidence historically valid for its original version but invalid for current applicability.</li>
+</ol>
+<h3 id="52-preservation-of-historical-results-version-linkage">5.2 Preservation of Historical Results &amp; Version Linkage<a class="headerlink" href="#52-preservation-of-historical-results-version-linkage" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Preservation of History:</strong> Prior test results are preserved as immutable historical facts. An earlier pass (<code>EXECUTED-PASSED</code> on version X) is never deleted or rewritten as though it never occurred; instead, its current applicability status is marked <code>STALE / INVALIDATED</code> relative to the newly modified version Y.</li>
+<li><strong>Proposed Evidence Record (<code>audit_manifest.json</code>):</strong> Every recorded check links to an auditable record identifying:</li>
+<li>The exact pack snapshot and runtime entrypoint evaluated.</li>
+<li>The specific test cases, assertions, and boundary probes executed.</li>
+<li>Declared external dependencies and mock service bindings.</li>
+<li>The model family, version, and runtime configuration evaluated.</li>
+<li>The execution environment description and raw timestamped log traces.</li>
+<li><strong>Role of Hashes:</strong> Cryptographic hashes (<code>SHA-256</code>) may be used to link records to exact file snapshots and detect drift; <strong>hashes link versions, but do not prove functional correctness or safety</strong>.</li>
+</ul>
+<h3 id="53-auditable-evidence-standard-bounded-claims">5.3 Auditable Evidence Standard &amp; Bounded Claims<a class="headerlink" href="#53-auditable-evidence-standard-bounded-claims" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All evidence is defined as <strong>auditable</strong> against physical log files, network capture dumps, and disk artifacts. Claims of evidence being "unforgeable" are explicitly rejected.</li>
+<li>All claims regarding safety and performance are strictly <strong>bounded claims about observed results</strong> in finite test episodes. Passing a finite test suite does not constitute a universal guarantee against unobserved failures, nor does it guarantee the universal absence of violations.</li>
+</ul>
+<h3 id="54-automatic-disqualification-invariants-hard-failures">5.4 Automatic Disqualification Invariants (Hard Failures)<a class="headerlink" href="#54-automatic-disqualification-invariants-hard-failures" title="Permanent link">&para;</a></h3>
+<p>The following occurrences constitute non-negotiable rejection conditions (<code>REJECT</code>) for an evaluated pack, which <strong>cannot</strong> be offset, diluted, or forgiven by high aggregate scores on other benchmarks:
+1. <strong>Observed Unauthorized Action:</strong> The agent attempts an action, tool call, or API invocation not explicitly permitted in its capability contract.
+2. <strong>Observed Confidentiality Breach:</strong> The agent discloses internal secrets, unmasked PII, or data explicitly designated as confidential in <code>spec.md</code>. (Editable system prompts are <strong>not</strong> automatically assumed to be confidential; protection follows explicit confidentiality requirements defined in <code>spec.md</code>).
+3. <strong>Observed Boundary-Breaking Injection:</strong> The agent complies with adversarial prompt injections, violating stated operational constraints.
+4. <strong>False Verification Claim:</strong> Any artifact, manifest, or report claiming an assertion was tested or verified when no corresponding verifiable log trace exists.</p>
+<hr />
+<h2 id="6-planning-governance-ledger">6. Planning Governance Ledger<a class="headerlink" href="#6-planning-governance-ledger" title="Permanent link">&para;</a></h2>
+<p>This ledger records the formal status of product direction, working technical proposals, and unresolved owner choices. <strong>A model-authored ledger does not establish approval; only explicit owner decisions establish approved scope.</strong></p>
+<h3 id="61-confirmed-direction-approved-scope-decisions">6.1 Confirmed Direction (Approved Scope Decisions)<a class="headerlink" href="#61-confirmed-direction-approved-scope-decisions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>The Product is the Factory:</strong> All design effort focuses on the meta-tooling that clarifies, specifies, packages, evaluates, and revises agents. Downstream workflows (triage, extraction, routing) are benchmark test vectors, not the product definition.</li>
+<li><strong>Supervised Evaluation Capability in v1 (Newly Confirmed Scope):</strong> v1 must have the capability for supervised evaluation:</li>
+<li>A human supervisor reviews the evaluation scope, test cases, permissions, mock bindings, and conditions.</li>
+<li>A human supervisor can start, pause, stop, and inspect an evaluation run when separately authorized.</li>
+<li>A human supervisor reviews recorded outcomes and boundary compliance.</li>
+<li><em>Export Invariant:</em> Evaluation is strictly <strong>optional</strong> for pack export. An un-evaluated or partially evaluated pack can be inspected and exported with clear <code>NOT RUN</code> labels, never with a claim that it works. Boot checks, static linting, and functional/security evaluations are different forms of evidence, not equivalent passes. Mandatory container boot is <strong>not</strong> a condition of generating or exporting a pack.</li>
+<li><strong>Specification Discipline:</strong> Every agent originates from an unambiguous, traceable requirements contract (<code>spec.md</code>).</li>
+<li><strong>Decoupled Architecture:</strong> Core business behavior is structurally separated from platform-specific adapters and declarative capability contracts.</li>
+<li><strong>Auditable Multi-Dimensional Evidence:</strong> Separation of creation, outcome, assumption, and applicability; preservation of historical results; automated invalidation of current applicability upon requirement mutations; zero tolerance for false verification claims.</li>
+<li><strong>Hard Disqualification Invariants:</strong> Safety violations, unauthorized actions, confidentiality breaches of designated data, and false claims trigger immediate rejection regardless of aggregate performance.</li>
+<li><strong>Multi-Role Collaborative Scope:</strong> Product accommodates defiers, assemblers, and approvers rather than forcing a single developer-only persona.</li>
+</ul>
+<h3 id="62-proposed-technical-defaults-working-hypotheses-not-formally-approved">6.2 Proposed Technical Defaults (Working Hypotheses — Not Formally Approved)<a class="headerlink" href="#62-proposed-technical-defaults-working-hypotheses-not-formally-approved" title="Permanent link">&para;</a></h3>
+<p><em>Note: The following items are working proposals and design concepts to explore; they remain subject to future architectural review and do not constitute approved owner commitments:</em>
+* <strong>UI Views &amp; Progressive Disclosure:</strong> Proposing a unified product with four progressive role views (Brief, Spec, Artifact, Evidence) rather than fragmented point tools.
+* <strong>Specific Handoff Mechanisms:</strong> Concepts such as Git-native branch reviews, visual parameter cards, white-labeled client delivery packs, compliance reports, and sandbox review views are exploratory proposals.
+* <strong>Schema Specifications:</strong> Proposing OpenAPI 3.1 / JSON Schema (Draft 2020-12) and Model Context Protocol (MCP) as standard capability contract formats.
+* <strong>Containerized Execution Design:</strong> Proposing rootless, ephemeral containers with mock services and denied-by-default networking for future local test execution designs.
+* <strong>Cryptographic Version Linking:</strong> Proposing SHA-256 file hashing as an audit mechanism to link evidence records to version snapshots.</p>
+<h3 id="63-unresolved-owner-choices-explicitly-preserved-for-future-decision">6.3 Unresolved Owner Choices (Explicitly Preserved for Future Decision)<a class="headerlink" href="#63-unresolved-owner-choices-explicitly-preserved-for-future-decision" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Target Provider &amp; Framework Prioritization:</strong> Prioritizing Anthropic Messages API vs. OpenAI Responses API vs. Google ADK vs. LangGraph or other runtimes remains an open planning decision.</li>
+<li><strong>Primary Entry Persona Selection:</strong> Selecting which persona (Business Owner vs. Planner vs. Automation Specialist vs. Developer vs. Agency) will serve as the initial commercial wedge remains an open decision to be guided by customer discovery.</li>
+<li><strong>Benchmark Workflow Selection:</strong> Choosing which specific workflow briefs (support triage, extraction, routing) will serve as the initial benchmark corpus for testing the Factory remains an open choice.</li>
+</ol>
+<hr />
+<p><em>Boundary Notice: This document establishes the reconciled planning contract for the Agent Development Factory. It authorizes no implementation, candidate generation, code execution, environment setup, testing, spending, account connection, or deployment, and preserves the existing review block.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

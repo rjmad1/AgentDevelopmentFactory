@@ -1,0 +1,2661 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Meta-product transforming workflow briefs into inspectable, portable, safe, and verifiable Agent Build Packs.">
+      
+      
+        <meta name="author" content="Raja Jeevan Kumar Maduri">
+      
+      
+        <link rel="canonical" href="https://rjmad1.github.io/AgentDevelopmentFactory/architecture/components/">
+      
+      
+        <link rel="prev" href="../three_plane/">
+      
+      
+        <link rel="next" href="../evaluations/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Component Architecture - Agent Development Factory</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#factory-component-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Agent Development Factory" class="md-header__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Agent Development Factory
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Component Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../ROADMAP/" class="md-tabs__link">
+          
+  
+  
+  Product Contracts & SDD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../master/" class="md-tabs__link">
+          
+  
+  
+  Platform Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../verification/pipeline/" class="md-tabs__link">
+          
+  
+  
+  Verification & CI/CD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/core/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/getting_started/" class="md-tabs__link">
+          
+  
+  
+  Guides & Operations
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Agent Development Factory" class="md-nav__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Agent Development Factory
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contracts & SDD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Product Contracts & SDD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ADF_Capability_Map_Roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Map (Reading List)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adf-evals-and-guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals & Guardrails Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_product_contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_capability_and_acceptance_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability & Acceptance Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_persona_opportunity_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persona Opportunity Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_paper_interaction_walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interaction Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DEVELOPMENT_PIPELINE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Pipeline Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AUTONOMOUS_LOOP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Engineering Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Platform Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Platform Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../master/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../three_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-Plane Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architectural-component-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architectural Component Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-component-specifications-and-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Component Specifications and Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Component Specifications and Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-control-plane-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Control Plane Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Control Plane Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-requestintake-agent_factorycontrol_planeintake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RequestIntake (agent_factory.control_plane.intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-lifecycleorchestrator-agent_factorycontrol_planeorchestrator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. LifecycleOrchestrator (agent_factory.control_plane.orchestrator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-taskledger-agent_factorycontrol_planetask_ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. TaskLedger (agent_factory.control_plane.task_ledger)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-specification-validation-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Specification &amp; Validation Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Specification &amp; Validation Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-universalagentspec-agent_factoryspecsschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. UniversalAgentSpec (agent_factory.specs.schema)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-specvalidator-agent_factoryspecsvalidator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SpecValidator (agent_factory.specs.validator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-capability-registry-environment-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Capability Registry &amp; Environment Discovery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 Capability Registry &amp; Environment Discovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-capabilityregistry-agent_factoryregistrycapability_registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CapabilityRegistry (agent_factory.registry.capability_registry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-environmentdiscovery-agent_factoryregistrydiscovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. EnvironmentDiscovery (agent_factory.registry.discovery)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-autonomous-engineering-workbench" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Autonomous Engineering Workbench
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Autonomous Engineering Workbench">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-workspacemanager-agent_factoryworkbenchworkspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. WorkspaceManager (agent_factory.workbench.workspace)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-codegenerator-agent_factoryworkbenchcode_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. CodeGenerator (agent_factory.workbench.code_generator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-testgenerator-agent_factoryworkbenchtest_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. TestGenerator (agent_factory.workbench.test_generator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-releasepackager-agent_factoryworkbenchpackager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ReleasePackager (agent_factory.workbench.packager)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-runtime-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Runtime Adapters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Runtime Adapters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-agentruntime-agent_factoryruntimebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. AgentRuntime (agent_factory.runtime.base)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-localprocessruntime-agent_factoryruntimelocal_process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. LocalProcessRuntime (agent_factory.runtime.local_process)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-omniroutemodeladapter-agent_factoryadaptersomniroute_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. OmniRouteModelAdapter (agent_factory.adapters.omniroute_adapter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-hermesharnessadapter-agent_factoryadaptershermes_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. HermesHarnessAdapter (agent_factory.adapters.hermes_adapter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-evaluation-quality-assurance-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Evaluation &amp; Quality Assurance Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 Evaluation &amp; Quality Assurance Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-evaluationrunner-agent_factoryevalsrunner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. EvaluationRunner (agent_factory.evals.runner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-deterministicgraders-agent_factoryevalsgraders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. DeterministicGraders (agent_factory.evals.graders)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-metricscalculator-agent_factoryevalsmetrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. MetricsCalculator (agent_factory.evals.metrics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-bounded-autonomous-remediation-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Bounded Autonomous Remediation Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 Bounded Autonomous Remediation Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remediationengine-agent_factoryremediationengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RemediationEngine (agent_factory.remediation.engine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Policies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification & CI/CD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification & CI/CD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zero-Cost CI/CD Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/deep_evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Evaluator & Gates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/langsmith/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Free Tier Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authoring Core Engine (JS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/control_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Plane (Python)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specifications & Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/workbench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workbench
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluations & Graders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime & Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Redaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registry & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provider Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides & Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides & Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recovery Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architectural-component-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architectural Component Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-component-specifications-and-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Component Specifications and Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Component Specifications and Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-control-plane-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Control Plane Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Control Plane Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-requestintake-agent_factorycontrol_planeintake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RequestIntake (agent_factory.control_plane.intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-lifecycleorchestrator-agent_factorycontrol_planeorchestrator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. LifecycleOrchestrator (agent_factory.control_plane.orchestrator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-taskledger-agent_factorycontrol_planetask_ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. TaskLedger (agent_factory.control_plane.task_ledger)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-specification-validation-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Specification &amp; Validation Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Specification &amp; Validation Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-universalagentspec-agent_factoryspecsschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. UniversalAgentSpec (agent_factory.specs.schema)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-specvalidator-agent_factoryspecsvalidator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SpecValidator (agent_factory.specs.validator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-capability-registry-environment-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Capability Registry &amp; Environment Discovery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 Capability Registry &amp; Environment Discovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-capabilityregistry-agent_factoryregistrycapability_registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CapabilityRegistry (agent_factory.registry.capability_registry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-environmentdiscovery-agent_factoryregistrydiscovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. EnvironmentDiscovery (agent_factory.registry.discovery)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-autonomous-engineering-workbench" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Autonomous Engineering Workbench
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Autonomous Engineering Workbench">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-workspacemanager-agent_factoryworkbenchworkspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. WorkspaceManager (agent_factory.workbench.workspace)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-codegenerator-agent_factoryworkbenchcode_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. CodeGenerator (agent_factory.workbench.code_generator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-testgenerator-agent_factoryworkbenchtest_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. TestGenerator (agent_factory.workbench.test_generator)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-releasepackager-agent_factoryworkbenchpackager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ReleasePackager (agent_factory.workbench.packager)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-runtime-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Runtime Adapters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Runtime Adapters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-agentruntime-agent_factoryruntimebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. AgentRuntime (agent_factory.runtime.base)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-localprocessruntime-agent_factoryruntimelocal_process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. LocalProcessRuntime (agent_factory.runtime.local_process)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-omniroutemodeladapter-agent_factoryadaptersomniroute_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. OmniRouteModelAdapter (agent_factory.adapters.omniroute_adapter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-hermesharnessadapter-agent_factoryadaptershermes_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. HermesHarnessAdapter (agent_factory.adapters.hermes_adapter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-evaluation-quality-assurance-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Evaluation &amp; Quality Assurance Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 Evaluation &amp; Quality Assurance Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-evaluationrunner-agent_factoryevalsrunner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. EvaluationRunner (agent_factory.evals.runner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-deterministicgraders-agent_factoryevalsgraders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. DeterministicGraders (agent_factory.evals.graders)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-metricscalculator-agent_factoryevalsmetrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. MetricsCalculator (agent_factory.evals.metrics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-bounded-autonomous-remediation-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Bounded Autonomous Remediation Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 Bounded Autonomous Remediation Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remediationengine-agent_factoryremediationengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RemediationEngine (agent_factory.remediation.engine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="factory-component-architecture">Factory Component Architecture<a class="headerlink" href="#factory-component-architecture" title="Permanent link">&para;</a></h1>
+<p><strong>Document Version:</strong> 1.0.0<br />
+<strong>Date:</strong> 2026-11-03<br />
+<strong>Author:</strong> Antigravity 2.0 (Supervising Principal Platform Architect)<br />
+<strong>Status:</strong> BASELINED &amp; APPROVED  </p>
+<hr />
+<h2 id="1-architectural-component-overview">1. Architectural Component Overview<a class="headerlink" href="#1-architectural-component-overview" title="Permanent link">&para;</a></h2>
+<p>The Agent Development Factory is organized into cohesive, loosely coupled Python modules located within the <code>agent_factory</code> package. Each component exposes a strict programmatic interface, enforces type safety via Pydantic/mypy standards, and maintains deterministic boundary protections.</p>
+<pre class="mermaid"><code>graph TD
+    subgraph CP["Control Plane (agent_factory.control_plane)"]
+        CLI["CLI &amp; API Gateway (cli.py)"] --&gt; Intake["Request Intake (intake.py)"]
+        Intake --&gt; Orch["Lifecycle Orchestrator (orchestrator.py)"]
+        Orch --&gt; Ledger["Task &amp; State Ledger (task_ledger.py)"]
+        Orch --&gt; Approval["Approval Gate (security.approval_gate)"]
+    end
+
+    subgraph SPEC["Specification Engine (agent_factory.specs)"]
+        Schema["Schema Models (schema.py)"]
+        Validator["Semantic Validator (validator.py)"]
+    end
+
+    subgraph REG["Capability Registry (agent_factory.registry)"]
+        CapReg["Capability Registry (capability_registry.py)"]
+        Discovery["Environment Discovery (discovery.py)"]
+    end
+
+    subgraph WB["Engineering Workbench (agent_factory.workbench)"]
+        WS["Workspace Manager (workspace.py)"]
+        CodeGen["Code Generator (code_generator.py)"]
+        TestGen["Test Generator (test_generator.py)"]
+        Packager["Release Packager (packager.py)"]
+    end
+
+    subgraph RT["Runtime Adapters (agent_factory.runtime &amp; adapters)"]
+        RTBase["Runtime Base (runtime.base)"]
+        LocalRT["Local Process Runtime (runtime.local_process)"]
+        HermesRT["Hermes Harness Adapter (adapters.hermes_adapter)"]
+        OmniRT["OmniRoute Model Adapter (adapters.omniroute_adapter)"]
+    end
+
+    subgraph QA["Evaluation &amp; QA (agent_factory.evals)"]
+        EvalRunner["Evaluation Runner (runner.py)"]
+        Graders["Deterministic Graders (graders.py)"]
+        Metrics["Score Calculator (metrics.py)"]
+    end
+
+    subgraph REM["Remediation Engine (agent_factory.remediation)"]
+        RemEngine["Bounded Remediation (engine.py)"]
+    end
+
+    subgraph SEC["Security &amp; Governance (agent_factory.security)"]
+        Policy["Policy Engine (policy.py)"]
+        Redactor["Secret Redactor (redactor.py)"]
+        Quarantine["Skill Quarantine (quarantine.py)"]
+    end
+
+    Orch --&gt; Schema
+    Orch --&gt; CapReg
+    Orch --&gt; WS
+    WS --&gt; CodeGen
+    WS --&gt; TestGen
+    WS --&gt; LocalRT
+    LocalRT --&gt; EvalRunner
+    EvalRunner --&gt; Graders
+    EvalRunner --&gt; Metrics
+    EvalRunner --&gt; RemEngine
+    RemEngine --&gt; WS
+    Orch --&gt; Packager</code></pre>
+<hr />
+<h2 id="2-component-specifications-and-contracts">2. Component Specifications and Contracts<a class="headerlink" href="#2-component-specifications-and-contracts" title="Permanent link">&para;</a></h2>
+<h3 id="21-control-plane-components">2.1 Control Plane Components<a class="headerlink" href="#21-control-plane-components" title="Permanent link">&para;</a></h3>
+<h4 id="1-requestintake-agent_factorycontrol_planeintake">1. <code>RequestIntake</code> (<code>agent_factory.control_plane.intake</code>)<a class="headerlink" href="#1-requestintake-agent_factorycontrol_planeintake" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Ingests raw business requests, decomposes requirements into functional units, determines project feasibility, and assigns an initial Risk Classification.</li>
+<li><strong>Core Method:</strong>
+  <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">ingest_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Admin"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProjectIntakeResult</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">"""Parses requirement, checks constraints, and constructs initial Project spec."""</span>
+</span></code></pre></div></li>
+<li><strong>Outputs:</strong> <code>ProjectIntakeResult</code> containing unique <code>project_id</code>, goal summary, input/output definitions, and risk level (<code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>).</li>
+</ul>
+<h4 id="2-lifecycleorchestrator-agent_factorycontrol_planeorchestrator">2. <code>LifecycleOrchestrator</code> (<code>agent_factory.control_plane.orchestrator</code>)<a class="headerlink" href="#2-lifecycleorchestrator-agent_factorycontrol_planeorchestrator" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Drives the 11-stage factory state machine. Verifies entry/exit criteria for each stage, triggers workbench activities, and coordinates approval gates.</li>
+<li><strong>Stage Sequence:</strong></li>
+<li><code>INTAKE</code> <span class="arithmatex">\(\rightarrow\)</span> 2. <code>SPEC_DRAFT</code> <span class="arithmatex">\(\rightarrow\)</span> 3. <code>SPEC_REVIEW</code> <span class="arithmatex">\(\rightarrow\)</span> 4. <code>BUILD</code> <span class="arithmatex">\(\rightarrow\)</span> 5. <code>TEST</code> <span class="arithmatex">\(\rightarrow\)</span> 6. <code>EVALUATE</code> <span class="arithmatex">\(\rightarrow\)</span> 7. <code>REMEDIATE</code> <span class="arithmatex">\(\rightarrow\)</span> 8. <code>PACKAGE</code> <span class="arithmatex">\(\rightarrow\)</span> 9. <code>RELEASE</code> <span class="arithmatex">\(\rightarrow\)</span> 10. <code>OPERATION</code> <span class="arithmatex">\(\rightarrow\)</span> 11. <code>RETIRED</code>.</li>
+<li><strong>Core Method:</strong>
+  <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">advance_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StageTransitionResult</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">"""Validates current stage exit criteria, transitions to next stage, and records evidence."""</span>
+</span></code></pre></div></li>
+</ul>
+<h4 id="3-taskledger-agent_factorycontrol_planetask_ledger">3. <code>TaskLedger</code> (<code>agent_factory.control_plane.task_ledger</code>)<a class="headerlink" href="#3-taskledger-agent_factorycontrol_planetask_ledger" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Durable state management for active workflows, task claims, and execution checkpoints. Implemented using atomic SQLite persistence and JSON Line event streams.</li>
+<li><strong>Core Data Model:</strong>
+  <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">TaskRecord</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># QUEUED, RUNNING, COMPLETED, FAILED, BLOCKED</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">input_hash</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">output_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">evidence_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">error_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">created_at</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">updated_at</span><span class="p">:</span> <span class="nb">str</span>
+</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="22-specification-validation-engine">2.2 Specification &amp; Validation Engine<a class="headerlink" href="#22-specification-validation-engine" title="Permanent link">&para;</a></h3>
+<h4 id="1-universalagentspec-agent_factoryspecsschema">1. <code>UniversalAgentSpec</code> (<code>agent_factory.specs.schema</code>)<a class="headerlink" href="#1-universalagentspec-agent_factoryspecsschema" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Pydantic model defining the portable contract format (<code>agent.yaml</code>).</li>
+<li><strong>Attributes:</strong></li>
+<li><code>schema_version</code>: Integer (default: 1).</li>
+<li><code>agent_id</code>: Machine-readable unique identifier.</li>
+<li><code>owner</code>: Name or role of the owning engineer/stakeholder.</li>
+<li><code>purpose</code>: Concrete single-sentence operational objective.</li>
+<li><code>inputs</code>: Typed dictionary of expected input parameters.</li>
+<li><code>outputs</code>: Typed dictionary of generated output artifacts.</li>
+<li><code>policy</code>: Permission boundaries (<code>mode</code>, <code>data_class</code>, <code>permitted_tools</code>, <code>effects</code>, <code>on_denial</code>).</li>
+<li><code>limits</code>: Numeric bounds (<code>max_steps</code>, <code>max_wall_time_seconds</code>, <code>paid_spend_ceiling</code>).</li>
+<li><code>acceptance</code>: Target evaluation suite and required passing thresholds.</li>
+<li><code>targets</code>: Declared runtime targets (<code>local_process</code>, <code>hermes</code>, <code>docker</code>).</li>
+</ul>
+<h4 id="2-specvalidator-agent_factoryspecsvalidator">2. <code>SpecValidator</code> (<code>agent_factory.specs.validator</code>)<a class="headerlink" href="#2-specvalidator-agent_factoryspecsvalidator" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Performs syntactic JSON Schema validation and deep semantic policy validation. Rejects specs requesting unauthorized effect levels (e.g., <code>SPEND_DELETE</code> without human authorization) or referencing non-existent tools.</li>
+</ul>
+<hr />
+<h3 id="23-capability-registry-environment-discovery">2.3 Capability Registry &amp; Environment Discovery<a class="headerlink" href="#23-capability-registry-environment-discovery" title="Permanent link">&para;</a></h3>
+<h4 id="1-capabilityregistry-agent_factoryregistrycapability_registry">1. <code>CapabilityRegistry</code> (<code>agent_factory.registry.capability_registry</code>)<a class="headerlink" href="#1-capabilityregistry-agent_factoryregistrycapability_registry" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Strongly typed catalog of infrastructure capabilities.</li>
+<li><strong>Entities:</strong></li>
+<li><code>Capability</code>: Unique ID, Kind (<code>MODEL</code>, <code>PROVIDER</code>, <code>HARNESS</code>, <code>RUNTIME</code>, <code>TOOL</code>, <code>MCP</code>, <code>SKILL</code>, <code>EVALUATION</code>), Provider, Version, Security Classification, Status (<code>ACTIVE</code>, <code>UNVERIFIED</code>, <code>DEPRECATED</code>).</li>
+<li><strong>Core Methods:</strong>
+  <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capability</span><span class="p">:</span> <span class="n">Capability</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">CapabilityKind</span><span class="p">,</span> <span class="n">criteria</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Capability</span><span class="p">]:</span> <span class="o">...</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">verify_capability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capability_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">probe_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+</span></code></pre></div></li>
+</ul>
+<h4 id="2-environmentdiscovery-agent_factoryregistrydiscovery">2. <code>EnvironmentDiscovery</code> (<code>agent_factory.registry.discovery</code>)<a class="headerlink" href="#2-environmentdiscovery-agent_factoryregistrydiscovery" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Probes the live system for CPU, RAM, GPU, listening ports (20128, 31415), installed Hermes version, MCP servers, and Ollama weights, registering verified capabilities automatically.</li>
+</ul>
+<hr />
+<h3 id="24-autonomous-engineering-workbench">2.4 Autonomous Engineering Workbench<a class="headerlink" href="#24-autonomous-engineering-workbench" title="Permanent link">&para;</a></h3>
+<h4 id="1-workspacemanager-agent_factoryworkbenchworkspace">1. <code>WorkspaceManager</code> (<code>agent_factory.workbench.workspace</code>)<a class="headerlink" href="#1-workspacemanager-agent_factoryworkbenchworkspace" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Provisions isolated project workspaces under <code>workspaces/&lt;project_id&gt;/</code> with clean subdirectories:</li>
+<li><code>src/</code>: Generated agent source code.</li>
+<li><code>tests/</code>: Automated test suites.</li>
+<li><code>fixtures/</code>: Deterministic input test data.</li>
+<li><code>artifacts/</code>: Generated outputs.</li>
+<li><code>evidence/</code>: Raw logs, trace events, and checksums.</li>
+</ul>
+<h4 id="2-codegenerator-agent_factoryworkbenchcode_generator">2. <code>CodeGenerator</code> (<code>agent_factory.workbench.code_generator</code>)<a class="headerlink" href="#2-codegenerator-agent_factoryworkbenchcode_generator" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Synthesizes executable Python code adhering to standard architecture patterns (e.g., Anomaly Analyzer, Data Pipeline, Document Processor) strictly matching the Universal Agent Specification.</li>
+</ul>
+<h4 id="3-testgenerator-agent_factoryworkbenchtest_generator">3. <code>TestGenerator</code> (<code>agent_factory.workbench.test_generator</code>)<a class="headerlink" href="#3-testgenerator-agent_factoryworkbenchtest_generator" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Generates comprehensive, automated pytest test files validating:</li>
+<li>Input schema validation and rejection of malformed payloads.</li>
+<li>Core functional logic correctness.</li>
+<li>Output schema and file artifact generation.</li>
+<li>Guard and boundary denial handling.</li>
+</ul>
+<h4 id="4-releasepackager-agent_factoryworkbenchpackager">4. <code>ReleasePackager</code> (<code>agent_factory.workbench.packager</code>)<a class="headerlink" href="#4-releasepackager-agent_factoryworkbenchpackager" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Bundles verified agent code, spec, fixtures, requirements lockfile, and manifest into a reproducible ZIP distribution with cryptographic SHA-256 digests.</li>
+</ul>
+<hr />
+<h3 id="25-runtime-adapters">2.5 Runtime Adapters<a class="headerlink" href="#25-runtime-adapters" title="Permanent link">&para;</a></h3>
+<h4 id="1-agentruntime-agent_factoryruntimebase">1. <code>AgentRuntime</code> (<code>agent_factory.runtime.base</code>)<a class="headerlink" href="#1-agentruntime-agent_factoryruntimebase" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Abstract base class defining runtime execution:
+  <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AgentRuntime</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="nd">@abstractmethod</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_pkg_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">limits</span><span class="p">:</span> <span class="n">ExecutionLimits</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExecutionResult</span><span class="p">:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="k">pass</span>
+</span></code></pre></div></li>
+</ul>
+<h4 id="2-localprocessruntime-agent_factoryruntimelocal_process">2. <code>LocalProcessRuntime</code> (<code>agent_factory.runtime.local_process</code>)<a class="headerlink" href="#2-localprocessruntime-agent_factoryruntimelocal_process" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Executes the agent as an isolated subprocess with:</li>
+<li>Dedicated process group.</li>
+<li>Hard execution timeout enforcement.</li>
+<li>Sanitized environment variables.</li>
+<li>Capture of stdout/stderr and exit codes.</li>
+</ul>
+<h4 id="3-omniroutemodeladapter-agent_factoryadaptersomniroute_adapter">3. <code>OmniRouteModelAdapter</code> (<code>agent_factory.adapters.omniroute_adapter</code>)<a class="headerlink" href="#3-omniroutemodeladapter-agent_factoryadaptersomniroute_adapter" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Connects to local OmniRoute gateway (<code>http://127.0.0.1:20128/v1</code>), formatting completions requests, tracking latency and token consumption, and handling connection retries.</li>
+</ul>
+<h4 id="4-hermesharnessadapter-agent_factoryadaptershermes_adapter">4. <code>HermesHarnessAdapter</code> (<code>agent_factory.adapters.hermes_adapter</code>)<a class="headerlink" href="#4-hermesharnessadapter-agent_factoryadaptershermes_adapter" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Maps agent specs to Hermes CLI commands, profiles, and skills, enabling invocation through the Hermes coordination engine.</li>
+</ul>
+<hr />
+<h3 id="26-evaluation-quality-assurance-engine">2.6 Evaluation &amp; Quality Assurance Engine<a class="headerlink" href="#26-evaluation-quality-assurance-engine" title="Permanent link">&para;</a></h3>
+<h4 id="1-evaluationrunner-agent_factoryevalsrunner">1. <code>EvaluationRunner</code> (<code>agent_factory.evals.runner</code>)<a class="headerlink" href="#1-evaluationrunner-agent_factoryevalsrunner" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Executes standard evaluation packs (A01–A15) against the candidate agent in an isolated environment.</li>
+</ul>
+<h4 id="2-deterministicgraders-agent_factoryevalsgraders">2. <code>DeterministicGraders</code> (<code>agent_factory.evals.graders</code>)<a class="headerlink" href="#2-deterministicgraders-agent_factoryevalsgraders" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Validates outcomes without probabilistic LLM judges:</li>
+<li>File existence and non-zero byte size.</li>
+<li>Exact SHA-256 checksum matches for golden outputs.</li>
+<li>Schema compliance of structured JSON/CSV outputs.</li>
+<li>Exit code 0 verification.</li>
+<li>Absence of unauthorized file writes outside workspace boundaries.</li>
+</ul>
+<h4 id="3-metricscalculator-agent_factoryevalsmetrics">3. <code>MetricsCalculator</code> (<code>agent_factory.evals.metrics</code>)<a class="headerlink" href="#3-metricscalculator-agent_factoryevalsmetrics" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Computes normalized scores for <strong>Efficacy</strong> (0.0 to 1.0), <strong>Safety</strong> (0.0 to 1.0, 1.0 required for release), and <strong>Efficiency</strong> (latency in milliseconds, tokens, cost).</li>
+</ul>
+<hr />
+<h3 id="27-bounded-autonomous-remediation-engine">2.7 Bounded Autonomous Remediation Engine<a class="headerlink" href="#27-bounded-autonomous-remediation-engine" title="Permanent link">&para;</a></h3>
+<h4 id="remediationengine-agent_factoryremediationengine"><code>RemediationEngine</code> (<code>agent_factory.remediation.engine</code>)<a class="headerlink" href="#remediationengine-agent_factoryremediationengine" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Purpose:</strong> Closes the autonomous engineering loop when tests fail.</li>
+<li><strong>Mechanism:</strong></li>
+<li>Inspects failed pytest output and error tracebacks.</li>
+<li>Identifies error category (<code>IMPORT_ERROR</code>, <code>SYNTAX_ERROR</code>, <code>ASSERTION_FAILURE</code>, <code>SCHEMA_ERROR</code>).</li>
+<li>Synthesizes a targeted surgical code fix.</li>
+<li>Applies the fix to the workspace source file.</li>
+<li>Reruns the test suite.</li>
+<li>Tracks iteration count; aborts with <code>BLOCKED: Remediation budget exhausted</code> if repairs exceed 3 attempts.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
