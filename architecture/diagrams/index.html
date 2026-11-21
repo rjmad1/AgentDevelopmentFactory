@@ -1034,6 +1034,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-nemo-nist-operational-safety-guardrail-architecture-for-devsecops-architects-and-ai-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. NeMo &amp; NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. NeMo &amp; NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nist-ai-rmf-nist-ai-100-1-mapping-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NIST AI RMF (NIST AI 100-1) Mapping Matrix:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2053,6 +2081,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-nemo-nist-operational-safety-guardrail-architecture-for-devsecops-architects-and-ai-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. NeMo &amp; NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. NeMo &amp; NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nist-ai-rmf-nist-ai-100-1-mapping-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NIST AI RMF (NIST AI 100-1) Mapping Matrix:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2268,6 +2324,140 @@
 <li><strong>Tamper-Evident Hashing</strong>: Manifests and check events calculate SHA-256 hashes of both input briefs and checker implementations. If a checker's source changes, previously recorded evidence is marked <code>STALE</code> without erasing audit history.</li>
 <li><strong>Port Canaries</strong>: The platform includes zero-cost canaries that verify required services (UI port 3000, local LLM port 11434) without opening external network attack surfaces.</li>
 </ul>
+<hr />
+<h2 id="6-nemo-nist-operational-safety-guardrail-architecture-for-devsecops-architects-and-ai-engineers">6. NeMo &amp; NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)<a class="headerlink" href="#6-nemo-nist-operational-safety-guardrail-architecture-for-devsecops-architects-and-ai-engineers" title="Permanent link">&para;</a></h2>
+<p>The Agent Development Factory binds the agent reasoning engine to the ingested declarative specification pack as the authoritative source of truth. Mandatory programmable guardrails derived from NVIDIA NeMo Guardrails and mapped to NIST AI RMF 1.0 (NIST AI 100-1) actively police execution paths, halting any path that deviates from the certified specification or violates security boundaries.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph SpecPack ["Authoritative Source of Truth (Ingested Specification Pack)"]
+        SpecYAML["UniversalAgentSpec (agent.yaml)"]
+        SpecSchema["Declarative Input/Output &amp; Limits Schema"]
+        PolicyBounds["Permitted Tools, Effects &amp; Risk Tier (T0-T3)"]
+    end
+
+    subgraph Phase1 ["Phase 1: Input Rails (NeMo / NIST MP-1.1, MP-2.3, GV-1.1)"]
+        InRaw["Raw User / Orchestrator Input"] --&gt; InjCheck{"Prompt Injection &amp; Jailbreak?"}
+        InjCheck -- Yes --&gt; BlockInj["HALT &amp; BLOCK (NIST MP-2.3)"]
+        InjCheck -- No --&gt; SchemaCheck{"Input Schema Conformity?"}
+        SchemaCheck -- No --&gt; BlockSchema["HALT &amp; BLOCK (NIST MP-1.1)"]
+        SchemaCheck -- Yes --&gt; PIIScrub["PII Sanitization &amp; Redaction (NIST GV-1.1)"]
+    end
+
+    subgraph Phase2 ["Phase 2: Dialog &amp; Intent Rails (NeMo / NIST GV-1.2, MG-2.2)"]
+        PIIScrub --&gt; IntentCheck{"Intent Drift vs Purpose?"}
+        IntentCheck -- Yes --&gt; BlockIntent["HALT &amp; BLOCK (NIST GV-1.2)"]
+        IntentCheck -- No --&gt; TransCheck{"State Transition Valid?"}
+        TransCheck -- No --&gt; BlockTrans["HALT &amp; BLOCK (NIST MG-2.2)"]
+        TransCheck -- Yes --&gt; ReasoningStep["Bounded Reasoning Step (INIT -&gt; INTAKE -&gt; PLAN)"]
+    end
+
+    subgraph Phase3 ["Phase 3: Execution &amp; Tool Rails (NeMo / NIST GV-1.2, GV-1.3, MG-1.1, MG-2.2)"]
+        ReasoningStep --&gt; ToolCall["Proposed Tool Invocation"]
+        ToolCall --&gt; ToolAllow{"Tool in Spec Allowlist?"}
+        ToolAllow -- No --&gt; BlockTool["HALT &amp; BLOCK (NIST GV-1.2)"]
+        ToolAllow -- Yes --&gt; EffectCheck{"Effect Level Permitted?"}
+        EffectCheck -- No --&gt; BlockEffect["HALT &amp; BLOCK (NIST GV-1.2)"]
+        EffectCheck -- Yes --&gt; PathCheck{"Workspace Path Contained?"}
+        PathCheck -- No --&gt; BlockPath["HALT &amp; BLOCK (NIST MG-2.2)"]
+        PathCheck -- Yes --&gt; GateCheck{"Elevated Effect (T1-T3)?"}
+        GateCheck -- Yes, Missing Token --&gt; BlockGate["HALT &amp; BLOCK (NIST GV-1.3)"]
+        GateCheck -- Permitted / Approved --&gt; ResCheck{"Ceiling Limits Exceeded?"}
+        ResCheck -- Yes --&gt; BlockRes["HALT &amp; BLOCK (NIST MG-1.1)"]
+        ResCheck -- No --&gt; ExecuteTool["Execute Tool within Sandbox"]
+    end
+
+    subgraph Phase4 ["Phase 4: Output Rails (NeMo / NIST MS-2.2, MS-2.7, MG-2.4)"]
+        ExecuteTool --&gt; OutCheck{"Secret Leak in Output?"}
+        OutCheck -- Yes --&gt; BlockSecret["HALT &amp; BLOCK (NIST MS-2.7)"]
+        OutCheck -- No --&gt; OutSchema{"Declared Output Artifacts Present?"}
+        OutSchema -- No --&gt; BlockOutSchema["HALT &amp; BLOCK (NIST MS-2.2)"]
+        OutSchema -- Yes --&gt; GroundCheck{"Factual Grounding (&gt;=0.90)?"}
+        GroundCheck -- No --&gt; BlockGround["HALT &amp; BLOCK (NIST MS-2.2)"]
+        GroundCheck -- Yes --&gt; CompleteTrace["Certified Output &amp; Bounded Execution Trace"]
+    end
+
+    SpecPack -. Binding Constraint .-&gt; Phase1
+    SpecPack -. Binding Constraint .-&gt; Phase2
+    SpecPack -. Binding Constraint .-&gt; Phase3
+    SpecPack -. Binding Constraint .-&gt; Phase4</code></pre>
+<h3 id="nist-ai-rmf-nist-ai-100-1-mapping-matrix">NIST AI RMF (NIST AI 100-1) Mapping Matrix:<a class="headerlink" href="#nist-ai-rmf-nist-ai-100-1-mapping-matrix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">NIST Function</th>
+<th style="text-align: left;">Control ID</th>
+<th style="text-align: left;">NeMo Rail Component</th>
+<th style="text-align: left;">Operational Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>GOVERN</strong></td>
+<td style="text-align: left;"><code>GV-1.1</code></td>
+<td style="text-align: left;">PII &amp; Secret Redactor</td>
+<td style="text-align: left;">Strips credentials and PII prior to reasoning engine intake</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GOVERN</strong></td>
+<td style="text-align: left;"><code>GV-1.2</code></td>
+<td style="text-align: left;">Tool &amp; Effect Policy Enforcer</td>
+<td style="text-align: left;">Rejects tools or effects not explicitly declared in <code>UniversalAgentSpec</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GOVERN</strong></td>
+<td style="text-align: left;"><code>GV-1.3</code></td>
+<td style="text-align: left;">Action Gate Authorization</td>
+<td style="text-align: left;">Demands HMAC owner approval tokens for elevated actions (T1–T3)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GOVERN</strong></td>
+<td style="text-align: left;"><code>GV-3.1</code></td>
+<td style="text-align: left;">Append-Only Decision Ledger</td>
+<td style="text-align: left;">Logs all rail decisions and state checkpoints in tamper-evident ledger</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MAP</strong></td>
+<td style="text-align: left;"><code>MP-1.1</code></td>
+<td style="text-align: left;">Input/Output Schema Validator</td>
+<td style="text-align: left;">Verifies parameters adhere to declarative typed JSON schemas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MAP</strong></td>
+<td style="text-align: left;"><code>MP-2.3</code></td>
+<td style="text-align: left;">Prompt Injection &amp; Path Defense</td>
+<td style="text-align: left;">Rejects jailbreak payloads and path escapes (symlinks/junctions)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MEASURE</strong></td>
+<td style="text-align: left;"><code>MS-2.2</code></td>
+<td style="text-align: left;">Grounding &amp; Efficacy Graders</td>
+<td style="text-align: left;">Ensures output claims match ground truth (no hallucinated records)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MEASURE</strong></td>
+<td style="text-align: left;"><code>MS-2.7</code></td>
+<td style="text-align: left;">Zero-Tolerance Secret Scanner</td>
+<td style="text-align: left;">Enforces 1.00 score preventing API keys or bearer token disclosures</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MANAGE</strong></td>
+<td style="text-align: left;"><code>MG-1.1</code></td>
+<td style="text-align: left;">Resource Ceiling Governor</td>
+<td style="text-align: left;">Hard halts on step counts, token usage, wall time, and spend ceiling</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MANAGE</strong></td>
+<td style="text-align: left;"><code>MG-2.2</code></td>
+<td style="text-align: left;">Active Fail-Safe Rail Enforcer</td>
+<td style="text-align: left;">Immediately halts and blocks any execution path violating spec bounds</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MANAGE</strong></td>
+<td style="text-align: left;"><code>MG-2.4</code></td>
+<td style="text-align: left;">Fail-Safe Escalation Router</td>
+<td style="text-align: left;">Dispatches unresolvable policy blocks to human intervention queues</td>
+</tr>
+</tbody>
+</table>
 
 
 
