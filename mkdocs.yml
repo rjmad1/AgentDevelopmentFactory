@@ -108,6 +108,7 @@ nav:
       - Registry & Discovery: api/registry.md
       - Provider Adapters: api/adapters.md
   - Guides & Operations:
+      - Production on Free Utilities: deployment/free_utilities.md
       - End-User Operating Manual: guides/user_manual.md
       - Getting Started: guides/getting_started.md
       - Operations Runbook: guides/operations.md

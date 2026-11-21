@@ -134,8 +134,8 @@ def run_worker_daemon() -> None:
     pool = AutoscalingWorkerPool(config=config)
 
     server = create_daemon_server(port=port, pool=pool)
-    print(f"[WORKER DAEMON] Started ADF Worker Daemon on port {port} (Min: {min_workers}, Max: {max_workers})")
-    print(f"[WORKER DAEMON] Enforcing strict $0.00 spend ceiling.")
+    print(f"[WORKER DAEMON] Started ADF Worker Daemon on port {port} (Min: {min_workers}, Max: {max_workers})", flush=True)
+    print(f"[WORKER DAEMON] Enforcing strict $0.00 spend ceiling.", flush=True)
 
     server_thread = threading.Thread(target=server.serve_forever, daemon=True)
     server_thread.start()
@@ -145,10 +145,10 @@ def run_worker_daemon() -> None:
             import time
             time.sleep(1.0)
     except (KeyboardInterrupt, SystemExit):
-        print("\n[WORKER DAEMON] Shutting down worker pool and probe server...")
+        print("\n[WORKER DAEMON] Shutting down worker pool and probe server...", flush=True)
         server.shutdown()
         pool.shutdown(wait=True)
-        print("[WORKER DAEMON] Graceful shutdown complete.")
+        print("[WORKER DAEMON] Graceful shutdown complete.", flush=True)
 
 
 if __name__ == "__main__":

@@ -1030,6 +1030,41 @@ export function executeFullSuite(runLabel) {
     assert(result.success === true, 'SRE probes and Prometheus exposition verified');
   });
 
+  // TEST 31: Multi-Utility Free Deployment Topology (GHCR, Hugging Face, Render, Docker & K8s)
+  recordTest('31. (Deployment on Free Utilities) GHCR, Hugging Face Spaces, Render, Docker & Kubernetes Assets', () => {
+    // 1. Verify GHCR Workflow
+    const ghcrWorkflow = path.join(projectRoot, '.github', 'workflows', 'docker-publish.yml');
+    assert(fs.existsSync(ghcrWorkflow), '.github/workflows/docker-publish.yml must exist');
+    const ghcrContent = fs.readFileSync(ghcrWorkflow, 'utf-8');
+    assert(ghcrContent.includes('ghcr.io'), 'Must publish to ghcr.io');
+
+    // 2. Verify Hugging Face Spaces Blueprint
+    const hfReadme = path.join(projectRoot, 'deploy', 'hf-space', 'README.md');
+    assert(fs.existsSync(hfReadme), 'deploy/hf-space/README.md must exist');
+    const hfContent = fs.readFileSync(hfReadme, 'utf-8');
+    assert(hfContent.includes('sdk: docker'), 'Hugging Face Space must declare sdk: docker');
+    assert(hfContent.includes('app_port: 3000'), 'Hugging Face Space must declare app_port: 3000');
+
+    // 3. Verify Render Free Blueprint
+    const renderYaml = path.join(projectRoot, 'render.yaml');
+    assert(fs.existsSync(renderYaml), 'render.yaml must exist');
+    const renderContent = fs.readFileSync(renderYaml, 'utf-8');
+    assert(renderContent.includes('plan: free'), 'Render manifest must declare free plan');
+    assert(renderContent.includes('healthCheckPath: /healthz'), 'Render manifest must wire /healthz');
+
+    // 4. Verify Local One-Click Scripts
+    assert(fs.existsSync(path.join(projectRoot, 'scripts', 'deploy-local.ps1')), 'deploy-local.ps1 must exist');
+    assert(fs.existsSync(path.join(projectRoot, 'scripts', 'deploy-local.sh')), 'deploy-local.sh must exist');
+    assert(fs.existsSync(path.join(projectRoot, 'scripts', 'deploy-k8s.ps1')), 'deploy-k8s.ps1 must exist');
+    assert(fs.existsSync(path.join(projectRoot, 'scripts', 'deploy-k8s.sh')), 'deploy-k8s.sh must exist');
+
+    // 5. Verify Documentation
+    const freeDeployDoc = path.join(projectRoot, 'docs', 'deployment', 'free_utilities.md');
+    assert(fs.existsSync(freeDeployDoc), 'docs/deployment/free_utilities.md must exist');
+    const docContent = fs.readFileSync(freeDeployDoc, 'utf-8');
+    assert(docContent.includes('$0.00'), 'Documentation must affirm $0.00 spend ceiling');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

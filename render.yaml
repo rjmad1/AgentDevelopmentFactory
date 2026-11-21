@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: agent-development-factory
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADF_ENV
+        value: production
+      - key: ADF_PORT
+        value: 3000
+      - key: ADF_SPEND_CEILING_USD
+        value: "0.00"
+      - key: PORT
+        value: 3000

@@ -39,6 +39,7 @@ jobs:
           cp docs/factory_persona_opportunity_map.md wiki/Persona-Opportunity-Map.md
           cp docs/DEVELOPMENT_PIPELINE.md wiki/Development-Pipeline-and-Hermes-Playbook.md
           if [ -f docs/guides/user_manual.md ]; then cp docs/guides/user_manual.md wiki/End-User-Manual.md; fi
+          if [ -f docs/deployment/free_utilities.md ]; then cp docs/deployment/free_utilities.md wiki/Production-Deployment-on-Free-Utilities.md; fi
           if [ -f docs/architecture/diagrams.md ]; then cp docs/architecture/diagrams.md wiki/Role-Based-Architecture-and-Diagrams.md; fi
           if [ -f docs/api/core.md ]; then cp docs/api/core.md wiki/CLI-and-API-Reference.md; fi
           cd wiki

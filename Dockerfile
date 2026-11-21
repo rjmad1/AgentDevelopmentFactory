@@ -39,6 +39,7 @@ ENV NODE_ENV=production \
     ADF_PORT=3000 \
     ADF_WORKER_PORT=8000 \
     ADF_SPEND_CEILING_USD=0.00 \
+    PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app
 
 # Expose HTTP control plane (3000) and worker probe (8000)

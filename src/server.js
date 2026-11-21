@@ -616,21 +616,36 @@ zero_spend_ceiling_usd: 0.00`;
   };
 }
 
-export function startServer(port = 3000, storeDir = null) {
+export function startServer(port = 3000, storeDir = null, host = '0.0.0.0') {
   const handler = createAppHandler(storeDir);
   const server = http.createServer(handler);
 
   return new Promise((resolve, reject) => {
-    server.listen(port, '127.0.0.1', () => {
+    server.listen(port, host, () => {
       const addr = server.address();
       const actualPort = typeof addr === 'object' && addr ? addr.port : port;
       resolve({
         server,
         port: actualPort,
-        url: `http://127.0.0.1:${actualPort}`,
+        url: `http://${host === '0.0.0.0' ? '127.0.0.1' : host}:${actualPort}`,
         close: () => new Promise((res) => server.close(res)),
       });
     });
     server.on('error', reject);
   });
 }
+
+// Auto-start server when executed directly: `node src/server.js`
+const isMainModule = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
+if (isMainModule) {
+  const port = parseInt(process.env.PORT || process.env.ADF_PORT || '3000', 10);
+  const host = process.env.ADF_HOST || '0.0.0.0';
+  startServer(port, null, host).then(({ port, url }) => {
+    console.log(`[ADF SERVER] Control Plane & Material UI running at http://${host}:${port} (${url})`);
+    console.log(`[ADF SERVER] Enforcing strict $0.00 spend ceiling.`);
+  }).catch((err) => {
+    console.error(`[ADF SERVER] Fatal startup error:`, err);
+    process.exit(1);
+  });
+}
+
