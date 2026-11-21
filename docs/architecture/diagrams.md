@@ -297,3 +297,53 @@ flowchart TD
 | **MANAGE** | `MG-2.2` | Active Fail-Safe Rail Enforcer | Immediately halts and blocks any execution path violating spec bounds |
 | **MANAGE** | `MG-2.4` | Fail-Safe Escalation Router | Dispatches unresolvable policy blocks to human intervention queues |
 
+---
+
+## 7. Sandboxed Execution Isolation & Continuous Red Teaming Pipeline (For DevSecOps & Platform Engineers)
+
+The Agent Development Factory strictly isolates all candidate agent code within hermetic sandboxes and continuously stresses guardrails via automated red teaming in CI/CD.
+
+```mermaid
+flowchart TD
+    subgraph SandboxBoundary ["Strict Sandboxed Execution Environment (SandboxedLocalProcessRuntime)"]
+        CandidateCode["Candidate Agent Source (src/agent.py)"]
+        ASTGate{"Pre-Execution AST Quarantine Gate"}
+        CandidateCode --> ASTGate
+        ASTGate -- "eval(), exec(), ctypes, os.system()" --> QuarantineBlock["HALT: Exit 126 AST_QUARANTINE_REJECTED"]
+        ASTGate -- Safe AST --> EnvScrub["Environment Scrubbing (Purge API Keys & Secrets)"]
+
+        EnvScrub --> NetBarrier["Network Sandboxing ($0.00 Ceiling, Offline Proxy http://127.0.0.1:0)"]
+        NetBarrier --> PathGuard["Real Filesystem Containment (Blocked: ../, symlinks, junctions)"]
+        PathGuard --> EphemeralSandbox["Spawn Isolated Child Subprocess with Wall-Clock Timeout"]
+        EphemeralSandbox --> ArtifactContainment["Artifact Containment: Strictly in workdir/artifacts"]
+    end
+
+    subgraph RedTeamCI ["Continuous Red Teaming & Prompt Injection Testing (CI/CD Pipeline)"]
+        GitPush["git push origin main"] --> CIWorkflow["GitHub Actions (pipeline.yml)"]
+        CIWorkflow --> StepRedTeam["Step: Automated Red Teaming Suite (run_redteam.py)"]
+
+        subgraph ProbesMatrix ["16 Continuous Adversarial Probes"]
+            P1["Direct Prompt Injection (DIR-01..05)"]
+            P2["Indirect Data Ingestion (IND-01..03)"]
+            P3["Obfuscation & Jailbreaks (OBF-01..03)"]
+            P4["Tool Misuse & Agency Abuse (TLS-01..03)"]
+            P5["Secret Exfiltration Probes (EXF-01..02)"]
+        end
+
+        StepRedTeam --> ProbesMatrix
+        ProbesMatrix --> GuardrailStress{"Guardrails Stress Evaluation"}
+        GuardrailStress -- "Any Critical/High Bypass" --> FailCI["Pipeline FAILED (Non-Zero Exit)"]
+        GuardrailStress -- "100% Probes Blocked" --> PassCI["PASS / HARDENED -> reports/redteam_report.json"]
+    end
+
+    EphemeralSandbox -. Verified Offline Execution .-> GuardrailStress
+```
+
+### Attack Vector Taxonomy & Defense Controls:
+1. **Direct Prompt Injection (`RED-DIR-01..05`)**: Protects against role-hijacking, system directive erasures, ChatML `<|im_start|>` delimiters, and developer mode prompts. Mapped to **NIST MP-2.3**.
+2. **Indirect Ingestion Injection (`RED-IND-01..03`)**: Neutralizes data-as-code attacks in CSV rows, hidden HTML comments, and markdown image data-exfiltration URLs. Mapped to **NIST MP-1.1 / MP-2.3**.
+3. **Obfuscated Jailbreak Variants (`RED-OBF-01..03`)**: Detects base64-encoded instructions, illegal state machine jumps (`INIT` $\to$ `COMPLETE`), and prohibited destruction intents. Mapped to **NIST GV-1.2 / MG-2.2**.
+4. **Autonomous Tool Misuse (`RED-TLS-01..03`)**: Blocks unlisted tool invocations, parameter path escapes (`../../../../system32`), and unapproved effect elevations. Mapped to **NIST GV-1.2 / MG-2.2**.
+5. **Secret Exfiltration Probes (`RED-EXF-01..02`)**: Intercepts active credential leaks (`sk-`, `Bearer`, `AKIA`) and scrubs environment variables. Mapped to **NIST MS-2.7**.
+
+

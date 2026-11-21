@@ -17,6 +17,7 @@ import {
   evaluateReleaseGates,
 } from './core.js';
 import { NeMoNistGuardrails } from './guardrails.js';
+import { runRedTeamSuite } from './red_team.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -335,6 +336,34 @@ zero_spend_ceiling_usd: 0.00`;
         });
       } catch (err) {
         sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/redteam/run
+    if (pathname === '/api/redteam/run' && method === 'POST') {
+      try {
+        const report = runRedTeamSuite();
+        sendJson(res, 200, report);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/redteam/report
+    if (pathname === '/api/redteam/report' && method === 'GET') {
+      try {
+        const reportFile = path.join(projectRoot, 'reports', 'redteam_report.json');
+        if (fs.existsSync(reportFile)) {
+          const rep = JSON.parse(fs.readFileSync(reportFile, 'utf-8'));
+          sendJson(res, 200, rep);
+        } else {
+          const fresh = runRedTeamSuite();
+          sendJson(res, 200, fresh);
+        }
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
       }
       return;
     }

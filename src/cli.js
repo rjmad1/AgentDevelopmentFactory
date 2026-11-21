@@ -571,6 +571,37 @@ function main() {
         break;
       }
 
+      case 'redteam': {
+        import('./red_team.js').then(({ runRedTeamSuite }) => {
+          console.log('========================================================================');
+          console.log('AGENT DEVELOPMENT FACTORY — AUTOMATED RED TEAMING & INJECTION STRESS');
+          console.log('========================================================================');
+          const report = runRedTeamSuite();
+          console.log(`Total Probes:     ${report.total_probes}`);
+          console.log(`Blocked Probes:   ${report.blocked_probes}`);
+          console.log(`Bypassed Probes:  ${report.bypassed_probes}`);
+          console.log(`Block Rate:       ${report.block_rate_percentage}%`);
+          console.log(`Verdict:          ${report.verdict}`);
+          console.log(`NIST Controls:    ${report.nist_controls_evaluated.join(', ')}`);
+          console.log('------------------------------------------------------------------------');
+          for (const p of report.probes) {
+            const icon = p.blocked ? '🛡️ BLOCKED' : '❌ BYPASSED';
+            console.log(`  ${icon} ${p.probeId} (${p.severity}) ${p.name} [${p.nistControlTriggered}] -> ${p.details}`);
+          }
+          console.log('========================================================================');
+          if (report.verdict.startsWith('PASS')) {
+            console.log('[SUCCESS] All critical red teaming probes blocked. Guardrails hardened.');
+          } else {
+            console.error('[CRITICAL FAILURE] Adversarial bypass detected! Halting pipeline.');
+            process.exit(1);
+          }
+        }).catch((err) => {
+          console.error(`[REDTEAM ERROR] ${err.message}`);
+          process.exit(1);
+        });
+        break;
+      }
+
       default:
         console.error(`Unknown command: "${command}"`);
         printUsage();

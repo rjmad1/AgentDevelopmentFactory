@@ -491,4 +491,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Red Teaming Runner Handler
+  const btnRunRed = document.getElementById('btnRunRedTeam');
+  if (btnRunRed) {
+    btnRunRed.addEventListener('click', async () => {
+      btnRunRed.textContent = '⚡ Running 16 Probes...';
+      btnRunRed.disabled = true;
+
+      const report = await callApi('/api/redteam/run', 'POST');
+      btnRunRed.textContent = '🚀 Run Red Team Stress Test';
+      btnRunRed.disabled = false;
+
+      if (report) {
+        document.getElementById('rtTotalProbes').textContent = `${report.blocked_probes} / ${report.total_probes}`;
+        document.getElementById('rtBlockRate').textContent = `${report.block_rate_percentage}%`;
+        const vEl = document.getElementById('rtVerdict');
+        vEl.textContent = report.verdict;
+        vEl.style.color = report.verdict.startsWith('PASS') ? '#146c2e' : '#b3261e';
+
+        alert(`Automated Red Teaming & Continuous Prompt Injection Report:\n- Verdict: ${report.verdict}\n- Total Probes: ${report.total_probes}\n- Blocked Probes: ${report.blocked_probes}\n- Bypassed Probes: ${report.bypassed_probes}\n- Adversarial Block Rate: ${report.block_rate_percentage}%\n- NIST Controls: ${report.nist_controls_evaluated.join(', ')}\n\nReport saved to reports/redteam_report.json.`);
+      }
+    });
+  }
 });

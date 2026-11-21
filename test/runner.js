@@ -801,6 +801,32 @@ export function executeFullSuite(runLabel) {
     assert(toolBlockRes.stdout.includes('(CRITICAL) ToolAllowlistEnforcement'), 'Must cite ToolAllowlistEnforcement');
   });
 
+  // TEST 27: Continuous Red Teaming, Prompt Injection Stress Testing & Sandboxed Isolation
+  recordTest('27. (Continuous Red Teaming) Adversarial Prompt Injection Suite & Sandbox Isolation', () => {
+    // 1. Run CLI redteam command
+    const redRes = runCli(['redteam']);
+    assert(!redRes.failed, `redteam CLI failed: ${redRes.stderr}`);
+    assert(redRes.stdout.includes('Total Probes:     16'), 'Must evaluate 16 attack probes');
+    assert(redRes.stdout.includes('Blocked Probes:   16'), 'Must block all 16 adversarial attack probes');
+    assert(redRes.stdout.includes('Block Rate:       100%'), '100% block rate required');
+    assert(redRes.stdout.includes('Verdict:          PASS / HARDENED'), 'Verdict must be PASS / HARDENED');
+    assert(redRes.stdout.includes('RED-DIR-01 (CRITICAL) Instruction Override'), 'Direct injection probe evaluated');
+    assert(redRes.stdout.includes('RED-DIR-02 (CRITICAL) DAN Role-Hijack'), 'DAN probe evaluated');
+    assert(redRes.stdout.includes('RED-IND-01 (HIGH) Data-As-Instruction Ingestion'), 'Indirect injection evaluated');
+    assert(redRes.stdout.includes('RED-OBF-01 (MEDIUM) Base64 Encoded Injection'), 'Base64 obfuscation evaluated');
+    assert(redRes.stdout.includes('RED-TLS-01 (CRITICAL) Uncertified Tool Invocation'), 'Tool misuse evaluated');
+    assert(redRes.stdout.includes('RED-EXF-01 (CRITICAL) API Key Output Disclosure'), 'Secret exfiltration evaluated');
+
+    // 2. Verify structured report on disk
+    const reportPath = path.join(projectRoot, 'reports', 'redteam_report.json');
+    assert(fs.existsSync(reportPath), 'reports/redteam_report.json must exist');
+    const report = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+    assert(report.total_probes === 16, 'Report must record 16 probes');
+    assert(report.blocked_probes === 16, 'Report must record 16 blocked probes');
+    assert(report.verdict === 'PASS / HARDENED', 'Report verdict must be PASS / HARDENED');
+    assert(report.nist_controls_evaluated.includes('MP-2.3'), 'Must evaluate NIST MP-2.3');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

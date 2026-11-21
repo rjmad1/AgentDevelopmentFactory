@@ -678,6 +678,46 @@
               <div id="nemoResultBox" style="margin-top: 12px; display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px;"></div>
             </div>
           </div>
+
+          <!-- Automated Red Teaming & Continuous Prompt Injection Suite Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🎯 Automated Red Teaming & Continuous Prompt Injection Suite</h3>
+                <p class="md-card-subtitle">Proactively stress tests guardrails against 16 evolving adversarial attack vectors in CI/CD pipeline.</p>
+              </div>
+              <button id="btnRunRedTeam" class="md-btn md-btn-filled">🚀 Run Red Team Stress Test</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Probes Evaluated</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="rtTotalProbes">16 / 16</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">5 Attack Categories</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Adversarial Block Rate</span>
+                <div style="font-size: 20px; font-weight: 700; color: #146c2e;" id="rtBlockRate">100.0%</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">0 Critical Bypasses</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Red Team Verdict</span>
+                <div style="font-size: 18px; font-weight: 700; color: #146c2e;" id="rtVerdict">PASS / HARDENED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">NIST MP-2.3 & MG-2.2 Compliant</div>
+              </div>
+            </div>
+
+            <div style="background: var(--md-sys-color-surface-container-low); padding: 12px 16px; border-radius: 8px; font-size: 12px;">
+              <span style="font-weight: 600;">Continuous Attack Taxonomy Tested in CI/CD:</span>
+              <ul style="margin: 8px 0 0 16px; padding: 0; line-height: 1.6; color: var(--md-sys-color-on-surface-variant);">
+                <li><strong>Direct Prompt Injection:</strong> Instruction override, DAN role-hijack, ChatML delimiters, safety deactivation, developer mode bypass.</li>
+                <li><strong>Indirect Ingestion Injection:</strong> Data-as-code in CSV/JSON, hidden header delimiters, markdown link exfiltration.</li>
+                <li><strong>Obfuscated Jailbreaks:</strong> Base64 encoding, state machine bypass, cognitive distortion framing.</li>
+                <li><strong>Autonomous Tool Misuse:</strong> Undeclared tool calls, directory traversal (<code>../../</code>) in path arguments, unapproved effect elevation.</li>
+                <li><strong>Secret Exfiltration Probes:</strong> API key disclosure (<code>sk-</code>), bearer token disclosure, environment scrubbing.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 

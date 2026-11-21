@@ -68,6 +68,11 @@ jobs:
           echo "=== EXECUTING DEEP EVALUATOR VERIFICATION SUITE ==="
           python scripts/run_evals.py
 
+      - name: Run Automated Red Teaming & Continuous Prompt Injection Suite
+        run: |
+          echo "=== RUNNING CONTINUOUS RED TEAMING & PROMPT INJECTION STRESS TEST ==="
+          python scripts/run_redteam.py
+
       - name: Upload Evaluation Artifacts
         if: always()
         uses: actions/upload-artifact@v4
