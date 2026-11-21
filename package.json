@@ -31,6 +31,7 @@
     "scale:simulate": "node src/cli.js scale --action simulate",
     "heal": "node src/cli.js heal",
     "sync": "node src/cli.js sync",
-    "sync:reconcile": "node src/cli.js sync --action reconcile"
+    "sync:reconcile": "node src/cli.js sync --action reconcile",
+    "remote": "node src/cli.js remote"
   }
 }

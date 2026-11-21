@@ -7,6 +7,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import {
   runDoctorCheck,
@@ -67,7 +68,10 @@ function sendJson(res, statusCode, data) {
     'Content-Length': Buffer.byteLength(payload),
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval, X-ADF-Access-Token',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
   });
   res.end(payload);
 }
@@ -76,6 +80,9 @@ function sendText(res, statusCode, text) {
   res.writeHead(statusCode, {
     'Content-Type': 'text/plain; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
   });
   res.end(text);
 }
@@ -83,23 +90,120 @@ function sendText(res, statusCode, text) {
 let serverRequestCounter = 0;
 const serverBootTimestamp = Date.now();
 
-export function createAppHandler(customStoreDir = null) {
+// In-Memory IP Sliding Window Rate Limiter (Max 120 requests/minute)
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 120;
+const clientRequestMap = new Map();
+
+function isRateLimited(clientIp) {
+  const now = Date.now();
+  let clientRecord = clientRequestMap.get(clientIp);
+  if (!clientRecord || (now - clientRecord.windowStart) > RATE_LIMIT_WINDOW_MS) {
+    clientRecord = { windowStart: now, count: 1 };
+    clientRequestMap.set(clientIp, clientRecord);
+    return false;
+  }
+  clientRecord.count++;
+  return clientRecord.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function extractClientToken(req, parsedUrl) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  const customHeader = req.headers['x-adf-access-token'];
+  if (customHeader) {
+    return String(customHeader).trim();
+  }
+  const queryToken = parsedUrl.searchParams.get('token');
+  if (queryToken) {
+    return String(queryToken).trim();
+  }
+  return null;
+}
+
+function isTokenValid(suppliedToken, expectedToken) {
+  if (!suppliedToken || !expectedToken) return false;
+  try {
+    const a = Buffer.from(suppliedToken);
+    const b = Buffer.from(expectedToken);
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
+
+export function createAppHandler(customStoreDir = null, options = {}) {
   const storeDir = customStoreDir || path.join(projectRoot, 'store');
+  const configuredToken = options.accessToken !== undefined ? options.accessToken : (process.env.ADF_ACCESS_TOKEN || null);
 
   return async function requestHandler(req, res) {
     serverRequestCounter++;
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
     const method = req.method.toUpperCase();
+    const clientIp = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1').split(',')[0].trim();
 
     // CORS preflight
     if (method === 'OPTIONS') {
       res.writeHead(204, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval, X-ADF-Access-Token',
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN',
       });
       res.end();
+      return;
+    }
+
+    // Rate Limiting Protection (Anti-DDoS on remote exposure)
+    if (isRateLimited(clientIp)) {
+      sendJson(res, 429, {
+        status: 'RATE_LIMITED',
+        error: 'Too many requests. Maximum 120 requests per minute allowed.',
+        retryAfterSeconds: 60,
+      });
+      return;
+    }
+
+    // ==========================================
+    // REMOTE AUTHENTICATION SECURITY GATE
+    // ==========================================
+    // Public unauthenticated routes: SRE probes, auth status, and static UI assets
+    const isPublicProbe = (
+      pathname === '/healthz' || pathname === '/api/healthz' ||
+      pathname === '/readyz' || pathname === '/api/readyz' ||
+      pathname === '/metrics' || pathname === '/api/metrics' ||
+      pathname === '/api/auth/status'
+    );
+    const isStaticAsset = (
+      pathname === '/' || pathname.endsWith('.html') ||
+      pathname.endsWith('.css') || pathname.endsWith('.js') ||
+      pathname.endsWith('.ico') || pathname.endsWith('.png') ||
+      pathname.endsWith('.svg')
+    );
+
+    if (configuredToken && !isPublicProbe && !isStaticAsset) {
+      const clientToken = extractClientToken(req, parsedUrl);
+      if (!isTokenValid(clientToken, configuredToken)) {
+        sendJson(res, 401, {
+          status: 'UNAUTHORIZED',
+          error: 'Authentication required. Supply a valid token via Authorization header or ?token= parameter.',
+        });
+        return;
+      }
+    }
+
+    // GET /api/auth/status
+    if (pathname === '/api/auth/status' && method === 'GET') {
+      sendJson(res, 200, {
+        authRequired: !!configuredToken,
+        service: 'adf-control-plane',
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -616,8 +720,8 @@ zero_spend_ceiling_usd: 0.00`;
   };
 }
 
-export function startServer(port = 3000, storeDir = null, host = '0.0.0.0') {
-  const handler = createAppHandler(storeDir);
+export function startServer(port = 3000, storeDir = null, host = '0.0.0.0', options = {}) {
+  const handler = createAppHandler(storeDir, options);
   const server = http.createServer(handler);
 
   return new Promise((resolve, reject) => {

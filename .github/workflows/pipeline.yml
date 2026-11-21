@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Authoring Slice Repeatable Test Suite
         run: |
-          echo "=== RUNNING AUTHORING SLICE 31-TEST SUITE ==="
+          echo "=== RUNNING AUTHORING SLICE 32-TEST SUITE ==="
           node test/runner.js
 
       - name: Set up Python

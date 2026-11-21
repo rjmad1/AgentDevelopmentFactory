@@ -1065,6 +1065,109 @@ export function executeFullSuite(runLabel) {
     assert(docContent.includes('$0.00'), 'Documentation must affirm $0.00 spend ceiling');
   });
 
+  // TEST 32: Secure Remote Accessibility, Zero-Trust Tunneling & Token Security Gate
+  recordTest('32. (Remote Accessibility & Security Gate) Token Authorization, Cloudflare Tunnel & Rate Limiting', () => {
+    // 1. Verify Remote Deployment Scripts
+    const remotePs1 = path.join(projectRoot, 'scripts', 'deploy-remote.ps1');
+    const remoteSh = path.join(projectRoot, 'scripts', 'deploy-remote.sh');
+    assert(fs.existsSync(remotePs1), 'scripts/deploy-remote.ps1 must exist');
+    assert(fs.existsSync(remoteSh), 'scripts/deploy-remote.sh must exist');
+
+    const ps1Content = fs.readFileSync(remotePs1, 'utf-8');
+    assert(ps1Content.includes('trycloudflare.com'), 'deploy-remote.ps1 must wire Cloudflare Tunnel');
+    assert(ps1Content.includes('ADF_ACCESS_TOKEN'), 'deploy-remote.ps1 must enforce token security');
+
+    // 2. Validate Remote Authentication & Security Gate on Ephemeral Server
+    const testScript = `
+      import { startServer } from './src/server.js';
+      import http from 'node:http';
+
+      function fetchUrl(url, method = 'GET', headers = {}) {
+        return new Promise((resolve, reject) => {
+          const parsed = new URL(url);
+          const req = http.request({
+            hostname: parsed.hostname,
+            port: parsed.port,
+            path: parsed.pathname + parsed.search,
+            method,
+            headers,
+          }, (res) => {
+            let data = '';
+            res.on('data', c => data += c);
+            res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
+          });
+          req.on('error', reject);
+          req.end();
+        });
+      }
+
+      async function run() {
+        const expectedToken = 'sec-test-token-778899aabbcc';
+        const s = await startServer(0, ${JSON.stringify(testStoreDir)}, '127.0.0.1', { accessToken: expectedToken });
+        try {
+          // A. Public healthz probe must succeed without token
+          const probe = await fetchUrl(s.url + '/healthz');
+          if (probe.status !== 200) throw new Error('Public healthz probe failed: ' + probe.status);
+
+          // B. Auth status endpoint must report authRequired: true
+          const authStatus = await fetchUrl(s.url + '/api/auth/status');
+          if (authStatus.status !== 200) throw new Error('Auth status failed: ' + authStatus.status);
+          const authJson = JSON.parse(authStatus.body);
+          if (authJson.authRequired !== true) throw new Error('Expected authRequired: true');
+
+          // C. Protected API call without token must be rejected with 401
+          const unauth = await fetchUrl(s.url + '/api/health');
+          if (unauth.status !== 401) throw new Error('Expected 401 on unauthenticated call, got: ' + unauth.status);
+          const unauthJson = JSON.parse(unauth.body);
+          if (unauthJson.status !== 'UNAUTHORIZED') throw new Error('Expected UNAUTHORIZED payload');
+
+          // D. Protected API call with invalid token must be rejected with 401
+          const badToken = await fetchUrl(s.url + '/api/health', 'GET', { 'Authorization': 'Bearer wrong-token' });
+          if (badToken.status !== 401) throw new Error('Expected 401 on invalid token, got: ' + badToken.status);
+
+          // E. Protected API call with valid Bearer token must succeed (200 OK)
+          const validBearer = await fetchUrl(s.url + '/api/health', 'GET', { 'Authorization': 'Bearer ' + expectedToken });
+          if (validBearer.status !== 200) throw new Error('Expected 200 with Bearer token, got: ' + validBearer.status);
+
+          // F. Protected API call with X-ADF-Access-Token header must succeed (200 OK)
+          const validCustom = await fetchUrl(s.url + '/api/health', 'GET', { 'x-adf-access-token': expectedToken });
+          if (validCustom.status !== 200) throw new Error('Expected 200 with X-ADF-Access-Token, got: ' + validCustom.status);
+
+          // G. Protected API call with URL query parameter ?token= must succeed (200 OK)
+          const validQuery = await fetchUrl(s.url + '/api/health?token=' + expectedToken);
+          if (validQuery.status !== 200) throw new Error('Expected 200 with URL ?token=, got: ' + validQuery.status);
+
+          // H. Security Headers verification
+          if (validBearer.headers['x-content-type-options'] !== 'nosniff') {
+            throw new Error('Missing X-Content-Type-Options: nosniff header');
+          }
+          if (validBearer.headers['x-frame-options'] !== 'SAMEORIGIN') {
+            throw new Error('Missing X-Frame-Options: SAMEORIGIN header');
+          }
+
+          process.stdout.write(JSON.stringify({ success: true }));
+        } finally {
+          s.server.close();
+        }
+      }
+      run().catch(err => {
+        process.stderr.write(err.stack || err.message);
+        process.exit(1);
+      });
+    `;
+
+    const res = spawnSync('node', ['--input-type=module', '-e', testScript], {
+      cwd: projectRoot,
+      encoding: 'utf-8',
+    });
+
+    if (res.status !== 0) {
+      throw new Error(`Remote security gate validation failed: ${res.stderr || res.stdout}`);
+    }
+    const result = JSON.parse(res.stdout);
+    assert(result.success === true, 'Remote token security gate verified');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

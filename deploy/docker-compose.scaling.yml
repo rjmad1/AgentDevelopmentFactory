@@ -100,6 +100,17 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     restart: unless-stopped
 
+  # Zero-Trust Remote Tunnel (Cloudflare Quick Tunnel / Named Tunnel - 100% Free)
+  adf-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: adf-remote-tunnel
+    command: tunnel --no-autoupdate --url http://adf-server:3000
+    depends_on:
+      adf-server:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles: ["remote", "all"]
+
 networks:
   default:
     name: adf-network

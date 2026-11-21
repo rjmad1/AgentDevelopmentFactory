@@ -780,6 +780,35 @@ function main() {
         break;
       }
 
+      case 'remote': {
+        import('node:crypto').then((crypto) => {
+          let token = options.token || process.env.ADF_ACCESS_TOKEN;
+          if (!token) {
+            token = crypto.randomBytes(32).toString('hex');
+          }
+          console.log('========================================================================');
+          console.log('AGENT DEVELOPMENT FACTORY — ZERO-TRUST REMOTE DEPLOYMENT');
+          console.log('========================================================================');
+          console.log(`Security Gate:           STRICT TOKEN AUTHENTICATION (Active)`);
+          console.log(`Access Token:            ${token}`);
+          console.log(`Rate Limiting:           120 req/min sliding window active`);
+          console.log(`Spend Ceiling:           $0.00 USD (Invariant strictly enforced)`);
+          console.log('------------------------------------------------------------------------');
+          console.log('Free Zero-Trust Tunnel Deployment Options:');
+          console.log('  1. One-Click Cloudflare Tunnel Stack (Recommended):');
+          console.log('     pwsh ./scripts/deploy-remote.ps1');
+          console.log('     bash ./scripts/deploy-remote.sh');
+          console.log('  2. Local Server with Remote Auth Enabled:');
+          console.log(`     ADF_ACCESS_TOKEN="${token}" node src/server.js`);
+          console.log('  3. Hugging Face Spaces (Free Cloud 16GB Docker Tier):');
+          console.log('     git push hf main');
+          console.log('  4. Render.com Free Blueprint:');
+          console.log('     deploy via render.yaml');
+          console.log('========================================================================');
+        });
+        break;
+      }
+
       default:
         console.error(`Unknown command: "${command}"`);
         printUsage();

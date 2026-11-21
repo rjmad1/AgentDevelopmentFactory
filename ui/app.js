@@ -38,15 +38,40 @@ function detectEnvironment() {
   }
 }
 
+// Auto-extract URL query token for remote access
+if (typeof window !== 'undefined' && window.location) {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('token')) {
+    sessionStorage.setItem('adf_token', urlParams.get('token'));
+  }
+}
+
 // Hybrid API Call Dispatcher
 async function callApi(endpoint, method = 'GET', body = null) {
   if (state.mode === 'REST') {
     try {
+      const headers = { 'Content-Type': 'application/json' };
+      const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('adf_token') : null;
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+        headers['X-ADF-Access-Token'] = token;
+      }
+
       const response = await fetch(endpoint, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: body ? JSON.stringify(body) : null,
       });
+
+      if (response.status === 401) {
+        const inputToken = window.prompt('🔒 Remote Security Gate: Please enter your ADF Access Token:');
+        if (inputToken && inputToken.trim()) {
+          sessionStorage.setItem('adf_token', inputToken.trim());
+          return callApi(endpoint, method, body);
+        }
+        throw new Error('HTTP Error 401: Unauthorized - Invalid or missing remote access token');
+      }
+
       if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
       return await response.json();
     } catch (err) {

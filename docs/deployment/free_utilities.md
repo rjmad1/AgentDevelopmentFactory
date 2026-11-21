@@ -99,3 +99,51 @@ To deploy on a local Kubernetes cluster (Minikube, Kind, Docker Desktop K8s, or 
   ```
 
 This provisions the `adf-runtime` namespace, starts the worker deployment with liveness and readiness probes, and activates the Horizontal Pod Autoscaler (`HPA v2`) to dynamically govern worker replicas between 2 and 16 pods based on queue depth and CPU pressure.
+
+---
+
+## 7. Secure Remote Accessibility & Zero-Trust Cloudflare Tunneling
+
+When the Agent Development Factory is deployed for remote access across the public internet, enterprise-grade safety, encryption, and authorization are strictly enforced.
+
+### 7.1 Architecture: Zero-Trust HTTPS Edge Tunnel
+Rather than opening insecure firewall ports or configuring dynamic DNS, the factory utilizes **Cloudflare Quick Tunnels** via the official `cloudflare/cloudflared` utility:
+* **Zero Firewall Configuration:** The tunnel initiates an outbound-only connection to Cloudflare's nearest edge server.
+* **Full TLS Termination:** Cloudflare manages edge certificates and automatically serves your application over `https://<tunnel-id>.trycloudflare.com`.
+* **Zero Operational Cost:** 100% free utility with no domain registration, credit card, or subscription required.
+
+### 7.2 Defense-in-Depth Remote Security Gate
+1. **Cryptographic Token Authorization:** Every non-public API endpoint strictly verifies the `ADF_ACCESS_TOKEN` using constant-time comparison (`crypto.timingSafeEqual`) to prevent timing attacks.
+   - Supported via `Authorization: Bearer <token>`
+   - Supported via header `X-ADF-Access-Token: <token>`
+   - Supported via URL parameter `?token=<token>`
+2. **Anti-DDoS Rate Limiting:** An in-memory sliding-window governor enforces a strict limit of 120 requests/minute per client IP to safeguard free resources from abusive traffic.
+3. **Enterprise Security Headers:** All responses include `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and strict origin referrer policies.
+4. **SRE Probe Isolation:** Public health and metrics endpoints (`/healthz`, `/readyz`, `/metrics`) remain accessible to Prometheus scrapers while mutating actions remain guarded.
+
+### 7.3 One-Click Secure Remote Launch
+* **Windows (PowerShell):**
+  ```powershell
+  .\scripts\deploy-remote.ps1
+  ```
+* **Linux / macOS (Bash):**
+  ```bash
+  ./scripts/deploy-remote.sh
+  ```
+
+The deployment script automatically:
+1. Generates a cryptographically strong 32-byte session token (if not already set via `ADF_ACCESS_TOKEN`).
+2. Boots the container cluster with the `adf-tunnel` profile active.
+3. Discovers the live public Cloudflare HTTPS URL from the tunnel handshake.
+4. Prints the pre-authenticated remote URL:
+   ```
+   🌐 Public HTTPS Domain:   https://xxxxxxxx-xxxx.trycloudflare.com
+   🔑 Authenticated Web UI:  https://xxxxxxxx-xxxx.trycloudflare.com/?token=<token>
+   🛡️ Security Access Token: <token>
+   ```
+
+### 7.4 Tearing Down Remote Accessibility
+```powershell
+.\scripts\deploy-remote.ps1 -Down
+```
+
