@@ -913,10 +913,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mathematical-formulation-of-reliability" class="md-nav__link">
+  <a href="#mathematical-formulation-of-reliability-laya-rlcd-calibration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mathematical Formulation of Reliability
+        Mathematical Formulation of Reliability &amp; Laya RLCD Calibration
       
     </span>
   </a>
@@ -1932,10 +1932,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mathematical-formulation-of-reliability" class="md-nav__link">
+  <a href="#mathematical-formulation-of-reliability-laya-rlcd-calibration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mathematical Formulation of Reliability
+        Mathematical Formulation of Reliability &amp; Laya RLCD Calibration
       
     </span>
   </a>
@@ -2143,7 +2143,7 @@
         PromptPatch --&gt; P1
         Decision --&gt;|NO (Retries &gt;= 3)| Tripped["Circuit Breaker Tripped (HALT)"]
     end</code></pre>
-<h3 id="mathematical-formulation-of-reliability">Mathematical Formulation of Reliability<a class="headerlink" href="#mathematical-formulation-of-reliability" title="Permanent link">&para;</a></h3>
+<h3 id="mathematical-formulation-of-reliability-laya-rlcd-calibration">Mathematical Formulation of Reliability &amp; Laya RLCD Calibration<a class="headerlink" href="#mathematical-formulation-of-reliability-laya-rlcd-calibration" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong><span class="arithmatex">\(\text{pass@k}\)</span> (Exploration Quality)</strong>:
   $<span class="arithmatex">\(\text{pass@k} = 1 - \frac{\binom{n-c}{k}}{\binom{n}{k}}\)</span>$
@@ -2151,6 +2151,14 @@
 <li><strong><span class="arithmatex">\(\text{pass}^k\)</span> (Repeatable Consistency)</strong>:
   $<span class="arithmatex">\(\text{pass}^k = \left(\frac{c}{n}\right)^k\)</span>$
   Measures the probability that all <span class="arithmatex">\(k\)</span> consecutive runs succeed independently without state drift. Required <span class="arithmatex">\(\ge 0.85\)</span>.</li>
+<li><strong>Laya RLCD Calibrated Composite Quality Gate</strong>:
+  $<span class="arithmatex">\(\text{CompositeScore} = w_H \cdot \mathcal{R}_{\text{HG}} + w_I \cdot \mathcal{R}_{\text{IF}} + w_S \cdot \mathcal{R}_{\text{SB}} + \text{Prior}\)</span>$
+  where:</li>
+<li><span class="arithmatex">\(\mathcal{R}_{\text{HG}}\)</span>: Hallucination &amp; Grounding Rubric (threshold <span class="arithmatex">\(\ge 0.90\)</span>)</li>
+<li><span class="arithmatex">\(\mathcal{R}_{\text{IF}}\)</span>: Instruction Following &amp; Spec Adherence Rubric (threshold <span class="arithmatex">\(\ge 0.90\)</span>)</li>
+<li><span class="arithmatex">\(\mathcal{R}_{\text{SB}}\)</span>: Security Boundaries &amp; Containment Rubric (zero-tolerance threshold <span class="arithmatex">\(= 1.00\)</span>)</li>
+<li><span class="arithmatex">\(\mathbf{w} = (w_H, w_I, w_S)\)</span>: Calibrated weights dynamically fetched from host Laya Intelligence (<code>~/.laya/data/laya.db</code>)</li>
+<li>Promotion granted if <span class="arithmatex">\(\text{CompositeScore} \ge 0.92\)</span> and <span class="arithmatex">\(\mathcal{R}_{\text{SB}} = 1.00\)</span>.</li>
 </ul>
 <hr />
 <h2 id="3-for-end-users-business-operators-intake-to-promotion">3. For End Users &amp; Business Operators: Intake to Promotion<a class="headerlink" href="#3-for-end-users-business-operators-intake-to-promotion" title="Permanent link">&para;</a></h2>
