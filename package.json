@@ -21,6 +21,8 @@
     "maturity": "node scripts/evaluate-product-maturity.js",
     "ui": "node src/cli.js ui",
     "eval:judge": "node src/cli.js eval-judge",
+    "guardrails:audit": "node src/cli.js guardrails audit",
+    "guardrails:verify": "node src/cli.js guardrails verify",
     "benchmark": "python scripts/run_laya_eval_judge.py"
   }
 }

@@ -55,6 +55,7 @@ checkJsSyntax('src/core.js');
 checkJsSyntax('src/cli.js');
 checkJsSyntax('src/server.js');
 checkJsSyntax('src/eval_judge.js');
+checkJsSyntax('src/guardrails.js');
 checkJsSyntax('src/laya_bridge.js');
 checkJsSyntax('ui/app.js');
 checkJsSyntax('test/runner.js');

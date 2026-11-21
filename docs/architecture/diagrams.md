@@ -220,3 +220,80 @@ flowchart TD
 - **Hermetic Filesystem Containment**: Tests create isolated, unique `test-runs/run-<id>` directories. If any code attempts to write outside its bounded execution root or escape via symlinks or Windows junction points, the operation is rejected immediately.
 - **Tamper-Evident Hashing**: Manifests and check events calculate SHA-256 hashes of both input briefs and checker implementations. If a checker's source changes, previously recorded evidence is marked `STALE` without erasing audit history.
 - **Port Canaries**: The platform includes zero-cost canaries that verify required services (UI port 3000, local LLM port 11434) without opening external network attack surfaces.
+
+---
+
+## 6. NeMo & NIST Operational Safety Guardrail Architecture (For DevSecOps, Architects, and AI Engineers)
+
+The Agent Development Factory binds the agent reasoning engine to the ingested declarative specification pack as the authoritative source of truth. Mandatory programmable guardrails derived from NVIDIA NeMo Guardrails and mapped to NIST AI RMF 1.0 (NIST AI 100-1) actively police execution paths, halting any path that deviates from the certified specification or violates security boundaries.
+
+```mermaid
+flowchart TD
+    subgraph SpecPack ["Authoritative Source of Truth (Ingested Specification Pack)"]
+        SpecYAML["UniversalAgentSpec (agent.yaml)"]
+        SpecSchema["Declarative Input/Output & Limits Schema"]
+        PolicyBounds["Permitted Tools, Effects & Risk Tier (T0-T3)"]
+    end
+
+    subgraph Phase1 ["Phase 1: Input Rails (NeMo / NIST MP-1.1, MP-2.3, GV-1.1)"]
+        InRaw["Raw User / Orchestrator Input"] --> InjCheck{"Prompt Injection & Jailbreak?"}
+        InjCheck -- Yes --> BlockInj["HALT & BLOCK (NIST MP-2.3)"]
+        InjCheck -- No --> SchemaCheck{"Input Schema Conformity?"}
+        SchemaCheck -- No --> BlockSchema["HALT & BLOCK (NIST MP-1.1)"]
+        SchemaCheck -- Yes --> PIIScrub["PII Sanitization & Redaction (NIST GV-1.1)"]
+    end
+
+    subgraph Phase2 ["Phase 2: Dialog & Intent Rails (NeMo / NIST GV-1.2, MG-2.2)"]
+        PIIScrub --> IntentCheck{"Intent Drift vs Purpose?"}
+        IntentCheck -- Yes --> BlockIntent["HALT & BLOCK (NIST GV-1.2)"]
+        IntentCheck -- No --> TransCheck{"State Transition Valid?"}
+        TransCheck -- No --> BlockTrans["HALT & BLOCK (NIST MG-2.2)"]
+        TransCheck -- Yes --> ReasoningStep["Bounded Reasoning Step (INIT -> INTAKE -> PLAN)"]
+    end
+
+    subgraph Phase3 ["Phase 3: Execution & Tool Rails (NeMo / NIST GV-1.2, GV-1.3, MG-1.1, MG-2.2)"]
+        ReasoningStep --> ToolCall["Proposed Tool Invocation"]
+        ToolCall --> ToolAllow{"Tool in Spec Allowlist?"}
+        ToolAllow -- No --> BlockTool["HALT & BLOCK (NIST GV-1.2)"]
+        ToolAllow -- Yes --> EffectCheck{"Effect Level Permitted?"}
+        EffectCheck -- No --> BlockEffect["HALT & BLOCK (NIST GV-1.2)"]
+        EffectCheck -- Yes --> PathCheck{"Workspace Path Contained?"}
+        PathCheck -- No --> BlockPath["HALT & BLOCK (NIST MG-2.2)"]
+        PathCheck -- Yes --> GateCheck{"Elevated Effect (T1-T3)?"}
+        GateCheck -- Yes, Missing Token --> BlockGate["HALT & BLOCK (NIST GV-1.3)"]
+        GateCheck -- Permitted / Approved --> ResCheck{"Ceiling Limits Exceeded?"}
+        ResCheck -- Yes --> BlockRes["HALT & BLOCK (NIST MG-1.1)"]
+        ResCheck -- No --> ExecuteTool["Execute Tool within Sandbox"]
+    end
+
+    subgraph Phase4 ["Phase 4: Output Rails (NeMo / NIST MS-2.2, MS-2.7, MG-2.4)"]
+        ExecuteTool --> OutCheck{"Secret Leak in Output?"}
+        OutCheck -- Yes --> BlockSecret["HALT & BLOCK (NIST MS-2.7)"]
+        OutCheck -- No --> OutSchema{"Declared Output Artifacts Present?"}
+        OutSchema -- No --> BlockOutSchema["HALT & BLOCK (NIST MS-2.2)"]
+        OutSchema -- Yes --> GroundCheck{"Factual Grounding (>=0.90)?"}
+        GroundCheck -- No --> BlockGround["HALT & BLOCK (NIST MS-2.2)"]
+        GroundCheck -- Yes --> CompleteTrace["Certified Output & Bounded Execution Trace"]
+    end
+
+    SpecPack -. Binding Constraint .-> Phase1
+    SpecPack -. Binding Constraint .-> Phase2
+    SpecPack -. Binding Constraint .-> Phase3
+    SpecPack -. Binding Constraint .-> Phase4
+```
+
+### NIST AI RMF (NIST AI 100-1) Mapping Matrix:
+| NIST Function | Control ID | NeMo Rail Component | Operational Mechanism |
+| :--- | :--- | :--- | :--- |
+| **GOVERN** | `GV-1.1` | PII & Secret Redactor | Strips credentials and PII prior to reasoning engine intake |
+| **GOVERN** | `GV-1.2` | Tool & Effect Policy Enforcer | Rejects tools or effects not explicitly declared in `UniversalAgentSpec` |
+| **GOVERN** | `GV-1.3` | Action Gate Authorization | Demands HMAC owner approval tokens for elevated actions (T1–T3) |
+| **GOVERN** | `GV-3.1` | Append-Only Decision Ledger | Logs all rail decisions and state checkpoints in tamper-evident ledger |
+| **MAP** | `MP-1.1` | Input/Output Schema Validator | Verifies parameters adhere to declarative typed JSON schemas |
+| **MAP** | `MP-2.3` | Prompt Injection & Path Defense | Rejects jailbreak payloads and path escapes (symlinks/junctions) |
+| **MEASURE** | `MS-2.2` | Grounding & Efficacy Graders | Ensures output claims match ground truth (no hallucinated records) |
+| **MEASURE** | `MS-2.7` | Zero-Tolerance Secret Scanner | Enforces 1.00 score preventing API keys or bearer token disclosures |
+| **MANAGE** | `MG-1.1` | Resource Ceiling Governor | Hard halts on step counts, token usage, wall time, and spend ceiling |
+| **MANAGE** | `MG-2.2` | Active Fail-Safe Rail Enforcer | Immediately halts and blocks any execution path violating spec bounds |
+| **MANAGE** | `MG-2.4` | Fail-Safe Escalation Router | Dispatches unresolvable policy blocks to human intervention queues |
+

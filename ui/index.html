@@ -621,6 +621,63 @@
               <span style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);" id="judgePriorText">Calibrated via Laya Engine (~/.laya/data/laya.db)</span>
             </div>
           </div>
+
+          <!-- NeMo & NIST Operational Safety Guardrail Engine Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🛡️ NeMo & NIST Operational Safety Guardrail Engine</h3>
+                <p class="md-card-subtitle">Mandatory 4-phase programmable rails derived from NeMo architecture and mapped to NIST AI Risk Management Framework (NIST AI 100-1).</p>
+              </div>
+              <button id="btnAuditNemoNist" class="md-btn md-btn-filled">🔍 Audit NIST AI RMF Controls</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid var(--md-sys-color-primary);">
+                <span class="md-label">Phase 1: Input Rails</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoInputStatus">ENFORCED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Prompt injection, PII sanitize, schema</div>
+                <div style="font-size: 10px; color: var(--md-sys-color-primary); margin-top: 2px;">NIST: MP-1.1, MP-2.3, GV-1.1</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #146c2e;">
+                <span class="md-label">Phase 2: Dialog Rails</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoDialogStatus">ENFORCED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Intent drift, flow transitions</div>
+                <div style="font-size: 10px; color: #146c2e; margin-top: 2px;">NIST: GV-1.2, MG-2.2</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #b3261e;">
+                <span class="md-label">Phase 3: Execution Rails</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoExecutionStatus">ENFORCED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Tool allowlist, path boundary, spend</div>
+                <div style="font-size: 10px; color: #b3261e; margin-top: 2px;">NIST: GV-1.2, GV-1.3, MG-1.1</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #6750a4;">
+                <span class="md-label">Phase 4: Output Rails</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoOutputStatus">ENFORCED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Secret leak zero, grounding >=0.90</div>
+                <div style="font-size: 10px; color: #6750a4; margin-top: 2px;">NIST: MS-2.2, MS-2.7, MG-2.4</div>
+              </div>
+            </div>
+
+            <!-- Interactive Guardrail Verification Form -->
+            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+              <span style="font-weight: 600; font-size: 13px;">⚡ Interactive Operational Safety Verifier:</span>
+              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Test how candidate reasoning payloads or tools are verified or blocked by the active guardrails.</p>
+              
+              <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                <button type="button" class="md-btn md-btn-tonal" id="btnPresetNormal" style="font-size: 11px; padding: 4px 10px;">Sample: Valid Request</button>
+                <button type="button" class="md-btn md-btn-tonal" id="btnPresetInjection" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: Prompt Injection</button>
+                <button type="button" class="md-btn md-btn-tonal" id="btnPresetToolEscape" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: Unauthorized Tool</button>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="nemoTestInput" class="md-input" style="flex: 1;" placeholder="Enter input text or intent to verify against guardrails..." value="Analyze anomalies in customer orders dataset" />
+                <button id="btnVerifyGuardrail" class="md-btn md-btn-outlined">🛡️ Test Rail</button>
+              </div>
+
+              <div id="nemoResultBox" style="margin-top: 12px; display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px;"></div>
+            </div>
+          </div>
         </div>
       </section>
 

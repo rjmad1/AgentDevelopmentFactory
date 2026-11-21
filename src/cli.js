@@ -519,6 +519,58 @@ function main() {
         break;
       }
 
+      case 'guardrails': {
+        const mode = args[1] || 'audit';
+        import('./guardrails.js').then(({ NeMoNistGuardrails }) => {
+          if (mode === 'audit') {
+            const audit = NeMoNistGuardrails.auditCompliance({
+              agent_id: options.agent || 'develop_an_agent_that_analyzes',
+              risk_tier: options.tier || 'T0',
+            });
+            console.log(`[NEMO & NIST OPERATIONAL SAFETY GUARDRAILS AUDIT]`);
+            console.log(`  Agent:               ${audit.agent_id}`);
+            console.log(`  Risk Tier:           ${audit.risk_tier}`);
+            console.log(`  Standard:            ${audit.governance_standard}`);
+            console.log(`  Authoritative Spec:  ${audit.authoritative_source_of_truth}`);
+            console.log(`  Verdict:             ${audit.operational_safety_verdict}`);
+            console.log(`  NeMo Rail Status:`);
+            for (const [rail, info] of Object.entries(audit.nemo_rails)) {
+              console.log(`    - ${rail}: ${info.status} (NIST: ${info.nist_controls.join(', ')})`);
+            }
+            console.log(`  NIST AI RMF (100-1) Controls:`);
+            for (const [func, controls] of Object.entries(audit.nist_matrix)) {
+              console.log(`    [${func}]`);
+              for (const c of controls) {
+                console.log(`      * ${c.code} [${c.status}]: ${c.details}`);
+              }
+            }
+          } else if (mode === 'verify') {
+            const sampleText = options.text || 'Analyze dataset for anomalies';
+            const inj = NeMoNistGuardrails.checkPromptInjection(sampleText);
+            const leak = NeMoNistGuardrails.checkSecretLeaks(sampleText);
+            const tool = options.tool || '';
+            const toolErr = tool ? NeMoNistGuardrails.validateToolAllowlist(tool, ['read_local_csv', 'compute_statistics', 'write_workspace_artifact']) : null;
+            const violations = [inj, leak, toolErr].filter(Boolean);
+
+            console.log(`[NEMO & NIST GUARDRAIL VERIFICATION]`);
+            console.log(`  Payload:             "${sampleText}"`);
+            console.log(`  Violations:          ${violations.length}`);
+            if (violations.length > 0) {
+              for (const v of violations) {
+                console.log(`    [${v.railType} BLOCKED | NIST ${v.nistControl}] (${v.severity}) ${v.railName}: ${v.message}`);
+              }
+              process.exit(1);
+            } else {
+              console.log(`  Status:              CLEAN / SAFE (All boundaries respected)`);
+            }
+          }
+        }).catch((err) => {
+          console.error(`[GUARDRAILS ERROR] ${err.message}`);
+          process.exit(1);
+        });
+        break;
+      }
+
       default:
         console.error(`Unknown command: "${command}"`);
         printUsage();

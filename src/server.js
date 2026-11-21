@@ -16,6 +16,7 @@ import {
   runAdversarialSecuritySuite,
   evaluateReleaseGates,
 } from './core.js';
+import { NeMoNistGuardrails } from './guardrails.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -276,6 +277,62 @@ zero_spend_ceiling_usd: 0.00`;
         });
 
         sendJson(res, 200, judgeReport);
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/guardrails/audit
+    if (pathname === '/api/guardrails/audit' && method === 'GET') {
+      try {
+        const audit = NeMoNistGuardrails.auditCompliance({
+          agent_id: parsedUrl.searchParams.get('agent') || 'develop_an_agent_that_analyzes',
+          risk_tier: parsedUrl.searchParams.get('tier') || 'T0',
+        });
+        sendJson(res, 200, audit);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/guardrails/verify
+    if (pathname === '/api/guardrails/verify' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const text = body.text || '';
+        const action = body.action || '';
+        const tool = body.tool || '';
+        const permittedTools = body.permittedTools || ['read_local_csv', 'compute_statistics', 'write_workspace_artifact'];
+
+        const violations = [];
+
+        // Input check
+        if (text) {
+          const inj = NeMoNistGuardrails.checkPromptInjection(text);
+          if (inj) violations.push(inj);
+          const leak = NeMoNistGuardrails.checkSecretLeaks(text);
+          if (leak) violations.push(leak);
+        }
+
+        // Action / intent check
+        if (action) {
+          const drift = NeMoNistGuardrails.checkIntentDrift(action);
+          if (drift) violations.push(drift);
+        }
+
+        // Tool check
+        if (tool) {
+          const tErr = NeMoNistGuardrails.validateToolAllowlist(tool, permittedTools);
+          if (tErr) violations.push(tErr);
+        }
+
+        sendJson(res, 200, {
+          passed: violations.length === 0,
+          violations,
+          sanitizedText: text ? NeMoNistGuardrails.sanitizePii(text) : '',
+        });
       } catch (err) {
         sendJson(res, 400, { error: err.message });
       }
