@@ -25,6 +25,9 @@
     "guardrails:verify": "node src/cli.js guardrails verify",
     "redteam": "node src/cli.js redteam",
     "redteam:py": "python scripts/run_redteam.py",
-    "benchmark": "python scripts/run_laya_eval_judge.py"
+    "benchmark": "python scripts/run_laya_eval_judge.py",
+    "trace": "node src/cli.js trace",
+    "scale": "node src/cli.js scale",
+    "scale:simulate": "node src/cli.js scale --action simulate"
   }
 }

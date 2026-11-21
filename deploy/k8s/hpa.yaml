@@ -1,0 +1,141 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: adf-agent-worker-hpa
+  namespace: adf-runtime
+  labels:
+    app.kubernetes.io/name: adf-agent-worker
+    app.kubernetes.io/part-of: agent-development-factory
+    app.kubernetes.io/component: reasoning-runtime
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: adf-agent-worker
+  minReplicas: 2
+  maxReplicas: 16
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: External
+      external:
+        metric:
+          name: agent_factory_queued_tasks
+        target:
+          type: AverageValue
+          averageValue: "3"
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      selectPolicy: Max
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 4
+          periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      selectPolicy: Min
+      policies:
+        - type: Percent
+          value: 25
+          periodSeconds: 60
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adf-agent-worker
+  namespace: adf-runtime
+  labels:
+    app.kubernetes.io/name: adf-agent-worker
+    app.kubernetes.io/part-of: agent-development-factory
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: adf-agent-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: adf-agent-worker
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: agent-runtime
+          image: ghcr.io/hermes/agent-development-factory:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "agent_factory.scaling.worker_daemon"]
+          env:
+            - name: ADF_ENV
+              value: "production"
+            - name: ADF_SPEND_CEILING_USD
+              value: "0.00"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector.observability.svc.cluster.local:4317"
+            - name: OTEL_SERVICE_NAME
+              value: "adf-agent-worker"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: workspace-volume
+              mountPath: /workspace
+            - name: scratch-volume
+              mountPath: /workspace/scratch
+            - name: artifacts-volume
+              mountPath: /workspace/artifacts
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2
+      volumes:
+        - name: workspace-volume
+          emptyDir: {}
+        - name: scratch-volume
+          emptyDir: {}
+        - name: artifacts-volume
+          emptyDir: {}

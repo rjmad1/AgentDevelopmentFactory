@@ -58,6 +58,8 @@ checkJsSyntax('src/eval_judge.js');
 checkJsSyntax('src/guardrails.js');
 checkJsSyntax('src/red_team.js');
 checkJsSyntax('src/laya_bridge.js');
+checkJsSyntax('src/telemetry.js');
+checkJsSyntax('src/scaling.js');
 checkJsSyntax('ui/app.js');
 checkJsSyntax('test/runner.js');
 checkJsSyntax('test/evals/runner.js');

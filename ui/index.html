@@ -798,6 +798,118 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Distributed Tracing & Causal Reasoning Chain Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🌐 Distributed Tracing & Causal Reasoning Chains</h3>
+                <p class="md-card-subtitle">W3C TraceContext (traceparent) and OpenTelemetry/Jaeger compliant causal hierarchy across agent reasoning chains.</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button id="btnRefreshTraces" class="md-btn md-btn-tonal">🔄 Refresh Traces</button>
+                <button id="btnExportJaeger" class="md-btn md-btn-outlined">📤 Export Jaeger JSON</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Standard Format</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-primary);">W3C TraceContext</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;"><code>00-{trace_id}-{span_id}-01</code></div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Active Traces</span>
+                <div style="font-size: 20px; font-weight: 700; color: #146c2e;" id="traceCountBadge">1 Trace</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Causal Tree Recorded</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Observability Protocol</span>
+                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface);">OTel / Jaeger Thrift</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero External SDK Overhead</div>
+              </div>
+            </div>
+
+            <!-- Trace Span Hierarchy Tree -->
+            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: 600; font-size: 13px;">Reasoning Span Hierarchy (Parent-Child Causal Links):</span>
+                <span style="font-family: monospace; font-size: 11px; color: var(--md-sys-color-primary);" id="activeTraceparentHeader">00-sample-trace-id-sample-span-id-01</span>
+              </div>
+              <div id="traceSpanHierarchyContainer" style="font-family: monospace; font-size: 12px; line-height: 1.8; color: var(--md-sys-color-on-surface);">
+                <div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
+                  <strong>• root: reasoning_chain (0.72ms)</strong> <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+                </div>
+                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                  └─ input_rail_screening (0.04ms) [NIST MP-1.1, MP-2.3] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+                </div>
+                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                  └─ dialog_rail_planning (0.01ms) [NIST GV-1.2, MG-2.2] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+                </div>
+                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                  └─ tool_execution:file_reader (0.08ms) [NIST GV-1.3, MG-1.1] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+                </div>
+                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                  └─ output_rail_verification (0.05ms) [NIST MS-2.2, MS-2.7] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto-Scaling Infrastructure & Dynamic Concurrency Governor Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">⚡ Auto-Scaling Infrastructure & Concurrency Governor</h3>
+                <p class="md-card-subtitle">Dynamically manages workload spikes, queue backpressure (min 1, max 16 workers), and circuit breaker protection.</p>
+              </div>
+              <button id="btnRefreshScaling" class="md-btn md-btn-tonal">🔄 Refresh Metrics</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Worker Pool</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="scaleWorkers">1 / 16</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Dynamic Burst Scale</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Queued Tasks</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-on-surface);" id="scaleQueue">0</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Backpressure Cap: 100</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Pool Utilization</span>
+                <div style="font-size: 20px; font-weight: 700; color: #146c2e;" id="scaleUtilization">0.0%</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Active Task Load</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Circuit Breaker</span>
+                <div style="font-size: 16px; font-weight: 700; color: #146c2e;" id="scaleCircuitBreaker">CLOSED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Healthy / Zero Cascade</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Spend Invariant</span>
+                <div style="font-size: 18px; font-weight: 700; color: #146c2e;">$0.00 USD</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Strict Spend Ceiling</div>
+              </div>
+            </div>
+
+            <!-- Interactive Workload Spike Simulator -->
+            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+              <span style="font-weight: 600; font-size: 13px;">🚀 Live Workload Spike Simulator:</span>
+              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Inject an instantaneous burst of agent tasks to trigger dynamic autoscaling from 1 baseline worker to multiple concurrent workers, with automatic idle cooldown.</p>
+
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="spikeTaskCount" style="font-size: 12px; font-weight: 500;">Burst Tasks:</label>
+                  <input type="number" id="spikeTaskCount" class="md-input" style="width: 80px;" value="15" min="5" max="50" />
+                </div>
+                <button id="btnSimulateSpike" class="md-btn md-btn-filled">⚡ Trigger Workload Spike</button>
+              </div>
+
+              <div id="spikeResultBanner" style="display: none; margin-top: 12px; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+            </div>
+          </div>
         </div>
       </section>
 

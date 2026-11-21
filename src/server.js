@@ -18,6 +18,8 @@ import {
 } from './core.js';
 import { NeMoNistGuardrails } from './guardrails.js';
 import { runRedTeamSuite } from './red_team.js';
+import { defaultTracer } from './telemetry.js';
+import { defaultScalingPool } from './scaling.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -362,6 +364,66 @@ zero_spend_ceiling_usd: 0.00`;
           const fresh = runRedTeamSuite();
           sendJson(res, 200, fresh);
         }
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/traces
+    if (pathname === '/api/traces' && method === 'GET') {
+      try {
+        if (defaultTracer.completedSpans.length === 0) {
+          const root = defaultTracer.startSpan('sample_agent_run', { attributes: { agent_id: 'agent_sample' } });
+          const s1 = defaultTracer.startSpan('input_rail_screening', { parentContext: root.context });
+          s1.end();
+          const s2 = defaultTracer.startSpan('dialog_rail_planning', { parentContext: root.context });
+          s2.end();
+          const s3 = defaultTracer.startSpan('tool_execution:csv_reader', { parentContext: root.context });
+          s3.end();
+          const s4 = defaultTracer.startSpan('output_rail_verification', { parentContext: root.context });
+          s4.end();
+          root.end();
+        }
+        const traces = defaultTracer.getAllTraces();
+        sendJson(res, 200, { traces, count: traces.length });
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/traces/:id
+    if (pathname.startsWith('/api/traces/') && method === 'GET') {
+      try {
+        const traceId = pathname.replace('/api/traces/', '');
+        const jaeger = defaultTracer.exportJaegerJson(traceId);
+        sendJson(res, 200, jaeger);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/scaling
+    if (pathname === '/api/scaling' && method === 'GET') {
+      try {
+        const status = defaultScalingPool.getStatus();
+        sendJson(res, 200, status);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/scaling/simulate-spike
+    if (pathname === '/api/scaling/simulate-spike' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const tasks = Number(body.numTasks) || 15;
+        const failFraction = Number(body.failFraction) || 0;
+        const result = await defaultScalingPool.simulateWorkloadSpike({ numTasks: tasks, failFraction });
+        sendJson(res, 200, result);
       } catch (err) {
         sendJson(res, 500, { error: err.message });
       }

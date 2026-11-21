@@ -4,6 +4,7 @@ Treats the ingested specification pack as the authoritative source of truth.
 Blocks any execution path that deviates from certified specifications or violates security boundaries.
 """
 
+import json
 import time
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable, Union
@@ -24,6 +25,13 @@ from agent_factory.guardrails.nemo_nist import (
     DialogRails,
     ExecutionRails,
     OutputRails,
+)
+from agent_factory.observability.tracer import (
+    Tracer,
+    TraceContext,
+    Span,
+    SpanKind,
+    SpanStatus,
 )
 
 
@@ -51,6 +59,9 @@ class BoundedExecutionTrace(BaseModel):
     violations_detected: List[GuardrailViolation] = Field(default_factory=list)
     steps: List[ReasoningStepRecord] = Field(default_factory=list)
     artifacts: Dict[str, str] = Field(default_factory=dict)
+    trace_id: Optional[str] = None
+    span_id: Optional[str] = None
+    traceparent: Optional[str] = None
 
 
 class ConstrainedReasoningEngine:
@@ -64,6 +75,8 @@ class ConstrainedReasoningEngine:
         spec: UniversalAgentSpec,
         workspace_root: Union[str, Path],
         approval_token: Optional[str] = None,
+        tracer: Optional[Tracer] = None,
+        parent_trace_context: Optional[TraceContext] = None,
     ):
         self.spec = spec
         self.workspace_root = Path(workspace_root).resolve()
@@ -73,6 +86,21 @@ class ConstrainedReasoningEngine:
         import hashlib
         spec_json = spec.model_dump_json()
         self.spec_sha256 = hashlib.sha256(spec_json.encode("utf-8")).hexdigest()
+
+        # Observability & Distributed Tracing
+        self.tracer = tracer or Tracer(service_name=f"agent-{spec.agent_id}")
+        self.root_span = self.tracer.start_span(
+            name=f"reasoning_chain:{self.spec.agent_id}",
+            parent_context=parent_trace_context,
+            kind=SpanKind.INTERNAL,
+            attributes={
+                "agent.id": self.spec.agent_id,
+                "agent.version": self.spec.version,
+                "agent.risk_tier": self.spec.risk_tier.value,
+                "spec.sha256": self.spec_sha256,
+            },
+        )
+        self.trace_context = self.root_span.context
 
         # Operational state
         self.current_state = "INIT"
@@ -87,6 +115,10 @@ class ConstrainedReasoningEngine:
         """Transitions engine to BLOCKED status, logs violation, and raises GuardrailViolationError."""
         self.current_state = "BLOCKED"
         self.violations.append(violation)
+        self.root_span.record_error(violation.message)
+        self.root_span.set_attribute("guardrail.violation.rail", violation.rail_type.value if hasattr(violation.rail_type, "value") else str(violation.rail_type))
+        self.root_span.set_attribute("guardrail.violation.control", str(violation.nist_control))
+        self.root_span.end()
         raise GuardrailViolationError(violation)
 
     def intake(self, raw_inputs: Dict[str, Any]) -> Dict[str, Any]:
@@ -97,46 +129,53 @@ class ConstrainedReasoningEngine:
         step_start = time.perf_counter()
         evaluated_controls = ["MP-1.1", "MP-2.3", "GV-1.1", "GV-1.2", "MG-2.2"]
 
-        # Validate state transition
-        trans_err = DialogRails.validate_state_transition(self.current_state, "INTAKE")
-        if trans_err:
-            self._block_and_raise(trans_err)
+        with self.tracer.start_span("input_rail_screening", parent_context=self.trace_context) as span:
+            span.set_attribute("rail.type", "INPUT")
+            span.set_attribute("input_keys", list(raw_inputs.keys()))
 
-        sanitized_inputs = {}
-        for key, value in raw_inputs.items():
-            if isinstance(value, str):
-                # 1. Prompt Injection Defense (NeMo input rail / NIST MP-2.3)
-                inj_err = InputRails.check_prompt_injection(value)
-                if inj_err:
-                    self._block_and_raise(inj_err)
+            # Validate state transition
+            trans_err = DialogRails.validate_state_transition(self.current_state, "INTAKE")
+            if trans_err:
+                span.record_error(trans_err.message)
+                self._block_and_raise(trans_err)
 
-                # 2. PII Sanitization (NIST GV-1.1 / MG-1.1)
-                clean_val, _ = InputRails.sanitize_pii(value)
-                sanitized_inputs[key] = clean_val
-            else:
-                sanitized_inputs[key] = value
+            sanitized_inputs = {}
+            for key, value in raw_inputs.items():
+                if isinstance(value, str):
+                    # 1. Prompt Injection Defense (NeMo input rail / NIST MP-2.3)
+                    inj_err = InputRails.check_prompt_injection(value)
+                    if inj_err:
+                        span.record_error(inj_err.message)
+                        self._block_and_raise(inj_err)
 
-        # 3. Input Schema Conformity (NIST MP-1.1 / GV-1.2)
-        schema_errs = InputRails.validate_input_schema(sanitized_inputs, self.spec.inputs)
-        if schema_errs:
-            self._block_and_raise(schema_errs[0])
+                    # 2. PII Sanitization (NIST GV-1.1 / MG-1.1)
+                    clean_val, _ = InputRails.sanitize_pii(value)
+                    sanitized_inputs[key] = clean_val
+                else:
+                    sanitized_inputs[key] = value
 
-        self.current_state = "INTAKE"
-        duration = (time.perf_counter() - step_start) * 1000.0
+            # 3. Input Schema Conformity (NIST MP-1.1 / GV-1.2)
+            schema_errs = InputRails.validate_input_schema(sanitized_inputs, self.spec.inputs)
+            if schema_errs:
+                span.record_error(schema_errs[0].message)
+                self._block_and_raise(schema_errs[0])
 
-        self.trace_steps.append(
-            ReasoningStepRecord(
-                step_number=self.step_count + 1,
-                state="INTAKE",
-                action_type="INPUT_SCREENING",
-                action_name="intake_validation",
-                guardrails_passed=True,
-                nist_controls_evaluated=evaluated_controls,
-                details={"inputs_validated": list(sanitized_inputs.keys())},
-                duration_ms=round(duration, 2),
+            self.current_state = "INTAKE"
+            duration = (time.perf_counter() - step_start) * 1000.0
+
+            self.trace_steps.append(
+                ReasoningStepRecord(
+                    step_number=self.step_count + 1,
+                    state="INTAKE",
+                    action_type="INPUT_SCREENING",
+                    action_name="intake_validation",
+                    guardrails_passed=True,
+                    nist_controls_evaluated=evaluated_controls,
+                    details={"inputs_validated": list(sanitized_inputs.keys())},
+                    duration_ms=round(duration, 2),
+                )
             )
-        )
-        return sanitized_inputs
+            return sanitized_inputs
 
     def plan_step(self, proposed_goal: str) -> None:
         """
@@ -146,30 +185,36 @@ class ConstrainedReasoningEngine:
         step_start = time.perf_counter()
         evaluated_controls = ["GV-1.2", "MG-2.2"]
 
-        trans_err = DialogRails.validate_state_transition(self.current_state, "PLAN")
-        if trans_err:
-            self._block_and_raise(trans_err)
+        with self.tracer.start_span("dialog_rail_planning", parent_context=self.trace_context) as span:
+            span.set_attribute("rail.type", "DIALOG")
+            span.set_attribute("proposed_goal", proposed_goal)
 
-        # Check intent drift
-        drift_err = DialogRails.check_intent_drift(proposed_goal, self.spec.purpose)
-        if drift_err:
-            self._block_and_raise(drift_err)
+            trans_err = DialogRails.validate_state_transition(self.current_state, "PLAN")
+            if trans_err:
+                span.record_error(trans_err.message)
+                self._block_and_raise(trans_err)
 
-        self.current_state = "PLAN"
-        duration = (time.perf_counter() - step_start) * 1000.0
+            # Check intent drift
+            drift_err = DialogRails.check_intent_drift(proposed_goal, self.spec.purpose)
+            if drift_err:
+                span.record_error(drift_err.message)
+                self._block_and_raise(drift_err)
 
-        self.trace_steps.append(
-            ReasoningStepRecord(
-                step_number=self.step_count + 1,
-                state="PLAN",
-                action_type="REASONING_FLOW",
-                action_name="plan_goal_alignment",
-                guardrails_passed=True,
-                nist_controls_evaluated=evaluated_controls,
-                details={"proposed_goal": proposed_goal},
-                duration_ms=round(duration, 2),
+            self.current_state = "PLAN"
+            duration = (time.perf_counter() - step_start) * 1000.0
+
+            self.trace_steps.append(
+                ReasoningStepRecord(
+                    step_number=self.step_count + 1,
+                    state="PLAN",
+                    action_type="REASONING_FLOW",
+                    action_name="plan_goal_alignment",
+                    guardrails_passed=True,
+                    nist_controls_evaluated=evaluated_controls,
+                    details={"proposed_goal": proposed_goal},
+                    duration_ms=round(duration, 2),
+                )
             )
-        )
 
     def guard_tool_action(
         self,
@@ -242,42 +287,52 @@ class ConstrainedReasoningEngine:
         """Pre-screens tool action against Execution Rails, executes it, and records trace."""
         step_start = time.perf_counter()
 
-        # Guard pre-execution
-        self.guard_tool_action(
-            tool_name=tool_name,
-            tool_args=tool_args,
-            requested_effect=requested_effect,
-            estimated_tokens=tokens_consumed,
-            estimated_cost_usd=cost_usd,
-        )
+        with self.tracer.start_span(f"tool_execution:{tool_name}", parent_context=self.trace_context) as span:
+            span.set_attribute("rail.type", "EXECUTION")
+            span.set_attribute("tool.name", tool_name)
+            span.set_attribute("tool.effect", requested_effect.value)
 
-        # Execute
-        self.step_count += 1
-        self.accumulated_tokens += tokens_consumed
-        self.accumulated_cost_usd += cost_usd
-
-        result = tool_callable(**tool_args)
-        duration = (time.perf_counter() - step_start) * 1000.0
-
-        self.current_state = "OBSERVE"
-        self.trace_steps.append(
-            ReasoningStepRecord(
-                step_number=self.step_count,
-                state="EXECUTE_TOOL",
-                action_type="TOOL_INVOCATION",
-                action_name=tool_name,
-                guardrails_passed=True,
-                nist_controls_evaluated=["GV-1.2", "GV-1.3", "MP-2.3", "MG-1.1", "MG-2.2"],
-                details={
-                    "tool": tool_name,
-                    "effect": requested_effect.value,
-                    "tokens": tokens_consumed,
-                    "cost_usd": cost_usd,
-                },
-                duration_ms=round(duration, 2),
+            # Guard pre-execution
+            self.guard_tool_action(
+                tool_name=tool_name,
+                tool_args=tool_args,
+                requested_effect=requested_effect,
+                estimated_tokens=tokens_consumed,
+                estimated_cost_usd=cost_usd,
             )
-        )
-        return result
+
+            # Execute
+            self.step_count += 1
+            self.accumulated_tokens += tokens_consumed
+            self.accumulated_cost_usd += cost_usd
+
+            try:
+                result = tool_callable(**tool_args)
+            except Exception as e:
+                span.record_error(str(e))
+                raise
+
+            duration = (time.perf_counter() - step_start) * 1000.0
+
+            self.current_state = "OBSERVE"
+            self.trace_steps.append(
+                ReasoningStepRecord(
+                    step_number=self.step_count,
+                    state="EXECUTE_TOOL",
+                    action_type="TOOL_INVOCATION",
+                    action_name=tool_name,
+                    guardrails_passed=True,
+                    nist_controls_evaluated=["GV-1.2", "GV-1.3", "MP-2.3", "MG-1.1", "MG-2.2"],
+                    details={
+                        "tool": tool_name,
+                        "effect": requested_effect.value,
+                        "tokens": tokens_consumed,
+                        "cost_usd": cost_usd,
+                    },
+                    duration_ms=round(duration, 2),
+                )
+            )
+            return result
 
     def finalize_and_verify_outputs(
         self,
@@ -292,36 +347,44 @@ class ConstrainedReasoningEngine:
         step_start = time.perf_counter()
         evaluated_controls = ["MS-2.2", "MS-2.7", "GV-1.2", "MG-2.2"]
 
-        # Validate state transition to SYNTHESIZE
-        trans_err = DialogRails.validate_state_transition(self.current_state, "SYNTHESIZE")
-        if trans_err:
-            self._block_and_raise(trans_err)
-        self.current_state = "SYNTHESIZE"
+        with self.tracer.start_span("output_rail_verification", parent_context=self.trace_context) as span:
+            span.set_attribute("rail.type", "OUTPUT")
+            span.set_attribute("artifacts.count", len(artifacts_created))
 
-        # 1. Output Secret Leak Containment (NIST MS-2.7)
-        if output_text:
-            leak_err = OutputRails.check_secret_leaks(output_text)
-            if leak_err:
-                self._block_and_raise(leak_err)
+            # Validate state transition to SYNTHESIZE
+            trans_err = DialogRails.validate_state_transition(self.current_state, "SYNTHESIZE")
+            if trans_err:
+                span.record_error(trans_err.message)
+                self._block_and_raise(trans_err)
+            self.current_state = "SYNTHESIZE"
 
-        # 2. Output Schema Conformity (NIST MS-2.2 / GV-1.2)
-        schema_errs = OutputRails.validate_output_schema(artifacts_created, self.spec.outputs)
-        if schema_errs:
-            self._block_and_raise(schema_errs[0])
+            # 1. Output Secret Leak Containment (NIST MS-2.7)
+            if output_text:
+                leak_err = OutputRails.check_secret_leaks(output_text)
+                if leak_err:
+                    span.record_error(leak_err.message)
+                    self._block_and_raise(leak_err)
 
-        # 3. Grounding Verification (NIST MS-2.2)
-        if ground_truth and artifacts_created:
-            # If summary JSON exists, inspect grounding
-            for art_name, art_path in artifacts_created.items():
-                if art_path.endswith(".json") and Path(art_path).exists():
-                    try:
-                        with open(art_path, "r", encoding="utf-8") as f:
-                            parsed_summary = json.load(f)
-                        ground_err = OutputRails.verify_grounding(parsed_summary, ground_truth)
-                        if ground_err:
-                            self._block_and_raise(ground_err)
-                    except Exception:
-                        pass
+            # 2. Output Schema Conformity (NIST MS-2.2 / GV-1.2)
+            schema_errs = OutputRails.validate_output_schema(artifacts_created, self.spec.outputs)
+            if schema_errs:
+                span.record_error(schema_errs[0].message)
+                self._block_and_raise(schema_errs[0])
+
+            # 3. Grounding Verification (NIST MS-2.2)
+            if ground_truth and artifacts_created:
+                # If summary JSON exists, inspect grounding
+                for art_name, art_path in artifacts_created.items():
+                    if art_path.endswith(".json") and Path(art_path).exists():
+                        try:
+                            with open(art_path, "r", encoding="utf-8") as f:
+                                parsed_summary = json.load(f)
+                            ground_err = OutputRails.verify_grounding(parsed_summary, ground_truth)
+                            if ground_err:
+                                span.record_error(ground_err.message)
+                                self._block_and_raise(ground_err)
+                        except Exception:
+                            pass
 
         # Final transition to COMPLETE
         self.current_state = "COMPLETE"
@@ -341,6 +404,11 @@ class ConstrainedReasoningEngine:
             )
         )
 
+        self.root_span.set_attribute("steps_executed", self.step_count)
+        self.root_span.set_attribute("total_tokens", self.accumulated_tokens)
+        self.root_span.set_attribute("total_cost_usd", self.accumulated_cost_usd)
+        self.root_span.end()
+
         return BoundedExecutionTrace(
             agent_id=self.spec.agent_id,
             version=self.spec.version,
@@ -354,4 +422,7 @@ class ConstrainedReasoningEngine:
             violations_detected=self.violations,
             steps=self.trace_steps,
             artifacts=artifacts_created,
+            trace_id=self.trace_context.trace_id,
+            span_id=self.trace_context.span_id,
+            traceparent=self.trace_context.to_traceparent(),
         )

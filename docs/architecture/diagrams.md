@@ -346,4 +346,77 @@ flowchart TD
 4. **Autonomous Tool Misuse (`RED-TLS-01..03`)**: Blocks unlisted tool invocations, parameter path escapes (`../../../../system32`), and unapproved effect elevations. Mapped to **NIST GV-1.2 / MG-2.2**.
 5. **Secret Exfiltration Probes (`RED-EXF-01..02`)**: Intercepts active credential leaks (`sk-`, `Bearer`, `AKIA`) and scrubs environment variables. Mapped to **NIST MS-2.7**.
 
+---
+
+## 8. Distributed Tracing & Auto-Scaling Concurrency Governance (For System Administrators, Architects & AI Engineers)
+
+### Distributed Tracing & Causal Reasoning Chain Architecture
+
+```mermaid
+flowchart TD
+    subgraph ClientAndIngress ["1. Ingress & Context Propagation"]
+        ClientReq["Agent Request / Workload"] --> ContextGen["W3C TraceContext Generator"]
+        ContextGen --> TPHeader["traceparent: 00-{trace_id}-{span_id}-01"]
+    end
+
+    subgraph ReasoningChainTracer ["2. Hierarchical Reasoning Chain (Root & Child Spans)"]
+        TPHeader --> RootSpan["Root Span: reasoning_chain:{agent_id}<br/>• Attributes: agent_id, spec_sha256, risk_tier"]
+        
+        RootSpan --> ChildSpan1["Child Span: input_rail_screening<br/>• Controls: NIST MP-1.1, MP-2.3<br/>• Attributes: injection_clean, pii_sanitized"]
+        ChildSpan1 --> ChildSpan2["Child Span: dialog_rail_planning<br/>• Controls: NIST GV-1.2, MG-2.2<br/>• Attributes: proposed_goal, intent_drift=0"]
+        ChildSpan2 --> ChildSpan3["Child Span: sandboxed_process_execution<br/>• Envs: TRACEPARENT=00-{trace_id}-{child_span_id}-01<br/>• Isolation: AST quarantine, offline network"]
+        ChildSpan3 --> ChildSpan4["Child Span: output_rail_verification<br/>• Controls: NIST MS-2.2, MS-2.7<br/>• Attributes: secret_leaks=0, schema_valid=true"]
+    end
+
+    subgraph ObservabilityEcosystem ["3. Correlated Telemetry & Export"]
+        ChildSpan1 -. Span Events & Timestamps .-> SpanStorage[("Spans Storage<br/>(spans.jsonl)")]
+        ChildSpan2 -. Span Events & Timestamps .-> SpanStorage
+        ChildSpan3 -. Span Events & Timestamps .-> SpanStorage
+        ChildSpan4 -. Span Events & Timestamps .-> SpanStorage
+        
+        RootSpan -. Correlated TraceContext .-> StructLogger["StructuredLogger (JSON Lines)<br/>• trace_id, span_id, level, agent_id"]
+        StructLogger --> LogStorage[("JSONL Log Stream<br/>(logs/agent_runtimes.jsonl)")]
+
+        SpanStorage --> JaegerExporter["Jaeger / OpenTelemetry Exporter<br/>(GET /api/traces/:id)"]
+        JaegerExporter --> JaegerUI["Jaeger All-In-One UI<br/>(Port 16686)"]
+    end
+```
+
+### Auto-Scaling Infrastructure & Dynamic Concurrency Governor
+
+```mermaid
+flowchart LR
+    subgraph TrafficFlow ["1. Traffic Ingestion & Backpressure"]
+        InWorkload["Workload Spikes / Variable Demand"] --> CBGuard{"Circuit Breaker<br/>(Failure Rate < 25%)"}
+        CBGuard -- "Tripped (OPEN)" --> RejectCascade["Reject with CircuitBreakerError<br/>(Prevent Cascading Degradation)"]
+        CBGuard -- "Healthy (CLOSED / HALF_OPEN)" --> QCheck{"Queue Capacity<br/>(Depth <= 100)"}
+        QCheck -- "Exceeded" --> RejectBP["Reject with QueueBackpressureError"]
+        QCheck -- "Accepted" --> TaskQueue[("Bounded Task Queue")]
+    end
+
+    subgraph DynamicScalingEngine ["2. Concurrency Scaling Governor"]
+        TaskQueue --> ScalerLoop{"Queue Depth >= 3?"}
+        ScalerLoop -- "Yes & Workers < 16" --> ScaleUp["Scale Up Pool: +2 Workers<br/>(Peak: 16 Workers)"]
+        ScalerLoop -- "No / Idle" --> CooldownCheck{"Queue Empty & Idle > 5s?"}
+        CooldownCheck -- "Yes" --> ScaleDown["Scale Down to Baseline: 1 Worker"]
+        
+        ScaleUp --> WorkerPool["Active Worker Threads / Containers"]
+        ScaleDown --> WorkerPool
+    end
+
+    subgraph CloudNativeTopology ["3. Cloud-Native & Container Scaling"]
+        WorkerPool --> K8sHPA["Kubernetes HPA v2 (hpa.yaml)<br/>• Min: 2 Pods, Max: 16 Pods<br/>• CPU Threshold: 75%<br/>• Custom Metric: agent_factory_queued_tasks"]
+        WorkerPool --> DockerCompose["Docker Compose Scaling Topology<br/>• deploy/docker-compose.scaling.yml<br/>• Replicas: 4 Workers + Jaeger + Prometheus"]
+        WorkerPool -. Health & Metrics .-> PrometheusScrape["Prometheus /metrics & /healthz"]
+    end
+```
+
+### Observability & Scaling Key Safeguards:
+1. **W3C TraceContext Standard Compliance**: Strictly follows `00-{trace_id}-{span_id}-{trace_flags}` enabling seamless trace propagation across Node.js, Python, and external OpenTelemetry collectors without proprietary SDK lock-in.
+2. **Causal Reasoning Chain Observability**: Every reasoning phase (Intake, Plan, Tool Execution, Output Verification) generates linked child spans, recording execution durations, evaluated NIST AI RMF controls, and error states.
+3. **Structured Log Correlation**: Ingests active `trace_id` and `span_id` into every JSON Lines log event, enabling microsecond-precision log aggregation and correlation.
+4. **Autonomous Circuit Breaker Protection**: Employs a sliding-window failure rate governor (25% threshold over 20 executions) with automatic `CLOSED` $\to$ `OPEN` $\to$ `HALF_OPEN` self-healing canary recovery.
+5. **Elastic Workload Burst Scaling**: Dynamic worker scaling under queue pressure (min 1 to max 16 workers) with idle scale-down and hard backpressure limits, strictly upholding the constitutional **$0.00 spend ceiling**.
+
+
 

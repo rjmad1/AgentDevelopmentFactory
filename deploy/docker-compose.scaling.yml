@@ -1,0 +1,102 @@
+version: "3.9"
+
+services:
+  # Primary Agent Development Factory Control Plane API & UI
+  adf-server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: adf-control-plane
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - ADF_PORT=3000
+      - ADF_SPEND_CEILING_USD=0.00
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - LOG_LEVEL=info
+    depends_on:
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+  # Auto-scaling Worker Pool Replicas
+  adf-worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: ["python", "-m", "agent_factory.scaling.worker_daemon"]
+    environment:
+      - ADF_ENV=production
+      - ADF_WORKER_MIN=1
+      - ADF_WORKER_MAX=16
+      - ADF_SPEND_CEILING_USD=0.00
+      - OTEL_EXPORTER_JAEGER_AGENT_HOST=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
+    depends_on:
+      - adf-server
+      - jaeger
+    deploy:
+      mode: replicated
+      replicas: 4
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+        reservations:
+          cpus: "0.2"
+          memory: 256M
+
+  # Distributed Tracing Backend: Jaeger all-in-one
+  jaeger:
+    image: jaegertracing/all-in-one:1.54
+    container_name: adf-jaeger
+    ports:
+      - "16686:16686" # Web UI
+      - "14268:14268" # HTTP thrift spans collector
+      - "6831:6831/udp" # UDP thrift agent
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - SPAN_STORAGE_TYPE=memory
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:16686/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Prometheus Telemetry & Queue Metric Collector
+  prometheus:
+    image: prom/prometheus:v2.50.0
+    container_name: adf-prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=7d"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
+
+networks:
+  default:
+    name: adf-network

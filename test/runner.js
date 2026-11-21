@@ -9,6 +9,8 @@ import {
   getCheckerImplementationHash,
   evaluateEvidenceApplicability,
 } from '../src/core.js';
+import { Tracer, TraceContext } from '../src/telemetry.js';
+import { AutoscalingWorkerPool, CircuitBreaker, CircuitState } from '../src/scaling.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -825,6 +827,63 @@ export function executeFullSuite(runLabel) {
     assert(report.blocked_probes === 16, 'Report must record 16 blocked probes');
     assert(report.verdict === 'PASS / HARDENED', 'Report verdict must be PASS / HARDENED');
     assert(report.nist_controls_evaluated.includes('MP-2.3'), 'Must evaluate NIST MP-2.3');
+  });
+
+  // TEST 28: Distributed Tracing & Auto-Scaling Concurrency Governance
+  recordTest('28. (Observability & Autoscaling) Distributed Tracing (W3C TraceContext) & Dynamic Concurrency Governor', () => {
+    // 1. Verify CLI trace inspection
+    const traceRes = runCli(['trace']);
+    assert(!traceRes.failed, `trace command failed: ${traceRes.stderr}`);
+    assert(traceRes.stdout.includes('DISTRIBUTED TRACING — REASONING CHAINS & W3C TRACE CONTEXT'), 'Must print tracing header');
+    assert(traceRes.stdout.includes('Root Operation:'), 'Must show root operation');
+    assert(traceRes.stdout.includes('Status:         ✅ OK'), 'Must show trace status OK');
+
+    // 2. Verify CLI scale status inspection
+    const scaleRes = runCli(['scale']);
+    assert(!scaleRes.failed, `scale command failed: ${scaleRes.stderr}`);
+    assert(scaleRes.stdout.includes('AUTOSCALING INFRASTRUCTURE & CONCURRENCY GOVERNOR STATUS'), 'Must print scaling header');
+    assert(scaleRes.stdout.includes('Current Workers:     1 (Min: 1, Max: 16)'), 'Must show baseline workers 1 / 16');
+    assert(scaleRes.stdout.includes('Circuit Breaker:     CLOSED'), 'Must show healthy closed circuit breaker');
+    assert(scaleRes.stdout.includes('Spend Ceiling:       $0.00 USD'), 'Must enforce $0.00 spend invariant');
+
+    // 3. Verify CLI scale workload spike simulation
+    const spikeRes = runCli(['scale', '--action', 'simulate', '--tasks', '10']);
+    assert(!spikeRes.failed, `scale simulate failed: ${spikeRes.stderr}`);
+    assert(spikeRes.stdout.includes('AUTOSCALING INFRASTRUCTURE — WORKLOAD SPIKE SIMULATION'), 'Must print spike simulation header');
+    assert(spikeRes.stdout.includes('Tasks Injected:      10'), 'Must inject 10 tasks');
+    assert(spikeRes.stdout.includes('Tasks Succeeded:     10'), 'Must complete 10 tasks');
+    assert(spikeRes.stdout.includes('Scaled Up: YES ⚡'), 'Must scale up dynamically under load');
+    assert(spikeRes.stdout.includes('Idle Scale-Down: PASS ✅'), 'Must scale back down when idle');
+
+    // 4. Programmatic Telemetry & Scaling Verification
+    // W3C TraceContext conformance
+    const ctx = new TraceContext();
+    const traceparent = ctx.toTraceparent();
+    assert(traceparent.startsWith(`00-${ctx.traceId}-${ctx.spanId}-`), 'Must format valid W3C traceparent');
+
+    const childCtx = ctx.createChild();
+    assert(childCtx.traceId === ctx.traceId, 'Child must inherit parent traceId');
+    assert(childCtx.parentSpanId === ctx.spanId, 'Child parentSpanId must match parent spanId');
+
+    // Tracer & Jaeger export
+    const t = new Tracer({ serviceName: 'test-tracer' });
+    const rootSpan = t.startSpan('root_op');
+    const childSpan = t.startSpan('child_op', { parentContext: rootSpan.context });
+    childSpan.end();
+    rootSpan.end();
+
+    const jaeger = t.exportJaegerJson(rootSpan.context.traceId);
+    assert(jaeger.data[0].traceID === rootSpan.context.traceId, 'Jaeger export must contain traceID');
+    assert(jaeger.data[0].spans.length === 2, 'Jaeger export must record 2 spans');
+
+    // Circuit Breaker Protection
+    const cb = new CircuitBreaker({ failureRateThreshold: 0.25, windowSize: 10, recoveryMs: 100 });
+    assert(cb.state === CircuitState.CLOSED, 'Circuit breaker must start CLOSED');
+    for (let i = 0; i < 4; i++) cb.recordSuccess();
+    cb.recordFailure();
+    cb.recordFailure(); // 2 / 6 = 33.3% > 25% -> trip
+    assert(cb.state === CircuitState.OPEN, 'Circuit breaker must trip to OPEN on 33% failure rate');
+    assert(!cb.canExecute(), 'Circuit breaker must reject calls when OPEN');
   });
 
   log(`\n==================================================`);

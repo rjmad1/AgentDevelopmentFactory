@@ -16,6 +16,7 @@ from agent_factory.runtime.base import AgentRuntime, ExecutionLimits, ExecutionR
 from agent_factory.runtime.local_process import LocalProcessRuntime
 from agent_factory.security.redactor import SecretRedactor
 from agent_factory.security.quarantine import SkillQuarantine
+from agent_factory.observability.tracer import Tracer, TraceContext, SpanKind
 
 
 class SandboxConfig(BaseModel):
@@ -43,8 +44,12 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
         super().__init__(python_executable=python_executable)
         self.config = config or SandboxConfig()
 
-    def _prepare_sandboxed_env(self, workdir: Path) -> Dict[str, str]:
-        """Prepares a hermetic, scrubbed environment with network barriers and secret isolation."""
+    def _prepare_sandboxed_env(
+        self,
+        workdir: Path,
+        trace_context: Optional[TraceContext] = None,
+    ) -> Dict[str, str]:
+        """Prepares a hermetic, scrubbed environment with network barriers, secret isolation, and W3C trace propagation."""
         # Start from stripped environment
         env = self._sanitize_env()
 
@@ -74,6 +79,10 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
         # Sandboxed python execution flags
         env["PYTHONDONTWRITEBYTECODE"] = "1"
         env["PYTHONUNBUFFERED"] = "1"
+
+        # Propagate W3C TraceContext if present
+        if trace_context:
+            env["TRACEPARENT"] = trace_context.to_traceparent()
 
         # Restrict PYTHONPATH strictly to agent source directories
         src_dir = workdir / "src"
@@ -109,11 +118,25 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
         args: List[str],
         limits: ExecutionLimits,
         workdir: Path,
+        trace_context: Optional[TraceContext] = None,
+        tracer: Optional[Tracer] = None,
     ) -> ExecutionResult:
         p = Path(entrypoint_script).resolve()
         workdir_path = Path(workdir).resolve()
 
+        if tracer:
+            span = tracer.start_span("sandboxed_process_execution", parent_context=trace_context)
+            span.set_attribute("entrypoint", str(p))
+            span.set_attribute("workdir", str(workdir_path))
+            active_trace_context = span.context
+        else:
+            span = None
+            active_trace_context = trace_context
+
         if not p.exists():
+            if span:
+                span.record_error(f"Entrypoint script not found: {p}")
+                span.end()
             return ExecutionResult(
                 success=False,
                 exit_code=127,
@@ -128,6 +151,9 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
             try:
                 self._verify_path_containment(p, workdir_path)
             except PermissionError as e:
+                if span:
+                    span.record_error(str(e))
+                    span.end()
                 return ExecutionResult(
                     success=False,
                     exit_code=126,
@@ -142,6 +168,9 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
             ast_findings = SkillQuarantine.audit_file(p)
             if ast_findings:
                 err_msg = f"AST_QUARANTINE_REJECTED: Prohibited constructs in candidate script: {'; '.join(ast_findings)}"
+                if span:
+                    span.record_error(err_msg)
+                    span.end()
                 return ExecutionResult(
                     success=False,
                     exit_code=126,
@@ -158,7 +187,7 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
         artifacts_dir.mkdir(parents=True, exist_ok=True)
 
         # 4. Prepare Hermetic Environment
-        sandboxed_env = self._prepare_sandboxed_env(workdir_path)
+        sandboxed_env = self._prepare_sandboxed_env(workdir_path, trace_context=active_trace_context)
         cmd = [self.python_exe, str(p)] + args
 
         start_time = time.perf_counter()
@@ -197,6 +226,13 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
                         else:
                             artifacts[f.name] = str(f.resolve())
 
+            if span:
+                span.set_attribute("exit_code", completed.returncode)
+                span.set_attribute("artifacts_count", len(artifacts))
+                if completed.returncode != 0:
+                    span.record_error(clean_stderr or f"Non-zero exit code: {completed.returncode}")
+                span.end()
+
             return ExecutionResult(
                 success=(completed.returncode == 0),
                 exit_code=completed.returncode,
@@ -209,6 +245,9 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
 
         except subprocess.TimeoutExpired as e:
             elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+            if span:
+                span.record_error(f"Timeout expired ({limits.max_wall_time_seconds}s)")
+                span.end()
             return ExecutionResult(
                 success=False,
                 exit_code=124,
@@ -219,6 +258,9 @@ class SandboxedLocalProcessRuntime(LocalProcessRuntime):
             )
         except Exception as e:
             elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+            if span:
+                span.record_error(str(e))
+                span.end()
             return ExecutionResult(
                 success=False,
                 exit_code=1,

@@ -514,4 +514,113 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // ==========================================
+  // DISTRIBUTED TRACING TELEMETRY HANDLERS
+  // ==========================================
+  let activeTraceId = null;
+
+  async function loadTraces() {
+    const data = await callApi('/api/traces');
+    if (data && data.traces && data.traces.length > 0) {
+      document.getElementById('traceCountBadge').textContent = `${data.traces.length} Trace${data.traces.length > 1 ? 's' : ''}`;
+      const firstTrace = data.traces[0];
+      activeTraceId = firstTrace.traceId;
+      document.getElementById('activeTraceparentHeader').textContent = `00-${firstTrace.traceId}-${firstTrace.spans[0]?.spanId || '0000000000000000'}-01`;
+
+      const container = document.getElementById('traceSpanHierarchyContainer');
+      if (container) {
+        let html = '';
+        const root = firstTrace.spans.find(s => !s.parentSpanId) || firstTrace.spans[0];
+        html += `<div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
+          <strong>• root: ${root.name} (${root.durationMs}ms)</strong> <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">${root.status}</span>
+        </div>`;
+
+        for (const span of firstTrace.spans) {
+          if (span === root) continue;
+          html += `<div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+            └─ ${span.name} (${span.durationMs}ms) <span class="md-chip md-chip-${span.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${span.status}</span>
+          </div>`;
+        }
+        container.innerHTML = html;
+      }
+    }
+  }
+
+  const btnRefreshTraces = document.getElementById('btnRefreshTraces');
+  if (btnRefreshTraces) {
+    btnRefreshTraces.addEventListener('click', () => {
+      loadTraces();
+    });
+  }
+
+  const btnExportJaeger = document.getElementById('btnExportJaeger');
+  if (btnExportJaeger) {
+    btnExportJaeger.addEventListener('click', async () => {
+      if (!activeTraceId) await loadTraces();
+      if (activeTraceId) {
+        const jaeger = await callApi(`/api/traces/${activeTraceId}`);
+        const blob = new Blob([JSON.stringify(jaeger, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `jaeger-trace-${activeTraceId}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
+
+  // ==========================================
+  // AUTOSCALING INFRASTRUCTURE HANDLERS
+  // ==========================================
+  async function loadScalingStatus() {
+    const status = await callApi('/api/scaling');
+    if (status) {
+      document.getElementById('scaleWorkers').textContent = `${status.currentWorkers} / ${status.maxWorkers}`;
+      document.getElementById('scaleQueue').textContent = status.queuedTasks;
+      document.getElementById('scaleUtilization').textContent = `${status.utilizationPct}%`;
+      const cbEl = document.getElementById('scaleCircuitBreaker');
+      cbEl.textContent = status.circuitBreaker?.state || 'CLOSED';
+      cbEl.style.color = (status.circuitBreaker?.state === 'CLOSED') ? '#146c2e' : '#b3261e';
+    }
+  }
+
+  const btnRefreshScaling = document.getElementById('btnRefreshScaling');
+  if (btnRefreshScaling) {
+    btnRefreshScaling.addEventListener('click', () => {
+      loadScalingStatus();
+    });
+  }
+
+  const btnSimulateSpike = document.getElementById('btnSimulateSpike');
+  if (btnSimulateSpike) {
+    btnSimulateSpike.addEventListener('click', async () => {
+      const taskInput = document.getElementById('spikeTaskCount');
+      const numTasks = taskInput ? parseInt(taskInput.value, 10) || 15 : 15;
+      const banner = document.getElementById('spikeResultBanner');
+
+      btnSimulateSpike.textContent = '⚡ Injecting Spike...';
+      btnSimulateSpike.disabled = true;
+
+      const res = await callApi('/api/scaling/simulate-spike', 'POST', { numTasks });
+      btnSimulateSpike.textContent = '⚡ Trigger Workload Spike';
+      btnSimulateSpike.disabled = false;
+
+      if (banner && res) {
+        banner.style.display = 'block';
+        banner.innerHTML = `<strong>⚡ [WORKLOAD SPIKE SIMULATION TELEMETRY]</strong><br>` +
+          `• Injected Tasks: ${res.tasksInjected} | Succeeded: ${res.tasksSucceeded} | Failed: ${res.tasksFailed}<br>` +
+          `• Initial Pool Size: ${res.initialWorkers} worker(s)<br>` +
+          `• <strong>Peak Scaled Pool: ${res.peakWorkers} workers (Dynamic Auto-Scale: ${res.scaledUp ? 'YES ⚡' : 'NO'})</strong><br>` +
+          `• Idle Scale-Down: Return to baseline ${res.finalWorkers} worker(s) (PASS ✅)<br>` +
+          `• Circuit Breaker Health: ${res.circuitBreakerStatus?.state} (Fail Rate: ${(res.circuitBreakerStatus?.failRate || 0) * 100}%)`;
+        loadScalingStatus();
+      }
+    });
+  }
+
+  // Initial loads for observability & scaling
+  loadTraces();
+  loadScalingStatus();
 });

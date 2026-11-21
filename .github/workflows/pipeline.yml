@@ -73,6 +73,12 @@ jobs:
           echo "=== RUNNING CONTINUOUS RED TEAMING & PROMPT INJECTION STRESS TEST ==="
           python scripts/run_redteam.py
 
+      - name: Verify Distributed Tracing & Autoscaling Concurrency Gate
+        run: |
+          echo "=== VERIFYING DISTRIBUTED TRACING & CONCURRENCY AUTOSCALER ==="
+          node src/cli.js trace
+          node src/cli.js scale --action simulate --tasks 15
+
       - name: Upload Evaluation Artifacts
         if: always()
         uses: actions/upload-artifact@v4
