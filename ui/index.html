@@ -910,6 +910,86 @@
               <div id="spikeResultBanner" style="display: none; margin-top: 12px; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
             </div>
           </div>
+
+          <!-- Autonomous Error Resolution & Self-Healing Engine Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🩹 Autonomous Error Resolution & Self-Healing Engine</h3>
+                <p class="md-card-subtitle">Mandatory runtime fault diagnosis, autonomous payload syntax repair, bounded backoff retries, and fallback degradation.</p>
+              </div>
+              <button id="btnTestSelfHealing" class="md-btn md-btn-filled">⚡ Test Auto-Repair</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Max Retry Budget</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);">3 Attempts</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Exponential Backoff + Jitter</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Auto-Repair Capabilities</span>
+                <div style="font-size: 14px; font-weight: 700; color: #146c2e;">JSON / Markdown / Commas</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Delimiter Stack Balancing</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Security Violations</span>
+                <div style="font-size: 14px; font-weight: 700; color: #b3261e;">Immediate Halt</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero Retry on Guardrail Block</div>
+              </div>
+            </div>
+
+            <!-- Interactive Self-Healing Tester -->
+            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+              <span style="font-weight: 600; font-size: 13px;">⚡ Interactive Format Auto-Repair Tester:</span>
+              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Enter malformed payload (e.g. enclosed in markdown fences, unclosed braces, or trailing commas) to observe autonomous repair.</p>
+
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <textarea id="healInputText" class="md-input" style="flex: 1; height: 80px; font-family: monospace; font-size: 11px;" placeholder="Enter malformed payload...">```json
+{
+  "action": "RUN_ANALYSIS",
+  "anomaly_threshold": 3.5,
+}
+```</textarea>
+              </div>
+
+              <div id="healResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+            </div>
+          </div>
+
+          <!-- Strict State Synchronization & Drift Elimination Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🔄 State Synchronization & Configuration Drift Elimination</h3>
+                <p class="md-card-subtitle">Enforces authoritative spec consensus, eliminates configuration drift across distributed nodes, and maintains $0.00 spend invariant.</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button id="btnAuditSync" class="md-btn md-btn-tonal">🔍 Audit State</button>
+                <button id="btnReconcileSync" class="md-btn md-btn-filled">🛠️ Reconcile Drift</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Consensus Status</span>
+                <div style="font-size: 18px; font-weight: 700; color: #146c2e;" id="syncStatusBadge">SYNCHRONIZED</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero Configuration Drift</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Evergreen Schemas</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="syncSchemaCount">4 Tracked</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Cryptographic Manifest</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Constitutional Spend</span>
+                <div style="font-size: 18px; font-weight: 700; color: #146c2e;">$0.00 USD</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Strict Non-Breachable</div>
+              </div>
+            </div>
+
+            <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+          </div>
         </div>
       </section>
 

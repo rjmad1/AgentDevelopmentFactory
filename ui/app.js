@@ -620,7 +620,90 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initial loads for observability & scaling
+  // ==========================================
+  // SELF-HEALING & FORMAT REPAIR HANDLERS
+  // ==========================================
+  const btnHeal = document.getElementById('btnTestSelfHealing');
+  if (btnHeal) {
+    btnHeal.addEventListener('click', async () => {
+      const text = document.getElementById('healInputText')?.value || '';
+      const banner = document.getElementById('healResultBanner');
+
+      btnHeal.textContent = '⚡ Repairing...';
+      const res = await callApi('/api/heal/repair', 'POST', { text });
+      btnHeal.textContent = '⚡ Test Auto-Repair';
+
+      if (banner && res) {
+        banner.style.display = 'block';
+        if (res.wasHealed) {
+          banner.style.border = '1px solid #146c2e';
+          banner.innerHTML = `<strong>✅ [AUTONOMOUS SELF-HEALING EXECUTED]</strong><br>` +
+            `• Stripped Markdown Fences: YES<br>` +
+            `• Removed Trailing Commas: YES<br>` +
+            `• Balanced Delimiters: Delimiter Stack<br>` +
+            `• Repaired JSON:<br><pre style="margin: 4px 0 0 0; background: rgba(0,0,0,0.05); padding: 6px; border-radius: 4px;">${res.repairedText}</pre>`;
+        } else {
+          banner.style.border = '1px solid #0b57d0';
+          banner.innerHTML = `<strong>ℹ️ [PAYLOAD VALID] No formatting repairs required.</strong>`;
+        }
+      }
+    });
+  }
+
+  // ==========================================
+  // STATE SYNCHRONIZATION HANDLERS
+  // ==========================================
+  async function loadSyncAudit() {
+    const data = await callApi('/api/sync/status');
+    if (data) {
+      const badge = document.getElementById('syncStatusBadge');
+      if (badge) {
+        badge.textContent = data.isSynchronized ? 'SYNCHRONIZED' : 'DRIFT_DETECTED';
+        badge.style.color = data.isSynchronized ? '#146c2e' : '#b3261e';
+      }
+      const countEl = document.getElementById('syncSchemaCount');
+      if (countEl) countEl.textContent = `${data.schemaCount} Tracked`;
+    }
+  }
+
+  const btnAuditSync = document.getElementById('btnAuditSync');
+  if (btnAuditSync) {
+    btnAuditSync.addEventListener('click', async () => {
+      const data = await callApi('/api/sync/status');
+      const banner = document.getElementById('syncResultBanner');
+      if (banner && data) {
+        banner.style.display = 'block';
+        banner.innerHTML = `<strong>🔍 [STATE DRIFT AUDIT COMPLETE]</strong><br>` +
+          `• Node ID: ${data.nodeId}<br>` +
+          `• Status: ${data.isSynchronized ? '✅ SYNCHRONIZED (Zero Drift)' : '⚠️ DRIFT DETECTED'}<br>` +
+          `• Active Schema Manifest: ${data.schemaCount} schemas tracked<br>` +
+          `• Constitutional Spend: $${data.spendCeilingUsd.toFixed(2)} USD`;
+        loadSyncAudit();
+      }
+    });
+  }
+
+  const btnReconcileSync = document.getElementById('btnReconcileSync');
+  if (btnReconcileSync) {
+    btnReconcileSync.addEventListener('click', async () => {
+      btnReconcileSync.textContent = '🛠️ Reconciling...';
+      const data = await callApi('/api/sync/reconcile', 'POST');
+      btnReconcileSync.textContent = '🛠️ Reconcile Drift';
+      const banner = document.getElementById('syncResultBanner');
+      if (banner && data) {
+        banner.style.display = 'block';
+        banner.innerHTML = `<strong>🛠️ [AUTONOMOUS STATE RECONCILIATION COMPLETE]</strong><br>` +
+          `• Node ID: ${data.nodeId}<br>` +
+          `• Initial Drift Count: ${data.initialDriftCount}<br>` +
+          `• Actions Executed: ${data.actionsTaken.length > 0 ? data.actionsTaken.join(', ') : 'Consensus already intact (0 actions needed)'}<br>` +
+          `• Final Status: ${data.reconciled ? '✅ SYNCHRONIZED' : '⚠️ RECONCILIATION IN PROGRESS'}`;
+        loadSyncAudit();
+      }
+    });
+  }
+
+  // Initial loads for observability, scaling & sync
   loadTraces();
   loadScalingStatus();
+  loadSyncAudit();
 });

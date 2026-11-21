@@ -11,6 +11,8 @@ import {
 } from '../src/core.js';
 import { Tracer, TraceContext } from '../src/telemetry.js';
 import { AutoscalingWorkerPool, CircuitBreaker, CircuitState } from '../src/scaling.js';
+import { SelfHealingEngine, FaultCategory, SelfHealingPolicy } from '../src/self_healing.js';
+import { StateSyncManager, DriftType } from '../src/sync.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -884,6 +886,55 @@ export function executeFullSuite(runLabel) {
     cb.recordFailure(); // 2 / 6 = 33.3% > 25% -> trip
     assert(cb.state === CircuitState.OPEN, 'Circuit breaker must trip to OPEN on 33% failure rate');
     assert(!cb.canExecute(), 'Circuit breaker must reject calls when OPEN');
+  });
+
+  // TEST 29: Autonomous Self-Healing, Evergreen Schemas & Strict State Synchronization
+  recordTest('29. (Self-Healing & State Synchronization) Autonomous Fault Remediation, Evergreen Schemas & Drift Elimination', () => {
+    // 1. Verify CLI heal format repair
+    const healRes = runCli(['heal']);
+    assert(!healRes.failed, `heal command failed: ${healRes.stderr}`);
+    assert(healRes.stdout.includes('AUTONOMOUS ERROR RESOLUTION & SELF-HEALING ENGINE'), 'Must show healing header');
+    assert(healRes.stdout.includes('Self-Healing Executed: YES ⚡ (Auto-Repaired)'), 'Must confirm auto-repair execution');
+    assert(healRes.stdout.includes('"action": "ANALYZE"'), 'Must parse repaired payload');
+
+    // 2. Verify CLI sync state audit
+    const syncRes = runCli(['sync']);
+    assert(!syncRes.failed, `sync command failed: ${syncRes.stderr}`);
+    assert(syncRes.stdout.includes('STATE SYNCHRONIZATION & CONFIGURATION DRIFT ELIMINATION'), 'Must show sync header');
+    assert(syncRes.stdout.includes('Status Consensus:       SYNCHRONIZED ✅'), 'Must confirm consensus synchronized');
+    assert(syncRes.stdout.includes('Spend Ceiling:          $0.00 USD'), 'Must confirm zero-cost invariant');
+
+    // 3. Programmatic Self-Healing Engine Verification
+    // Format repair of markdown fences and trailing commas
+    const malformed = '```json\n{\n  "status": "HEALED",\n  "code": 200,\n}\n```';
+    const { data, wasHealed } = SelfHealingEngine.safeParseJsonWithHealing(malformed);
+    assert(wasHealed === true, 'Must indicate payload was healed');
+    assert(data.status === 'HEALED', 'Must extract healed property');
+    assert(data.code === 200, 'Must extract healed number');
+
+    // Delimiter stack repair of unclosed structures
+    const unclosed = '{"nested": [1, 2';
+    const repaired = SelfHealingEngine.repairJsonFormat(unclosed);
+    const parsed = JSON.parse(repaired);
+    assert(parsed.nested.length === 2, 'Must balance nested array and object');
+
+    // Fault classification: transient vs security
+    const transientDiag = SelfHealingEngine.diagnose(new Error('ETIMEDOUT: Connection timed out'));
+    assert(transientDiag.category === FaultCategory.TRANSIENT, 'Must classify ETIMEDOUT as TRANSIENT');
+    assert(transientDiag.isRecoverable === true, 'Transient faults must be recoverable');
+
+    const secDiag = SelfHealingEngine.diagnose(new Error('GuardrailViolation: Prompt injection detected'));
+    assert(secDiag.category === FaultCategory.SECURITY_VIOLATION, 'Must classify guardrail violation as SECURITY_VIOLATION');
+    assert(secDiag.isRecoverable === false, 'Security violations must be strictly non-recoverable');
+
+    // 4. Programmatic State Synchronization Verification
+    const syncMgr = new StateSyncManager({ projectRoot });
+    const audit = syncMgr.auditState({ storeDir: testStoreDir });
+    assert(audit.isSynchronized === true, 'Test store must start synchronized');
+    assert(audit.spendCeilingUsd === 0.0, 'Spend ceiling must be $0.00');
+
+    const reconcile = syncMgr.reconcileState({ storeDir: testStoreDir });
+    assert(reconcile.reconciled === true, 'Reconcile must maintain consensus');
   });
 
   log(`\n==================================================`);

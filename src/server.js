@@ -20,6 +20,8 @@ import { NeMoNistGuardrails } from './guardrails.js';
 import { runRedTeamSuite } from './red_team.js';
 import { defaultTracer } from './telemetry.js';
 import { defaultScalingPool } from './scaling.js';
+import { SelfHealingEngine } from './self_healing.js';
+import { defaultSyncManager } from './sync.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -423,6 +425,54 @@ zero_spend_ceiling_usd: 0.00`;
         const tasks = Number(body.numTasks) || 15;
         const failFraction = Number(body.failFraction) || 0;
         const result = await defaultScalingPool.simulateWorkloadSpike({ numTasks: tasks, failFraction });
+        sendJson(res, 200, result);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/heal/diagnose
+    if (pathname === '/api/heal/diagnose' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const errText = body.error || 'SyntaxError: Unexpected token';
+        const diag = SelfHealingEngine.diagnose(errText);
+        sendJson(res, 200, diag);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/heal/repair
+    if (pathname === '/api/heal/repair' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const text = body.text || '{"status": "ok",}';
+        const { data, wasHealed } = SelfHealingEngine.safeParseJsonWithHealing(text);
+        sendJson(res, 200, { data, wasHealed, repairedText: JSON.stringify(data, null, 2) });
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/sync/status
+    if (pathname === '/api/sync/status' && method === 'GET') {
+      try {
+        const audit = defaultSyncManager.auditState({ storeDir });
+        sendJson(res, 200, audit);
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/sync/reconcile
+    if (pathname === '/api/sync/reconcile' && method === 'POST') {
+      try {
+        const result = defaultSyncManager.reconcileState({ storeDir });
         sendJson(res, 200, result);
       } catch (err) {
         sendJson(res, 500, { error: err.message });

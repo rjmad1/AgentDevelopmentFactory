@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -351,4 +352,64 @@ const indexLines = [
 
 fs.writeFileSync(path.join(projectRoot, 'docs', 'index.md'), indexLines.join('\n') + '\n', 'utf-8');
 console.log('[PASS] Generated: docs/index.md');
+
+// Generate docs/schemas/ and docs/schema_manifest.json (Evergreen Schemas)
+const schemasDocsDir = path.join(projectRoot, 'docs', 'schemas');
+if (!fs.existsSync(schemasDocsDir)) {
+  fs.mkdirSync(schemasDocsDir, { recursive: true });
+}
+
+function getFileSha256(filePath) {
+  if (!fs.existsSync(filePath)) return '';
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+const specPyPath = path.join(projectRoot, 'agent_factory', 'specs', 'schema.py');
+const guardrailsPyPath = path.join(projectRoot, 'agent_factory', 'guardrails', 'nemo_nist.py');
+const capRegistryPath = path.join(projectRoot, 'data', 'capability_registry.json');
+const rubricsJsonPath = path.join(projectRoot, 'schemas', 'evals', 'scoring_rubrics.json');
+
+const specSha = getFileSha256(specPyPath);
+const guardrailsSha = getFileSha256(guardrailsPyPath);
+const capSha = getFileSha256(capRegistryPath);
+const rubricsSha = getFileSha256(rubricsJsonPath);
+
+const nowIso = new Date().toISOString();
+const manifest = {
+  compiled_at_iso: nowIso,
+  total_schemas: 4,
+  schemas: {
+    UniversalAgentSpec: {
+      schema_name: 'UniversalAgentSpec',
+      source_file: 'agent_factory/specs/schema.py',
+      sha256: specSha,
+      last_compiled_iso: nowIso,
+      fields_count: 13,
+    },
+    NistGuardrailsCatalog: {
+      schema_name: 'NistGuardrailsCatalog',
+      source_file: 'agent_factory/guardrails/nemo_nist.py',
+      sha256: guardrailsSha,
+      last_compiled_iso: nowIso,
+      fields_count: 11,
+    },
+    CapabilityRegistry: {
+      schema_name: 'CapabilityRegistry',
+      source_file: 'data/capability_registry.json',
+      sha256: capSha,
+      last_compiled_iso: nowIso,
+      fields_count: 2,
+    },
+    ScoringRubrics: {
+      schema_name: 'ScoringRubrics',
+      source_file: 'schemas/evals/scoring_rubrics.json',
+      sha256: rubricsSha,
+      last_compiled_iso: nowIso,
+      fields_count: 3,
+    },
+  },
+};
+
+fs.writeFileSync(path.join(projectRoot, 'docs', 'schema_manifest.json'), JSON.stringify(manifest, null, 2) + '\n', 'utf-8');
+console.log('[PASS] Generated: docs/schema_manifest.json (Evergreen Cryptographic Schema Manifest)');
 console.log('================================================================');

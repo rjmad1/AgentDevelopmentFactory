@@ -137,6 +137,14 @@ Commands:
   scale                Inspect auto-scaling concurrency governor and simulate spikes
     --action <status|simulate> Action to perform (default: status)
     --tasks <count>        Number of tasks to inject for spike simulation (default: 15)
+
+  heal                 Test autonomous self-healing, format repair, and fault diagnosis
+    --action <diagnose|repair> Action to perform (default: repair)
+    --payload <string>     Malformed payload or error text to self-heal
+
+  sync                 Enforce strict state synchronization and eliminate configuration drift
+    --action <audit|reconcile> Action to perform (default: audit)
+    --store <path>         Path to revision storage directory (default: ./store)
 `);
 }
 
@@ -697,6 +705,76 @@ function main() {
           }
         }).catch((err) => {
           console.error(`[SCALE ERROR] ${err.message}`);
+          process.exit(1);
+        });
+        break;
+      }
+
+      case 'heal': {
+        import('./self_healing.js').then(({ SelfHealingEngine }) => {
+          const action = options.action || 'repair';
+          const payload = options.payload || '```json\n{\n  "action": "ANALYZE",\n  "status": "OK",\n}\n```';
+
+          console.log('========================================================================');
+          console.log('AUTONOMOUS ERROR RESOLUTION & SELF-HEALING ENGINE');
+          console.log('========================================================================');
+
+          if (action === 'diagnose') {
+            const diag = SelfHealingEngine.diagnose(payload);
+            console.log(`Fault Category:    ${diag.category}`);
+            console.log(`Is Recoverable:    ${diag.isRecoverable ? 'YES ✅' : 'NO ⛔'}`);
+            console.log(`Suggested Action:  ${diag.suggestedAction}`);
+            console.log(`Root Cause:        ${diag.rootCause}`);
+          } else {
+            console.log('Original Corrupted Payload:');
+            console.log(payload);
+            console.log('------------------------------------------------------------------------');
+            const { data, wasHealed } = SelfHealingEngine.safeParseJsonWithHealing(payload);
+            console.log(`Self-Healing Executed: ${wasHealed ? 'YES ⚡ (Auto-Repaired)' : 'NO (Already Valid)'}`);
+            console.log('Repaired Parsed Object:');
+            console.log(JSON.stringify(data, null, 2));
+          }
+          console.log('========================================================================');
+        }).catch((err) => {
+          console.error(`[HEAL ERROR] ${err.message}`);
+          process.exit(1);
+        });
+        break;
+      }
+
+      case 'sync': {
+        import('./sync.js').then(({ defaultSyncManager }) => {
+          const action = options.action || 'audit';
+          console.log('========================================================================');
+          console.log('STATE SYNCHRONIZATION & CONFIGURATION DRIFT ELIMINATION');
+          console.log('========================================================================');
+
+          if (action === 'reconcile') {
+            const res = defaultSyncManager.reconcileState({ storeDir });
+            console.log(`Node Identifier:        ${res.nodeId}`);
+            console.log(`Initial Drift Count:    ${res.initialDriftCount}`);
+            console.log(`Reconciled Successfully: ${res.reconciled ? 'YES ✅' : 'NO ⚠️'}`);
+            console.log(`Actions Executed:       ${res.actionsTaken.length}`);
+            for (const act of res.actionsTaken) {
+              console.log(`  • ${act}`);
+            }
+          } else {
+            const audit = defaultSyncManager.auditState({ storeDir });
+            console.log(`Node Identifier:        ${audit.nodeId}`);
+            console.log(`Status Consensus:       ${audit.isSynchronized ? 'SYNCHRONIZED ✅' : 'DRIFT_DETECTED ⚠️'}`);
+            console.log(`Drift Findings Count:   ${audit.driftCount}`);
+            console.log(`Schema Manifest Items:  ${audit.schemaCount} tracked schemas`);
+            console.log(`Spend Ceiling:          $${audit.spendCeilingUsd.toFixed(2)} USD (Invariant)`);
+            if (audit.driftCount > 0) {
+              console.log('------------------------------------------------------------------------');
+              for (const f of audit.findings) {
+                console.log(`  [${f.severity}] ${f.type}: ${f.details} -> Action: ${f.action}`);
+              }
+            }
+          }
+          console.log('========================================================================');
+        }).catch((err) => {
+          console.error(`[SYNC ERROR] ${err.message}`);
           process.exit(1);
         });
         break;

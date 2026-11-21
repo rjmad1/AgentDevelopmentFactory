@@ -28,6 +28,9 @@
     "benchmark": "python scripts/run_laya_eval_judge.py",
     "trace": "node src/cli.js trace",
     "scale": "node src/cli.js scale",
-    "scale:simulate": "node src/cli.js scale --action simulate"
+    "scale:simulate": "node src/cli.js scale --action simulate",
+    "heal": "node src/cli.js heal",
+    "sync": "node src/cli.js sync",
+    "sync:reconcile": "node src/cli.js sync --action reconcile"
   }
 }

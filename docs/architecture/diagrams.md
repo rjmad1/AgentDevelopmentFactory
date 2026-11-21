@@ -418,5 +418,97 @@ flowchart LR
 4. **Autonomous Circuit Breaker Protection**: Employs a sliding-window failure rate governor (25% threshold over 20 executions) with automatic `CLOSED` $\to$ `OPEN` $\to$ `HALF_OPEN` self-healing canary recovery.
 5. **Elastic Workload Burst Scaling**: Dynamic worker scaling under queue pressure (min 1 to max 16 workers) with idle scale-down and hard backpressure limits, strictly upholding the constitutional **$0.00 spend ceiling**.
 
+---
+
+## 9. Autonomous Self-Healing & Distributed State Synchronization Architecture (For Architects, AI Engineers & Enterprise Operators)
+
+### Autonomous Self-Healing & Delimiter-Stack Auto-Repair Loop
+
+```mermaid
+flowchart TD
+    subgraph ExecutionPlane ["1. Agent Runtime Execution & Error Capture"]
+        TaskExec["Agent Runtime Task Execution"] --> ExecCheck{"Execution Result"}
+        ExecCheck -- "Success (200 OK)" --> Complete["Return Task Result / Emit Trace"]
+        ExecCheck -- "Failure / Exception" --> FaultClassifier["Autonomous Fault Classifier"]
+    end
+
+    subgraph FaultDiagnosis ["2. Deterministic Fault Classification"]
+        FaultClassifier --> Classify{"Fault Category"}
+        Classify -- "SECURITY_VIOLATION" --> SecurityHalt["Immediate Security Halt<br/>• Non-Recoverable<br/>• Halt Attempt 1 (No Retry Burn)"]
+        Classify -- "FORMAT_CORRUPTION" --> DelimiterStackRepair["Format Auto-Repair Engine<br/>• Delimiter Closing Stack<br/>• Strip Markdown Fences<br/>• Balance Brackets/Braces<br/>• Trailing Comma Pruning"]
+        Classify -- "TRANSIENT / RESOURCE_STARVATION" --> ExponentialBackoff["Bounded Backoff Governor<br/>• T = min(max_ms, base * 2^attempt + jitter)<br/>• Max 3 Attempts"]
+        Classify -- "TOOL_EXECUTION_FAILURE" --> ToolFallback["Tool Retries / Degraded Fallback"]
+        Classify -- "SCHEMA_MISMATCH" --> SchemaCoercion["Schema Structural Coercion"]
+    end
+
+    subgraph SelfHealingLoop ["3. Self-Healing & Remediation Ledger"]
+        DelimiterStackRepair --> ReParseCheck{"Valid JSON Re-parsed?"}
+        ReParseCheck -- "Success" --> ApplyPatch["Apply Self-Healed Payload"]
+        ReParseCheck -- "Failed" --> DegradedFallback["Degraded Safe Fallback"]
+
+        ExponentialBackoff --> RetryCheck{"Attempt <= MaxRetries?"}
+        RetryCheck -- "Yes" --> TaskExec
+        RetryCheck -- "No" --> ExhaustedFail["Remediation Exhausted (Escalate)"]
+
+        ToolFallback --> RetryCheck
+        SchemaCoercion --> TaskExec
+        ApplyPatch --> Complete
+
+        SecurityHalt --> AppendLedger[("Append-Only Remediation Ledger<br/>• Fault Class<br/>• Stack Trace<br/>• Repair Action<br/>• Resolution Status")]
+        ApplyPatch --> AppendLedger
+        ExhaustedFail --> AppendLedger
+        DegradedFallback --> AppendLedger
+    end
+```
+
+### Strict State Synchronization & Distributed Drift Elimination Topology
+
+```mermaid
+flowchart TD
+    subgraph CertifiedAnchor ["1. Authoritative Certified Specification Anchor"]
+        CertSpec[("Certified Universal Agent Spec<br/>(Declarative Schema Pack)")]
+        NistCatalog[("NIST AI RMF Guardrails Catalog")]
+        SpendPolicy[("Spend Ceiling Policy: $0.00 Invariant")]
+        CertSpec & NistCatalog & SpendPolicy --> SchemaCompiler["Evergreen Schema Compiler<br/>(scripts/generate-api-docs.js)"]
+        SchemaCompiler --> CryptoManifest[("docs/schema_manifest.json<br/>SHA-256 Checksums")]
+        CryptoManifest --> FreshnessGate{"Documentation Freshness Check"}
+        FreshnessGate -- "Drift Detected" --> BlockCI["Block CI / Pre-Commit Gate"]
+        FreshnessGate -- "Fresh (Synced)" --> CertifiedBaseline[("Authoritative Consensus Baseline")]
+    end
+
+    subgraph DriftDetectionPlane ["2. Continuous State Drift Auditing"]
+        CertifiedBaseline --> DriftDetector["State Drift Detector<br/>(StateDriftDetector / src/sync.js)"]
+        
+        NodeA["Distributed Agent Node A"] -. Heartbeat & State Hash .-> DriftDetector
+        NodeB["Distributed Agent Node B (Edge)"] -. Heartbeat & State Hash .-> DriftDetector
+        NodeC["Distributed Agent Node C (Worker)"] -. Heartbeat & State Hash .-> DriftDetector
+
+        DriftDetector --> AuditRules{"Detect Inconsistencies"}
+        AuditRules -- "Spec Tampered" --> DriftType1["SPEC_DRIFT Alert"]
+        AuditRules -- "Guardrail Relaxed" --> DriftType2["POLICY_DRIFT Alert"]
+        AuditRules -- "Cost > $0.00" --> DriftType3["SPEND_CEILING_MUTATED Alert"]
+        AuditRules -- "Untracked Files" --> DriftType4["ROGUE_ARTIFACTS_DETECTED Alert"]
+    end
+
+    subgraph ConvergenceReconciliation ["3. Automated State Convergence & Reconciler"]
+        DriftType1 & DriftType2 & DriftType3 & DriftType4 --> Reconciler["State Reconciler<br/>(StateReconciler.reconcile())"]
+        
+        Reconciler --> Action1["1. Force Reload Certified Spec Baseline"]
+        Reconciler --> Action2["2. Restore Strict NeMo/NIST Guardrail Policies"]
+        Reconciler --> Action3["3. Re-anchor Spend Ceiling to $0.00"]
+        Reconciler --> Action4["4. Quarantine & Prune Rogue Unregistered Artifacts"]
+        
+        Action1 & Action2 & Action3 & Action4 --> ConsensusConverged[("Cluster State Synchronized<br/>• Consensus Established<br/>• Cryptographic Drift Eliminated")]
+        ConsensusConverged -. Synchronized State Push .-> NodeA & NodeB & NodeC
+    end
+```
+
+### Self-Healing & State Synchronization Key Safeguards:
+1. **Security Boundary Non-Retry Invariant**: Security violations (prompt injection, jailbreak attempts, path traversal, guardrail trips) are strictly non-recoverable and halt immediately on attempt 1 with zero retry budget consumption, preventing vulnerability exploitation loops.
+2. **Reverse Delimiter Stack JSON Auto-Repair**: Syntax corruptions resulting from LLM truncation, unclosed brackets, braces, and trailing commas are repaired using a reverse delimiter stack (`{` $\to$ `}`, `[` $\to$ `]`), restoring syntactic validity without loss of extracted tokens.
+3. **Cryptographically Coupled Evergreen Documentation**: Schemas directly compile to markdown architecture specifications. SHA-256 hashes are recorded in `docs/schema_manifest.json`, ensuring technical documentation can never drift from code contracts during CI/CD.
+4. **Deterministic Convergence Protocol**: Node drift across distributed runtimes triggers automated non-destructive reconciliation, restoring declarative baseline contracts, purging untracked runtime artifacts, and strictly re-anchoring the **$0.00 spend ceiling**.
+
+
 
 
