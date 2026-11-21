@@ -124,6 +124,11 @@ Commands:
   ui                   Launch Google Material Design 3 Hybrid Web Platform
     --port <number>        Port to bind HTTP server (default: 3000)
     --store <path>         Path to revision storage directory (default: ./store)
+
+  eval-judge           Execute LLM-as-a-Judge evaluation calibrated via Laya RLCD
+    --revision <id>        Revision identifier (default: rev-001)
+    --target <path>        Path to deployment directory or code file
+    --store <path>         Path to revision storage directory (default: ./store)
 `);
 }
 
@@ -465,6 +470,51 @@ function main() {
             console.error(`[SERVER ERROR] ${err.message}`);
             process.exit(1);
           });
+        });
+        break;
+      }
+
+      case 'eval-judge': {
+        const revId = options.revision || 'rev-001';
+        const projectRoot = path.resolve(__dirname, '..');
+        const targetDir = options.target ? path.resolve(process.cwd(), options.target) : path.join(projectRoot, 'deployments', 'develop_an_agent_that_analyzes');
+        import('./eval_judge.js').then(({ runLayaJudgeEvaluation }) => {
+          let outputText = '';
+          let codeStr = '';
+          const reportPath = path.join(targetDir, 'artifacts', 'anomaly_report.md');
+          const codePath = path.join(targetDir, 'src', 'agent.py');
+          if (fs.existsSync(reportPath)) outputText = fs.readFileSync(reportPath, 'utf-8');
+          if (fs.existsSync(codePath)) codeStr = fs.readFileSync(codePath, 'utf-8');
+
+          const sourceInputs = "id,value,category\n1,100.0,A\n2,102.0,A\n10,15000.0,A";
+          const requirements = [
+            { id: 'REQ-01', statement: 'Analyze incoming CSV tabular payloads for numerical anomalies', status: 'CONFIRMED' },
+            { id: 'REQ-02', statement: 'Enforce zero-spend paid spend ceiling 0.0', status: 'CONFIRMED' },
+            { id: 'REQ-03', statement: 'Write markdown anomaly report into artifacts directory', status: 'CONFIRMED' },
+          ];
+
+          const res = runLayaJudgeEvaluation({
+            revisionId: revId,
+            outputText,
+            sourceInputs,
+            requirements,
+            codeStr,
+          });
+
+          console.log(`[LLM-AS-A-JUDGE & LAYA RLCD QUALITY GATE]`);
+          console.log(`  Revision:            ${res.revisionId}`);
+          console.log(`  Verdict:             ${res.decision.verdict} (${res.promoted ? 'PROMOTED' : 'HELD'})`);
+          console.log(`  Composite Score:     ${res.decision.compositeScore} (Threshold: ${res.decision.threshold})`);
+          console.log(`  RLCD Prior Source:   ${res.decision.weights.source}`);
+          console.log(`  Rubric 1 (HG):       ${res.rubrics.hallucination.score.toFixed(2)} [${res.rubrics.hallucination.passed ? 'PASS' : 'FAIL'}] -> ${res.rubrics.hallucination.findings[0] || 'Grounded'}`);
+          console.log(`  Rubric 2 (IF):       ${res.rubrics.instruction.score.toFixed(2)} [${res.rubrics.instruction.passed ? 'PASS' : 'FAIL'}] -> ${res.rubrics.instruction.findings[0] || 'Adherent'}`);
+          console.log(`  Rubric 3 (SB):       ${res.rubrics.security.score.toFixed(2)} [${res.rubrics.security.passed ? 'PASS' : 'FAIL'}] -> ${res.rubrics.security.findings[0] || 'Sandboxed'}`);
+          console.log(`  Rationale:           ${res.decision.rationale}`);
+
+          if (!res.promoted) process.exit(1);
+        }).catch((err) => {
+          console.error(`[JUDGE ERROR] ${err.message}`);
+          process.exit(1);
         });
         break;
       }

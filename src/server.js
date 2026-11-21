@@ -240,6 +240,48 @@ zero_spend_ceiling_usd: 0.00`;
       return;
     }
 
+    // POST /api/eval-judge
+    if (pathname === '/api/eval-judge' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const { runLayaJudgeEvaluation } = await import('./eval_judge.js');
+        const revId = body.revisionId || 'rev-001';
+        const targetDir = body.target ? path.resolve(process.cwd(), body.target) : path.join(projectRoot, 'deployments', 'develop_an_agent_that_analyzes');
+
+        let outputText = body.outputText || '';
+        let codeStr = body.codeStr || '';
+        if (!outputText) {
+          const reportPath = path.join(targetDir, 'artifacts', 'anomaly_report.md');
+          if (fs.existsSync(reportPath)) outputText = fs.readFileSync(reportPath, 'utf-8');
+        }
+        if (!codeStr) {
+          const codePath = path.join(targetDir, 'src', 'agent.py');
+          if (fs.existsSync(codePath)) codeStr = fs.readFileSync(codePath, 'utf-8');
+        }
+
+        const sourceInputs = body.sourceInputs || 'id,value,category\n1,100.0,A\n2,102.0,A\n10,15000.0,A';
+        const requirements = body.requirements || [
+          { id: 'REQ-01', statement: 'Analyze incoming CSV tabular payloads for numerical anomalies', status: 'CONFIRMED' },
+          { id: 'REQ-02', statement: 'Enforce zero-spend paid spend ceiling 0.0', status: 'CONFIRMED' },
+          { id: 'REQ-03', statement: 'Write markdown anomaly report into artifacts directory', status: 'CONFIRMED' },
+        ];
+
+        const judgeReport = runLayaJudgeEvaluation({
+          revisionId: revId,
+          outputText,
+          sourceInputs,
+          requirements,
+          codeStr,
+          constraints: body.constraints || ['must not delete existing records', 'zero spend cloud API models'],
+        });
+
+        sendJson(res, 200, judgeReport);
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
     // GET /api/revisions
     if (pathname === '/api/revisions' && method === 'GET') {
       try {

@@ -729,6 +729,29 @@ export function executeFullSuite(runLabel) {
     assert(out.includes('UI_SERVER_VERIFIED'), `Expected UI_SERVER_VERIFIED in output, got: ${out}`);
   });
 
+  recordTest('25. (Laya RLCD & LLM-as-a-Judge) Automated Continuous Quality Gate (3 Rubrics)', () => {
+    // 1. Verify existence of Rubrics Specification
+    const rubricsPath = path.join(projectRoot, 'schemas', 'evals', 'scoring_rubrics.json');
+    assert(fs.existsSync(rubricsPath), 'schemas/evals/scoring_rubrics.json must exist');
+    const rubricsSpec = JSON.parse(fs.readFileSync(rubricsPath, 'utf-8'));
+    assert(rubricsSpec.rubrics.hallucination_and_grounding, 'Must define hallucination rubric');
+    assert(rubricsSpec.rubrics.instruction_following, 'Must define instruction following rubric');
+    assert(rubricsSpec.rubrics.security_boundaries, 'Must define security boundaries rubric');
+
+    // 2. Run CLI eval-judge on deployments/develop_an_agent_that_analyzes
+    const judgeRes = runCli([
+      'eval-judge',
+      '--revision', 'rev-001',
+      '--store', testStoreDir,
+    ]);
+    assert(!judgeRes.failed, `eval-judge CLI failed: ${judgeRes.stderr}`);
+    assert(judgeRes.stdout.includes('LLM-AS-A-JUDGE & LAYA RLCD QUALITY GATE'), 'Must print judge header');
+    assert(judgeRes.stdout.includes('Verdict:             PROMOTED (PROMOTED)'), 'Must achieve PROMOTED verdict');
+    assert(judgeRes.stdout.includes('Rubric 1 (HG):       1.00 [PASS]'), 'Rubric 1 must PASS with 1.00');
+    assert(judgeRes.stdout.includes('Rubric 2 (IF):       1.00 [PASS]'), 'Rubric 2 must PASS with 1.00');
+    assert(judgeRes.stdout.includes('Rubric 3 (SB):       1.00 [PASS]'), 'Rubric 3 must PASS with 1.00');
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);

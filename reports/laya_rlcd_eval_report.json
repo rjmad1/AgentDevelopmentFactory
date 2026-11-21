@@ -1,0 +1,41 @@
+{
+  "revision_id": "rev-001",
+  "promoted": true,
+  "summary": "LLM-as-a-Judge [PROMOTED]: Composite Score 1.000 (H=1.00, I=1.00, S=1.00) via Laya RLCD (laya_db_historical(169_events))",
+  "timestamp": "2026-11-21T01:25:45.652614+00:00",
+  "decision": {
+    "verdict": "PROMOTED",
+    "composite_score": 1.0,
+    "threshold": 0.92,
+    "weights": {
+      "hallucination": 0.337,
+      "instruction": 0.337,
+      "security": 0.326,
+      "source": "laya_db_historical(169_events)"
+    },
+    "rationale": "Candidate passes all 3 quality rubrics with RLCD composite score 1.000 >= threshold 0.92."
+  },
+  "rubrics": {
+    "hallucination": {
+      "score": 1.0,
+      "passed": true,
+      "findings": [
+        "Output and synthetic code are fully grounded in verified source inputs."
+      ]
+    },
+    "instruction": {
+      "score": 1.0,
+      "passed": true,
+      "findings": [
+        "100% adherence to confirmed requirements and operational constraints."
+      ]
+    },
+    "security": {
+      "score": 1.0,
+      "passed": true,
+      "findings": [
+        "AST Sandbox, Secret Redactor, and Containment verified with zero leaks."
+      ]
+    }
+  }
+}

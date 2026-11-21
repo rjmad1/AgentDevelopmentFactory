@@ -54,6 +54,8 @@ function scanDirJson(dirRel) {
 checkJsSyntax('src/core.js');
 checkJsSyntax('src/cli.js');
 checkJsSyntax('src/server.js');
+checkJsSyntax('src/eval_judge.js');
+checkJsSyntax('src/laya_bridge.js');
 checkJsSyntax('ui/app.js');
 checkJsSyntax('test/runner.js');
 checkJsSyntax('test/evals/runner.js');

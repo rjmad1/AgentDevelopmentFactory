@@ -19,6 +19,8 @@
     "setup:hooks": "node scripts/setup-hooks.js",
     "doctor": "node src/cli.js doctor",
     "maturity": "node scripts/evaluate-product-maturity.js",
-    "ui": "node src/cli.js ui"
+    "ui": "node src/cli.js ui",
+    "eval:judge": "node src/cli.js eval-judge",
+    "benchmark": "python scripts/run_laya_eval_judge.py"
   }
 }

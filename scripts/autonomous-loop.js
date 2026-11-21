@@ -41,7 +41,8 @@ function executePipelineCycle() {
     { name: '4. Source JSDoc & API Docs',    path: 'scripts/generate-api-docs.js' },
     { name: '5. Hermes Critic Packet',       path: 'scripts/bundle-critic-packet.js' },
     { name: '6. Hermes Verifier Packet',     path: 'scripts/bundle-verifier-packet.js' },
-    { name: '7. Hermes Doc Packet',          path: 'scripts/bundle-doc-packet.js' }
+    { name: '7. Hermes Doc Packet',          path: 'scripts/bundle-doc-packet.js' },
+    { name: '8. Laya RLCD LLM Judge Gate',   path: 'src/cli.js', args: ['eval-judge'] }
   ];
 
   let failedStep = null;
@@ -49,7 +50,7 @@ function executePipelineCycle() {
 
   for (const step of steps) {
     process.stdout.write(`  ⏳ Running ${step.name}...`);
-    const res = runStep(step.name, step.path);
+    const res = runStep(step.name, step.path, step.args || []);
     executionResults.push(res);
     if (!res.passed) {
       process.stdout.write(` ❌ FAILED (${res.duration}ms)\n`);

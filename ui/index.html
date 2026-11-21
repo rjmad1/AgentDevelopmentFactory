@@ -584,6 +584,43 @@
               </tbody>
             </table>
           </div>
+
+          <!-- LLM-as-a-Judge & Laya RLCD Continuous Quality Gate Card -->
+          <div class="md-card md-card-filled" style="margin-top: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">⚖️ LLM-as-a-Judge & Laya RLCD Continuous Quality Gate</h3>
+                <p class="md-card-subtitle">Automated 3-rubric continuous audit calibrated via host Laya RLCD decision engine (~/.laya/data/laya.db).</p>
+              </div>
+              <button id="btnRunJudgeEval" class="md-btn md-btn-filled">⚡ Run Laya RLCD Judge Audit</button>
+            </div>
+
+            <div class="md-grid-3" style="margin-bottom: 16px;">
+              <div class="md-card md-card-outlined">
+                <span class="md-label">Rubric 1: Hallucination & Grounding</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="judgeScoreHg">1.00 / 1.00</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero phantom APIs or ungrounded data</div>
+              </div>
+              <div class="md-card md-card-outlined">
+                <span class="md-label">Rubric 2: Instruction Following</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="judgeScoreIf">1.00 / 1.00</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% adherence to confirmed constraints</div>
+              </div>
+              <div class="md-card md-card-outlined">
+                <span class="md-label">Rubric 3: Security Boundaries</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="judgeScoreSb">1.00 / 1.00</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">AST quarantine, zero leaks, $0.00 spend</div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--md-sys-color-surface-container-low); padding: 12px 16px; border-radius: 8px;">
+              <div>
+                <span style="font-weight: 600; font-size: 13px;">Laya RLCD Composite Verdict:</span>
+                <span id="judgeVerdictBadge" class="md-chip md-chip-success" style="margin-left: 8px;">PROMOTED (Score: 1.000)</span>
+              </div>
+              <span style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);" id="judgePriorText">Calibrated via Laya Engine (~/.laya/data/laya.db)</span>
+            </div>
+          </div>
         </div>
       </section>
 

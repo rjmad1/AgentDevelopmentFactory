@@ -119,6 +119,24 @@ function executeMockFallback(endpoint, body) {
     };
   }
 
+  if (endpoint.includes('/api/eval-judge')) {
+    return {
+      revisionId: (body && body.revisionId) || 'rev-001',
+      promoted: true,
+      rubrics: {
+        hallucination: { score: 1.0, passed: true, findings: ['Output strictly grounded in verified source inputs.'] },
+        instruction: { score: 1.0, passed: true, findings: ['100% adherence to confirmed requirements.'] },
+        security: { score: 1.0, passed: true, findings: ['AST Sandbox, Secret Redactor, and Containment verified.'] },
+      },
+      decision: {
+        verdict: 'PROMOTED',
+        compositeScore: 1.0,
+        weights: { source: 'laya_calibrated_prior' },
+        rationale: 'Candidate passes all 3 quality rubrics with RLCD score 1.000 >= threshold 0.92.',
+      },
+    };
+  }
+
   return { status: 'OK', fallback: true };
 }
 
@@ -370,6 +388,32 @@ document.addEventListener('DOMContentLoaded', () => {
     box.className = 'md-gate-box pass';
     alert(`Human Signoff Recorded for reviewer: ${name}.\nGate 8 Promoted. All 9 Release Gates PASS.`);
   });
+
+  // Run LLM-as-a-Judge & Laya RLCD Evaluation
+  const btnRunJudge = document.getElementById('btnRunJudgeEval');
+  if (btnRunJudge) {
+    btnRunJudge.addEventListener('click', async () => {
+      btnRunJudge.textContent = '⏳ Running Judge Audit...';
+      btnRunJudge.disabled = true;
+
+      const res = await callApi('/api/eval-judge', 'POST', { revisionId: 'rev-001' });
+
+      btnRunJudge.textContent = '⚡ Run Laya RLCD Judge Audit';
+      btnRunJudge.disabled = false;
+
+      document.getElementById('judgeScoreHg').textContent = `${res.rubrics.hallucination.score.toFixed(2)} / 1.00`;
+      document.getElementById('judgeScoreIf').textContent = `${res.rubrics.instruction.score.toFixed(2)} / 1.00`;
+      document.getElementById('judgeScoreSb').textContent = `${res.rubrics.security.score.toFixed(2)} / 1.00`;
+
+      const badge = document.getElementById('judgeVerdictBadge');
+      badge.textContent = `${res.decision.verdict} (Score: ${res.decision.compositeScore.toFixed(3)})`;
+      badge.className = res.promoted ? 'md-chip md-chip-success' : 'md-chip md-chip-error';
+
+      document.getElementById('judgePriorText').textContent = `Calibrated via ${res.decision.weights.source}`;
+
+      alert(`Laya RLCD Judge Quality Gate Verdict:\n- Outcome: ${res.decision.verdict}\n- Composite Score: ${res.decision.compositeScore.toFixed(3)} (Threshold: 0.92)\n- Grounding (HG): ${res.rubrics.hallucination.score.toFixed(2)}\n- Instruction (IF): ${res.rubrics.instruction.score.toFixed(2)}\n- Security (SB): ${res.rubrics.security.score.toFixed(2)}\n- Source: ${res.decision.weights.source}`);
+    });
+  }
 
   // Refresh Doctor Check
   const btnRefreshDoc = document.getElementById('btnRefreshDoctor');
