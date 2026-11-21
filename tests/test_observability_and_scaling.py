@@ -311,3 +311,71 @@ def test_constrained_reasoning_engine_trace_correlation(tmp_path):
     assert "dialog_rail_planning" in span_names
     assert "tool_execution:file_reader" in span_names
     assert "output_rail_verification" in span_names
+
+
+def test_worker_daemon_health_readyz_and_prometheus_metrics():
+    """
+    Validates that the background worker daemon exposes Kubernetes liveness (/healthz),
+    readiness (/readyz), and Prometheus (/metrics) endpoints adhering to SRE standards.
+    """
+    import urllib.request
+    import urllib.error
+    import threading
+    from agent_factory.scaling.worker_daemon import create_daemon_server
+    from agent_factory.scaling.autoscaler import AutoscalingWorkerPool, WorkerPoolConfig, CircuitState
+
+    config = WorkerPoolConfig(min_workers=1, max_workers=4)
+    pool = AutoscalingWorkerPool(config=config)
+
+    # Use port 8991 to avoid collisions
+    test_port = 8991
+    server = create_daemon_server(port=test_port, pool=pool)
+    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+    server_thread.start()
+
+    base_url = f"http://127.0.0.1:{test_port}"
+
+    try:
+        # 1. Test /healthz
+        with urllib.request.urlopen(f"{base_url}/healthz", timeout=3.0) as resp:
+            assert resp.status == 200
+            data = json.loads(resp.read().decode("utf-8"))
+            assert data["status"] == "healthy"
+            assert data["service"] == "adf-agent-worker"
+
+        # 2. Test /readyz when healthy
+        with urllib.request.urlopen(f"{base_url}/readyz", timeout=3.0) as resp:
+            assert resp.status == 200
+            data = json.loads(resp.read().decode("utf-8"))
+            assert data["status"] == "ready"
+
+        # 3. Test /readyz when circuit breaker is tripped (OPEN)
+        pool.circuit_breaker.state = CircuitState.OPEN
+        try:
+            urllib.request.urlopen(f"{base_url}/readyz", timeout=3.0)
+            assert False, "Expected 503 HTTPError when circuit breaker is OPEN"
+        except urllib.error.HTTPError as err:
+            assert err.code == 503
+            err_data = json.loads(err.read().decode("utf-8"))
+            assert err_data["status"] == "not_ready"
+            assert err_data["reason"] == "circuit_breaker_open"
+
+        # Restore circuit state
+        pool.circuit_breaker.state = CircuitState.CLOSED
+
+        # 4. Test /metrics exposition format
+        with urllib.request.urlopen(f"{base_url}/metrics", timeout=3.0) as resp:
+            assert resp.status == 200
+            content_type = resp.headers.get("Content-Type", "")
+            assert "text/plain" in content_type
+            metrics_text = resp.read().decode("utf-8")
+            assert "agent_factory_spend_ceiling_usd 0.00" in metrics_text
+            assert "agent_factory_queued_tasks 0" in metrics_text
+            assert "agent_factory_current_workers 1" in metrics_text
+            assert "agent_factory_circuit_state 0" in metrics_text
+
+    finally:
+        server.shutdown()
+        server.server_close()
+        pool.shutdown(wait=False)
+

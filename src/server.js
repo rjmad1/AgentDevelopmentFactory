@@ -80,10 +80,14 @@ function sendText(res, statusCode, text) {
   res.end(text);
 }
 
+let serverRequestCounter = 0;
+const serverBootTimestamp = Date.now();
+
 export function createAppHandler(customStoreDir = null) {
   const storeDir = customStoreDir || path.join(projectRoot, 'store');
 
   return async function requestHandler(req, res) {
+    serverRequestCounter++;
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
     const method = req.method.toUpperCase();
@@ -100,8 +104,68 @@ export function createAppHandler(customStoreDir = null) {
     }
 
     // ==========================================
-    // REST API ENDPOINTS
+    // REST API ENDPOINTS & SRE PROBES
     // ==========================================
+
+    // GET /healthz (Kubernetes liveness probe)
+    if ((pathname === '/healthz' || pathname === '/api/healthz') && method === 'GET') {
+      sendJson(res, 200, {
+        status: 'healthy',
+        service: 'adf-control-plane',
+        uptimeSeconds: Math.floor((Date.now() - serverBootTimestamp) / 1000),
+        zeroSpendCeilingEnforced: true,
+      });
+      return;
+    }
+
+    // GET /readyz (Kubernetes readiness probe)
+    if ((pathname === '/readyz' || pathname === '/api/readyz') && method === 'GET') {
+      const scaleStatus = defaultScalingPool.getStatus();
+      const cbState = scaleStatus.circuitBreaker ? scaleStatus.circuitBreaker.state : 'CLOSED';
+      if (cbState === 'OPEN') {
+        sendJson(res, 503, { status: 'not_ready', reason: 'circuit_breaker_open' });
+        return;
+      }
+      sendJson(res, 200, {
+        status: 'ready',
+        service: 'adf-control-plane',
+        uptimeSeconds: Math.floor((Date.now() - serverBootTimestamp) / 1000),
+        circuitBreaker: cbState,
+      });
+      return;
+    }
+
+    // GET /metrics (Prometheus scrape exposition endpoint)
+    if ((pathname === '/metrics' || pathname === '/api/metrics') && method === 'GET') {
+      const scaleStatus = defaultScalingPool.getStatus();
+      const uptimeSec = Math.floor((Date.now() - serverBootTimestamp) / 1000);
+      const lines = [
+        '# HELP agent_factory_http_requests_total Total HTTP requests handled',
+        '# TYPE agent_factory_http_requests_total counter',
+        `agent_factory_http_requests_total ${serverRequestCounter}`,
+        '# HELP agent_factory_uptime_seconds Process uptime in seconds',
+        '# TYPE agent_factory_uptime_seconds gauge',
+        `agent_factory_uptime_seconds ${uptimeSec}`,
+        '# HELP agent_factory_spend_ceiling_usd Spend ceiling in USD',
+        '# TYPE agent_factory_spend_ceiling_usd gauge',
+        'agent_factory_spend_ceiling_usd 0.00',
+        '# HELP agent_factory_scaling_workers Number of workers in scaling pool',
+        '# TYPE agent_factory_scaling_workers gauge',
+        `agent_factory_scaling_workers ${scaleStatus.currentWorkers}`,
+        '# HELP agent_factory_scaling_queue_depth Pending tasks in scaling pool',
+        '# TYPE agent_factory_scaling_queue_depth gauge',
+        `agent_factory_scaling_queue_depth ${scaleStatus.queuedTasks}`,
+        '',
+      ];
+      const body = lines.join('\n');
+      res.writeHead(200, {
+        'Content-Type': 'text/plain; version=0.0.4; charset=utf-8',
+        'Content-Length': Buffer.byteLength(body),
+        'Access-Control-Allow-Origin': '*',
+      });
+      res.end(body);
+      return;
+    }
 
     // GET /api/health
     if (pathname === '/api/health' && method === 'GET') {

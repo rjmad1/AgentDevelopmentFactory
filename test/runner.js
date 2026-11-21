@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import {
   assertRealFsContainment,
@@ -935,6 +935,99 @@ export function executeFullSuite(runLabel) {
 
     const reconcile = syncMgr.reconcileState({ storeDir: testStoreDir });
     assert(reconcile.reconciled === true, 'Reconcile must maintain consensus');
+  });
+
+  // TEST 30: Production Infrastructure & SRE Probes (Prometheus Metrics Exposition, Kubernetes Probes & Worker Daemon)
+  recordTest('30. (Production Infrastructure & SRE Probes) Prometheus Metrics Exposition, Kubernetes Probes (/healthz, /readyz) & Worker Daemon', () => {
+    // 1. Validate Dockerfile & deployment assets exist
+    const dockerfilePath = path.join(projectRoot, 'Dockerfile');
+    const promConfigPath = path.join(projectRoot, 'deploy', 'prometheus.yml');
+    const workerDaemonPy = path.join(projectRoot, 'agent_factory', 'scaling', 'worker_daemon.py');
+
+    assert(fs.existsSync(dockerfilePath), 'Root Dockerfile must exist for containerized deployments');
+    assert(fs.existsSync(promConfigPath), 'deploy/prometheus.yml must exist for metrics scraping');
+    assert(fs.existsSync(workerDaemonPy), 'agent_factory/scaling/worker_daemon.py must exist for daemon replicas');
+
+    const dockerfileContent = fs.readFileSync(dockerfilePath, 'utf-8');
+    assert(dockerfileContent.includes('USER 10001'), 'Dockerfile must enforce non-root UID 10001');
+    assert(dockerfileContent.includes('ADF_SPEND_CEILING_USD=0.00'), 'Dockerfile must enforce $0.00 spend ceiling');
+
+    // 2. Validate Kubernetes probes and Prometheus metrics via ephemeral server
+    const testScript = `
+      import { startServer } from './src/server.js';
+      import http from 'node:http';
+
+      function fetchUrl(url, method = 'GET') {
+        return new Promise((resolve, reject) => {
+          const parsed = new URL(url);
+          const req = http.request({
+            hostname: parsed.hostname,
+            port: parsed.port,
+            path: parsed.pathname,
+            method,
+          }, (res) => {
+            let data = '';
+            res.on('data', c => data += c);
+            res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
+          });
+          req.on('error', reject);
+          req.end();
+        });
+      }
+
+      async function run() {
+        const s = await startServer(0, ${JSON.stringify(testStoreDir)});
+        try {
+          // Liveness probe
+          const healthz = await fetchUrl(s.url + '/healthz');
+          if (healthz.status !== 200) throw new Error('healthz probe returned ' + healthz.status);
+          const healthzJson = JSON.parse(healthz.body);
+          if (healthzJson.status !== 'healthy' || healthzJson.zeroSpendCeilingEnforced !== true) {
+            throw new Error('healthz JSON payload invalid');
+          }
+
+          // Readiness probe
+          const readyz = await fetchUrl(s.url + '/readyz');
+          if (readyz.status !== 200) throw new Error('readyz probe returned ' + readyz.status);
+          const readyzJson = JSON.parse(readyz.body);
+          if (readyzJson.status !== 'ready' || readyzJson.circuitBreaker !== 'CLOSED') {
+            throw new Error('readyz JSON payload invalid');
+          }
+
+          // Prometheus metrics
+          const metrics = await fetchUrl(s.url + '/metrics');
+          if (metrics.status !== 200) throw new Error('metrics endpoint returned ' + metrics.status);
+          if (!metrics.headers['content-type']?.includes('text/plain')) {
+            throw new Error('metrics Content-Type must be text/plain exposition format');
+          }
+          if (!metrics.body.includes('agent_factory_spend_ceiling_usd 0.00')) {
+            throw new Error('metrics must expose agent_factory_spend_ceiling_usd 0.00');
+          }
+          if (!metrics.body.includes('agent_factory_uptime_seconds')) {
+            throw new Error('metrics must expose uptime gauge');
+          }
+
+          process.stdout.write(JSON.stringify({ success: true }));
+        } finally {
+          s.server.close();
+        }
+      }
+      run().catch(err => {
+        process.stderr.write(err.stack || err.message);
+        process.exit(1);
+      });
+    `;
+
+    const res = spawnSync('node', ['--input-type=module', '-e', testScript], {
+      cwd: projectRoot,
+      encoding: 'utf-8',
+    });
+
+    if (res.status !== 0) {
+      throw new Error(`Probe and Metrics Server check failed: ${res.stderr || res.stdout}`);
+    }
+    const result = JSON.parse(res.stdout);
+    assert(result.success === true, 'SRE probes and Prometheus exposition verified');
   });
 
   log(`\n==================================================`);

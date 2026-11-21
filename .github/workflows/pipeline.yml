@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Authoring Slice Repeatable Test Suite
         run: |
-          echo "=== RUNNING AUTHORING SLICE 23-TEST SUITE ==="
+          echo "=== RUNNING AUTHORING SLICE 30-TEST SUITE ==="
           node test/runner.js
 
       - name: Set up Python
@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Automated Pytest Suite
         run: |
-          echo "=== RUNNING 42-TEST UNIT & INTEGRATION SUITE ==="
+          echo "=== RUNNING 86-TEST UNIT & INTEGRATION SUITE ==="
           pytest -v
 
       - name: Run Deep Evaluator & LangSmith Free Tier Telemetry
@@ -78,6 +78,17 @@ jobs:
           echo "=== VERIFYING DISTRIBUTED TRACING & CONCURRENCY AUTOSCALER ==="
           node src/cli.js trace
           node src/cli.js scale --action simulate --tasks 15
+
+      - name: Verify Self-Healing, State Synchronization & SRE Probes Gate
+        run: |
+          echo "=== VERIFYING SELF-HEALING & STATE SYNCHRONIZATION ==="
+          node src/cli.js heal
+          node src/cli.js sync
+
+      - name: Validate Container Image Build & Healthcheck Spec
+        run: |
+          echo "=== VALIDATING DOCKERFILE BUILD & CONTAINER SPEC ==="
+          docker build -t adf:ci-test .
 
       - name: Upload Evaluation Artifacts
         if: always()

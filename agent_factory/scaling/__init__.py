@@ -10,6 +10,11 @@ from agent_factory.scaling.autoscaler import (
     CircuitBreaker,
     AutoscalingWorkerPool,
 )
+from agent_factory.scaling.worker_daemon import (
+    WorkerProbeHandler,
+    create_daemon_server,
+    run_worker_daemon,
+)
 
 __all__ = [
     "CircuitState",
@@ -18,4 +23,7 @@ __all__ = [
     "QueueBackpressureError",
     "CircuitBreaker",
     "AutoscalingWorkerPool",
+    "WorkerProbeHandler",
+    "create_daemon_server",
+    "run_worker_daemon",
 ]

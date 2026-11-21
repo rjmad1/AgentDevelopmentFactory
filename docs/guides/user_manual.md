@@ -110,3 +110,30 @@ If an agent is Tier 1 or higher, Gate 8 will pause and request **Human Signoff**
 
 ### Q: Are my API keys safe?
 > **Dual-Phase Secret Redaction**: The factory active security layer (G3) scans all prompts, logs, and outputs for high-entropy tokens and API keys. Any identified credential is automatically replaced with `[REDACTED_API_KEY]` before touching the screen or disk.
+
+---
+
+## 5. Production SRE Operations, Docker Deployment & Prometheus Monitoring
+
+For DevOps, SREs, and Platform Engineers deploying the Agent Development Factory in production environments, the system provides standard enterprise observability and containerization assets.
+
+### 5.1 Docker Container Deployment
+The factory includes a secure multi-runtime container image running Python 3.11 and Node.js 20 under an unprivileged user (`UID 10001`).
+
+To build and launch the complete stack (Control Plane API + UI, Auto-scaling Worker Daemons, Jaeger Distributed Tracing, and Prometheus Metric Scraper):
+```bash
+docker compose -f deploy/docker-compose.scaling.yml up --build -d
+```
+
+### 5.2 Kubernetes Probes & SRE Health Endpoints
+Both the Control Plane (`server.js`) and Background Worker Daemons (`agent_factory.scaling.worker_daemon`) expose standard Kubernetes-native endpoints:
+
+| Endpoint | Standard | Expected Response | Description |
+| :--- | :--- | :--- | :--- |
+| **`GET /healthz`** | Liveness Probe | `200 OK` | Confirms process is running and event loop is responsive. |
+| **`GET /readyz`** | Readiness Probe | `200 OK` or `503 Service Unavailable` | Evaluates circuit breaker state. Returns `503` if tripped (`OPEN`) to remove node from service mesh routing. |
+| **`GET /metrics`** | Prometheus Exposition | `200 OK` (`text/plain; version=0.0.4`) | Exposes operational counters and gauges (`agent_factory_http_requests_total`, `agent_factory_uptime_seconds`, `agent_factory_queued_tasks`, `agent_factory_current_workers`, `agent_factory_circuit_state`, `agent_factory_spend_ceiling_usd 0.00`). |
+
+### 5.3 Kubernetes Horizontal Pod Autoscaler (HPA v2)
+The factory includes declarative Kubernetes manifests in `deploy/k8s/hpa.yaml` configured to dynamically scale worker replicas from 2 to 16 pods based on queue depth (`agent_factory_queued_tasks >= 3`) and CPU utilization (75%).
+
