@@ -87,7 +87,7 @@ The Hermes fleet consumes lean JSON packets (< 2,500 total tokens) instead of ra
 * **Hermes Verifier:** Ingests `verifier_packet.json` (~115 tokens) and writes `.hermes/verdicts/verifier_verdict.json`.
 * **Hermes Communicator:** Ingests `doc_packet.json` (~1,830 tokens) and maintains documentation deltas.
 
-Full instructions: [`.hermes/AUTONOMOUS_FLEET.md`](../.hermes/AUTONOMOUS_FLEET.md).
+Full instructions: [`.hermes/AUTONOMOUS_FLEET.md`](https://github.com/rjmad1/AgentDevelopmentFactory/blob/main/.hermes/AUTONOMOUS_FLEET.md).
 
 ---
 
@@ -95,15 +95,15 @@ Full instructions: [`.hermes/AUTONOMOUS_FLEET.md`](../.hermes/AUTONOMOUS_FLEET.m
 
 Whenever code is pushed to `main` on GitHub:
 
-1. **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml):**
+1. **[`.github/workflows/ci.yml`](https://github.com/rjmad1/AgentDevelopmentFactory/blob/main/.github/workflows/ci.yml):**
    * Multi-OS matrix test on Node 18, 20, and 22.
    * Runs unit tests, linter, and evaluation suite.
    * Streams live run telemetry to LangSmith if `LANGSMITH_API_KEY` secret is set.
-2. **[`.github/workflows/docs.yml`](../.github/workflows/docs.yml):**
+2. **[`.github/workflows/docs.yml`](https://github.com/rjmad1/AgentDevelopmentFactory/blob/main/.github/workflows/docs.yml):**
    * Generates API documentation from source comments.
    * Builds MkDocs Material site.
    * Publishes directly to GitHub Pages at [https://rjmad1.github.io/AgentDevelopmentFactory/](https://rjmad1.github.io/AgentDevelopmentFactory/).
-3. **[`.github/workflows/wiki-sync.yml`](../.github/workflows/wiki-sync.yml):**
+3. **[`.github/workflows/wiki-sync.yml`](https://github.com/rjmad1/AgentDevelopmentFactory/blob/main/.github/workflows/wiki-sync.yml):**
    * Clones `AgentDevelopmentFactory.wiki`.
    * Automatically copies updated documents from `docs/` and commits them to the Wiki master branch.
    * **Result:** The GitHub Wiki is 100% evergreen with zero manual sync commands.

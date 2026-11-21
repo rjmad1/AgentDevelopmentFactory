@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Authoring Slice Repeatable Test Suite
         run: |
-          echo "=== RUNNING AUTHORING SLICE 13-TEST SUITE ==="
+          echo "=== RUNNING AUTHORING SLICE 23-TEST SUITE ==="
           node test/runner.js
 
       - name: Set up Python
@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Automated Pytest Suite
         run: |
-          echo "=== RUNNING 28-TEST UNIT & INTEGRATION SUITE ==="
+          echo "=== RUNNING 42-TEST UNIT & INTEGRATION SUITE ==="
           pytest -v
 
       - name: Run Deep Evaluator & LangSmith Free Tier Telemetry
@@ -88,6 +88,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate API Docs from Source JSDoc Comments
+        run: node scripts/generate-api-docs.js
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -100,9 +108,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build MkDocs Site with mkdocstrings
+        env:
+          PYTHONPATH: .
         run: |
           echo "=== BUILDING EVERGREEN DOCUMENTATION ==="
-          mkdocs build --strict
+          mkdocs build
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

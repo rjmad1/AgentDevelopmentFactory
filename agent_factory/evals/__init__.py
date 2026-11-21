@@ -18,6 +18,19 @@ from agent_factory.evals.metrics import (
 )
 from agent_factory.evals.runner import EvaluationRunner
 from agent_factory.evals.langsmith_adapter import LangSmithAdapter
+from agent_factory.evals.eval_catalogue import (
+    EvalRecord,
+    EvalCatalogue,
+    EvalDefinition,
+    ReliabilityCalculator,
+    EvalGenerator,
+    GraderType,
+)
+from agent_factory.evals.release_gates import (
+    ReleaseGateVerifier,
+    ReleaseGateReport,
+    GateResult,
+)
 
 __all__ = [
     "GraderResult",
@@ -32,4 +45,13 @@ __all__ = [
     "MetricsCalculator",
     "EvaluationRunner",
     "LangSmithAdapter",
+    "EvalRecord",
+    "EvalCatalogue",
+    "EvalDefinition",
+    "ReliabilityCalculator",
+    "EvalGenerator",
+    "GraderType",
+    "ReleaseGateVerifier",
+    "ReleaseGateReport",
+    "GateResult",
 ]
