@@ -32,6 +32,12 @@
     "heal": "node src/cli.js heal",
     "sync": "node src/cli.js sync",
     "sync:reconcile": "node src/cli.js sync --action reconcile",
-    "remote": "node src/cli.js remote"
+    "remote": "node src/cli.js remote",
+    "test:ui": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "axe-core": "^4.14.1"
   }
 }

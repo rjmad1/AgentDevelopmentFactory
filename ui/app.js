@@ -42,9 +42,11 @@ function detectEnvironment() {
     state.mode = 'REST';
   }
 
-  const modeBadge = document.getElementById('clientModeText');
-  if (modeBadge) {
-    modeBadge.textContent = `Mode: ${state.mode === 'OFFLINE_MOCK' ? 'Offline Simulation' : state.mode === 'WEBVIEW' ? 'Embedded Webview' : 'Live REST Bridge'}`;
+  // REST starts as "checking" and is corrected by the first real call.
+  if (state.mode === 'REST') {
+    setConnectionState('checking', 'Waiting for the first backend response');
+  } else {
+    setConnectionState('simulation', `${state.mode} mode shows built-in sample data, not live results`);
   }
 }
 
@@ -90,9 +92,135 @@ function showSnackbar(message, icon = 'ℹ️', actionText = 'DISMISS', onAction
   }, duration);
 }
 
-// Hybrid API Call Dispatcher
+// ==========================================
+// CONNECTION STATUS & IN-FLIGHT PROGRESS
+// ==========================================
+let inFlight = 0;
+
+function setBusy(delta) {
+  inFlight = Math.max(0, inFlight + delta);
+  const bar = document.getElementById('appProgressBar');
+  if (bar) bar.hidden = inFlight === 0;
+  document.body.setAttribute('aria-busy', inFlight > 0 ? 'true' : 'false');
+}
+
+// Reflects whether the backend answered, so the UI never implies data it does not have.
+function setConnectionState(status, detail) {
+  state.connection = status;
+  const chip = document.getElementById('clientModeBadge');
+  const text = document.getElementById('clientModeText');
+  if (!chip || !text) return;
+  chip.classList.remove('md-chip-success', 'md-chip-error', 'md-chip-warning', 'md-chip-primary');
+  if (status === 'live') {
+    chip.classList.add('md-chip-success');
+    text.textContent = 'Backend connected';
+  } else if (status === 'unauthorized') {
+    chip.classList.add('md-chip-warning');
+    text.textContent = 'Access token required';
+  } else if (status === 'simulation') {
+    chip.classList.add('md-chip-primary');
+    text.textContent = 'Offline simulation — sample data';
+  } else if (status === 'checking') {
+    chip.classList.add('md-chip-primary');
+    text.textContent = 'Checking backend…';
+  } else {
+    chip.classList.add('md-chip-error');
+    text.textContent = 'Backend unreachable';
+  }
+  chip.title = detail || text.textContent;
+}
+
+// Health badge shows only what /api/health reported, or that nothing was measured.
+function renderHealthBadge(doc) {
+  const chip = document.getElementById('doctorHealthBadge');
+  const text = document.getElementById('doctorHealthText');
+  const dot = chip ? chip.querySelector('.md-badge-dot') : null;
+  if (!chip || !text) return;
+
+  chip.classList.remove('md-chip-success', 'md-chip-error', 'md-chip-warning');
+  if (dot) dot.className = 'md-badge-dot';
+
+  if (!doc || !doc.status) {
+    text.textContent = 'Health: not checked';
+    return;
+  }
+
+  const status = String(doc.status).toUpperCase();
+  const healthy = status === 'HEALTHY' || status === 'OK' || status === 'PASS';
+  state.doctorHealthy = healthy;
+  text.textContent = `Health: ${status}`;
+  chip.classList.add(healthy ? 'md-chip-success' : 'md-chip-error');
+  if (dot) dot.className = `md-badge-dot ${healthy ? 'md-badge-dot-green' : 'md-badge-dot-red'}`;
+}
+
+// Render an honest failure state into a panel container, replacing whatever it held.
+function renderErrorState(el, message, onRetry) {
+  if (!el) return;
+  el.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'md-state-block md-state-error';
+  box.setAttribute('role', 'alert');
+  const title = document.createElement('p');
+  title.className = 'md-state-title';
+  title.textContent = 'Could not load this data';
+  const detail = document.createElement('p');
+  detail.className = 'md-state-text';
+  detail.textContent = message;
+  box.append(title, detail);
+  if (typeof onRetry === 'function') {
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'md-btn md-btn-outlined';
+    retry.textContent = 'Try again';
+    retry.addEventListener('click', onRetry);
+    box.append(retry);
+  }
+  el.append(box);
+}
+
+function renderEmptyState(el, message) {
+  if (!el) return;
+  el.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'md-state-block md-state-empty';
+  const detail = document.createElement('p');
+  detail.className = 'md-state-text';
+  detail.textContent = message;
+  box.append(detail);
+  el.append(box);
+}
+
+// Last failure per endpoint, so panels can explain themselves after the fact.
+const lastApiError = new Map();
+
+function reportApiFailure(endpoint, message) {
+  lastApiError.set(endpoint, message);
+  console.warn(`[ADF] ${endpoint}: ${message}`);
+  showSnackbar(`${endpoint} failed: ${message}`, '⚠️', 'DISMISS', null, 6000);
+}
+
+function apiErrorFor(endpoint) {
+  return lastApiError.get(endpoint) || 'The backend did not respond.';
+}
+
+// Hybrid API Call Dispatcher.
+// In REST mode a failure returns null — it never substitutes simulated data,
+// because the badge would still read "Live" and the operator would trust it.
+
+// Prefer the server's own explanation over a bare status line.
+async function readErrorMessage(response) {
+  const fallback = `HTTP ${response.status} ${response.statusText || ''}`.trim();
+  try {
+    const data = await response.json();
+    return data && data.error ? `${data.error} (HTTP ${response.status})` : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 async function callApi(endpoint, method = 'GET', body = null) {
   if (state.mode === 'REST') {
+    setBusy(1);
     try {
       const headers = { 'Content-Type': 'application/json' };
       const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('adf_token') : null;
@@ -108,20 +236,38 @@ async function callApi(endpoint, method = 'GET', body = null) {
       });
 
       if (response.status === 401) {
-        const inputToken = window.prompt('🔒 Remote Security Gate: Please enter your ADF Access Token:');
+        setConnectionState('unauthorized', `${endpoint} returned 401 Unauthorized`);
+        const inputToken = window.prompt('Access token required. Paste your ADF access token:');
         if (inputToken && inputToken.trim()) {
           sessionStorage.setItem('adf_token', inputToken.trim());
           return callApi(endpoint, method, body);
         }
-        showSnackbar('Authentication required: please provide an access token.', '⚠️');
-        throw new Error('HTTP Error 401: Unauthorized');
+        reportApiFailure(endpoint, 'Access token required (401)');
+        return null;
       }
 
-      if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-      return await response.json();
+      if (!response.ok) {
+        // The backend answered, so the connection is fine — only this request failed.
+        // Server errors are different: treat those as the backend being in trouble.
+        const detail = await readErrorMessage(response);
+        setConnectionState(
+          response.status >= 500 ? 'error' : 'live',
+          `${endpoint} returned HTTP ${response.status}`
+        );
+        reportApiFailure(endpoint, detail);
+        return null;
+      }
+
+      const payload = await response.json();
+      lastApiError.delete(endpoint);
+      setConnectionState('live', `Last successful call: ${endpoint}`);
+      return payload;
     } catch (err) {
-      console.warn(`[ADF Hybrid] REST call to ${endpoint} failed, falling back to local simulation:`, err.message);
-      return executeMockFallback(endpoint, body);
+      setConnectionState('error', `${endpoint} could not be reached`);
+      reportApiFailure(endpoint, err.message || 'Network request failed');
+      return null;
+    } finally {
+      setBusy(-1);
     }
   } else if (state.mode === 'WEBVIEW') {
     return new Promise((resolve) => {
@@ -431,7 +577,13 @@ function switchView(targetViewId) {
 
   // 1. Update Navigation Rail
   document.querySelectorAll('.md-nav-item').forEach((b) => {
-    b.classList.toggle('active', b.getAttribute('data-view') === targetViewId);
+    const isCurrent = b.getAttribute('data-view') === targetViewId;
+    b.classList.toggle('active', isCurrent);
+    if (isCurrent) {
+      b.setAttribute('aria-current', 'page');
+    } else {
+      b.removeAttribute('aria-current');
+    }
   });
 
   // 2. Update View Panels
@@ -454,7 +606,7 @@ function markStepCompleted(stepViewId) {
     if (s.getAttribute('data-step') === stepViewId) {
       s.classList.add('completed');
       const circle = s.querySelector('.md-step-circle');
-      if (circle) circle.innerHTML = '✓';
+      if (circle) circle.textContent = '✓';
     }
   });
 }
@@ -889,14 +1041,25 @@ document.addEventListener('DOMContentLoaded', () => {
           resultBox.style.background = 'var(--md-sys-color-success-container)';
           resultBox.style.color = 'var(--md-sys-color-on-success-container)';
           resultBox.style.border = '1px solid var(--md-sys-color-success)';
-          resultBox.innerHTML = `<strong>✅ [VERIFIED SAFE] All Guardrail Boundaries Respected:</strong><br>• Zero prompt injection detected.<br>• Zero secret leaks detected.<br>• Safe to proceed.`;
-          showSnackbar('Guardrail test PASSED: Input is safe and compliant.', '✅');
+          resultBox.textContent = 'No guardrail violations reported for this input.';
+          showSnackbar('Guardrail test passed: no violations reported.', '✅');
         } else {
           resultBox.style.background = 'var(--md-sys-color-error-container)';
           resultBox.style.color = 'var(--md-sys-color-on-error-container)';
           resultBox.style.border = '1px solid var(--md-sys-color-error)';
-          const vList = (res.violations || []).map(v => `• <strong>[${v.railType} BLOCKED]</strong> (${v.severity}) ${v.railName}: ${v.message}`).join('<br>');
-          resultBox.innerHTML = `<strong>⛔ [EXECUTION BLOCKED] Security Boundary Triggered:</strong><br>${vList}<br><em>Action safely contained without harming system.</em>`;
+          // Violation text echoes operator input, so it is inserted as text, never markup.
+          resultBox.textContent = '';
+          const heading = document.createElement('strong');
+          heading.textContent = 'Blocked — a guardrail was triggered:';
+          resultBox.appendChild(heading);
+          const list = document.createElement('ul');
+          list.style.margin = '8px 0 0 18px';
+          (res.violations || []).forEach((v) => {
+            const li = document.createElement('li');
+            li.textContent = `[${v.railType}] ${v.railName} (${v.severity}): ${v.message}`;
+            list.appendChild(li);
+          });
+          resultBox.appendChild(list);
           showSnackbar('Guardrail test BLOCKED unsafe input as expected.', '🛡️');
         }
       }
@@ -917,16 +1080,49 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRunAdversarial.textContent = '🛡️ Run Anti-Hacking Test';
       btnRunAdversarial.disabled = false;
 
-      if (report && secTableBody) {
-        secTableBody.querySelectorAll('tr').forEach((r, idx) => {
-          const chip = r.querySelector('.md-chip');
-          if (chip) {
-            chip.textContent = 'PASS';
-            chip.className = 'md-chip md-chip-success';
-          }
-        });
-        showSnackbar(`Anti-Hacking Suite Complete: 10 / 10 Attacks Defended Successfully!`, '🛡️', 'AWESOME', null, 5000);
+      if (!report) {
+        renderErrorState(
+          document.getElementById('secSuiteStatus'),
+          apiErrorFor('/api/sec-evals'),
+          () => btnRunAdversarial.click()
+        );
+        return;
       }
+
+      const findings = report.findings || [];
+      if (secTableBody) {
+        if (findings.length === 0) {
+          renderEmptyState(
+            document.getElementById('secSuiteStatus'),
+            'The suite ran but reported no probes.'
+          );
+        } else {
+          // Each row reflects its own finding; never a blanket PASS.
+          secTableBody.querySelectorAll('tr').forEach((row, idx) => {
+            const finding = findings[idx];
+            const chip = row.querySelector('.md-chip');
+            if (!chip) return;
+            if (!finding) {
+              chip.textContent = 'NOT REPORTED';
+              chip.className = 'md-chip';
+              return;
+            }
+            chip.textContent = finding.passed ? 'PASS' : 'FAIL';
+            chip.className = `md-chip ${finding.passed ? 'md-chip-success' : 'md-chip-error'}`;
+            if (finding.details) row.title = finding.details;
+          });
+        }
+      }
+
+      const total = report.totalTests ?? findings.length;
+      const passed = report.passedCount ?? findings.filter((f) => f.passed).length;
+      showSnackbar(
+        `Adversarial suite: ${passed} of ${total} probes defended.`,
+        passed === total ? '🛡️' : '⚠️',
+        'DISMISS',
+        null,
+        5000
+      );
     });
   }
 
@@ -941,7 +1137,16 @@ document.addEventListener('DOMContentLoaded', () => {
       humanReviewConfirmed: state.humanApproved,
     });
 
-    if (res && res.gates) {
+    const gatesStatus = document.getElementById('gatesStatus');
+
+    if (!res) {
+      renderErrorState(gatesStatus, apiErrorFor('/api/eval-gates'), checkGates);
+      return;
+    }
+
+    if (gatesStatus) gatesStatus.innerHTML = '';
+
+    if (res.gates) {
       res.gates.forEach((g) => {
         const box = document.getElementById(`gateBox${g.gateNumber}`);
         if (box) {
@@ -963,12 +1168,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    const gates = res.gates || [];
+    const passedGates = gates.filter((g) => g.status === 'PASS').length;
+
     if (!state.humanApproved && state.currentTier !== 'T0') {
       if (hitlModal) hitlModal.classList.add('open');
       showSnackbar('Gate 8 requires your personal sign-off before official launch.', '✋');
-    } else {
+    } else if (gates.length && passedGates === gates.length) {
       markStepCompleted('view-evals');
-      showSnackbar('All 9 Release Gates SATISFIED! Ready for production.', '🚀');
+      showSnackbar(`All ${gates.length} release gates passed.`, '🚀');
+    } else {
+      showSnackbar(`Release gates: ${passedGates} of ${gates.length} passed.`, '🚦');
     }
   }
 
@@ -997,20 +1207,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnConfirmHitl && hitlModal) {
     btnConfirmHitl.addEventListener('click', () => {
-      const name = humanReviewerName ? humanReviewerName.value.trim() : 'System Operator';
+      const name = humanReviewerName ? humanReviewerName.value.trim() : '';
+      if (!name) {
+        showSnackbar('Enter your name to record the approval.', '✋');
+        if (humanReviewerName) humanReviewerName.focus();
+        return;
+      }
+
       state.humanApproved = true;
       hitlModal.classList.remove('open');
 
       if (gate8Badge) {
-        gate8Badge.textContent = 'PASS';
+        gate8Badge.textContent = 'APPROVED';
         gate8Badge.className = 'md-chip md-chip-success';
       }
       if (gateBox8) {
         gateBox8.className = 'md-gate-box pass';
       }
 
-      markStepCompleted('view-evals');
-      showSnackbar(`Approval recorded for ${name}! All 9 Release Gates Passed.`, '✅');
+      showSnackbar(`Approval recorded for ${name}. Re-checking the gates.`, '✅');
+      // The backend decides the remaining gates; re-evaluate instead of asserting.
+      checkGates();
     });
   }
 
@@ -1086,9 +1303,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rateEl) rateEl.textContent = `${report.block_rate_percentage}%`;
         if (vEl) {
           vEl.textContent = report.verdict;
-          vEl.style.color = report.verdict.startsWith('PASS') ? '#146c2e' : '#b3261e';
+          vEl.style.color = report.verdict.startsWith('PASS')
+            ? 'var(--md-sys-color-success)'
+            : 'var(--md-sys-color-error)';
         }
-        showSnackbar(`Red Team Attack Test: 16 / 16 Probes Blocked (100% Hardened)`, '🎯');
+        showSnackbar(
+          `Red team: ${report.blocked_probes} of ${report.total_probes} probes blocked (${report.block_rate_percentage}%).`,
+          report.verdict.startsWith('PASS') ? '🎯' : '⚠️'
+        );
       }
     });
   }
@@ -1100,8 +1322,9 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRefreshDoc.textContent = '🔄 Checking...';
       const doc = await callApi('/api/health');
       btnRefreshDoc.textContent = '🔄 Re-run Health Check';
+      renderHealthBadge(doc);
       if (doc) {
-        showSnackbar(`Platform Health: ${doc.status} • Zero Spend Limit: Enforced ($0.00)`, '🩺');
+        showSnackbar(`Platform health: ${doc.status}`, '🩺');
       }
     });
   }
@@ -1119,8 +1342,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (qEl) qEl.textContent = status.queuedTasks;
       if (uEl) uEl.textContent = `${status.utilizationPct}%`;
       if (cbEl) {
-        cbEl.textContent = status.circuitBreaker?.state || 'CLOSED';
-        cbEl.style.color = (status.circuitBreaker?.state === 'CLOSED') ? '#146c2e' : '#b3261e';
+        cbEl.textContent = status.circuitBreaker?.state || 'UNKNOWN';
+        cbEl.style.color = (status.circuitBreaker?.state === 'CLOSED')
+          ? 'var(--md-sys-color-success)'
+          : 'var(--md-sys-color-error)';
       }
     }
   }
@@ -1152,7 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         banner.innerHTML = `<strong>⚡ [WORKLOAD SPIKE SIMULATION COMPLETE]</strong><br>` +
           `• Injected Tasks: ${res.tasksInjected} | Succeeded: ${res.tasksSucceeded} | Failed: ${res.tasksFailed}<br>` +
           `• <strong>Scaled from ${res.initialWorkers} to ${res.peakWorkers} concurrent workers!</strong><br>` +
-          `• Cooled down to baseline ${res.finalWorkers} worker(s). Zero memory leaks.`;
+          `• Cooled down to baseline ${res.finalWorkers} worker(s).`;
         loadScalingStatus();
         showSnackbar(`Workload spike handled: scaled to ${res.peakWorkers} workers!`, '⚡');
       }
@@ -1173,7 +1398,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (banner && res) {
         banner.style.display = 'block';
         if (res.wasHealed) {
-          banner.style.border = '1px solid #146c2e';
+          banner.style.border = '1px solid var(--md-sys-color-success)';
           banner.innerHTML = `<strong>✅ [AUTONOMOUS SELF-HEALING EXECUTED]</strong><br>` +
             `• Stripped Markdown Fences: YES<br>` +
             `• Removed Trailing Commas: YES<br>` +
@@ -1202,15 +1427,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeTraceId = null;
   async function loadTraces() {
     const data = await callApi('/api/traces');
-    if (data && data.traces && data.traces.length > 0) {
+    const container = document.getElementById('traceSpanHierarchyContainer');
+
+    if (!data) {
+      renderErrorState(container, apiErrorFor('/api/traces'), loadTraces);
+      return;
+    }
+    if (!data.traces || data.traces.length === 0) {
+      activeTraceId = null;
+      renderEmptyState(container, 'No traces recorded yet. Run a workflow step to produce one.');
+      return;
+    }
+
+    {
       const firstTrace = data.traces[0];
       activeTraceId = firstTrace.traceId;
-      const container = document.getElementById('traceSpanHierarchyContainer');
       if (container) {
         let html = '';
         const root = firstTrace.spans.find(s => !s.parentSpanId) || firstTrace.spans[0];
         html += `<div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
-          <strong>• root: ${root.name} (${root.durationMs}ms)</strong> <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">${root.status}</span>
+          <strong>• root: ${root.name} (${root.durationMs}ms)</strong> <span class="md-chip md-chip-${root.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${root.status}</span>
         </div>`;
 
         for (const span of firstTrace.spans) {
@@ -1253,4 +1489,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial Data Loads
   loadTraces();
   loadScalingStatus();
+  callApi('/api/health').then(renderHealthBadge);
 });

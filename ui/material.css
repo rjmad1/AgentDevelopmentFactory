@@ -8,6 +8,8 @@
   /* M3 Light Palette (Default) */
   --md-sys-color-primary: #0b57d0;
   --md-sys-color-on-primary: #ffffff;
+  /* Primary tone legible on the inverse surface used by the snackbar */
+  --md-sys-color-inverse-primary: #a8c7fa;
   --md-sys-color-primary-container: #d3e3fd;
   --md-sys-color-on-primary-container: #041e49;
   
@@ -80,6 +82,7 @@
 [data-theme="dark"] {
   --md-sys-color-primary: #a8c7fa;
   --md-sys-color-on-primary: #041e49;
+  --md-sys-color-inverse-primary: #0b57d0;
   --md-sys-color-primary-container: #0842a0;
   --md-sys-color-on-primary-container: #d3e3fd;
 
@@ -279,6 +282,9 @@ body {
 /* Main Workspace Viewport */
 .md-main-content {
   flex: 1;
+  /* Without this the flex item cannot shrink below its content, so a wide
+     child pushes the whole page sideways next to the nav rail. */
+  min-width: 0;
   padding: 28px 36px;
   background-color: var(--md-sys-color-surface);
   max-width: 1440px;
@@ -835,6 +841,9 @@ body {
   border-radius: var(--md-sys-shape-corner-large);
   padding: 12px 20px;
   margin-bottom: 24px;
+  /* Five fixed-width steps outgrow the row below ~1100px; scroll instead of
+     pushing the page sideways. */
+  overflow-x: auto;
   border: 1px solid var(--md-sys-color-outline-variant);
   overflow-x: auto;
   gap: 12px;
@@ -1052,5 +1061,233 @@ body {
 
 .md-inline-add-box.open {
   display: block;
+}
+
+/* ========================================================================== */
+/* APPLICATION STATES, ACCESSIBILITY & ADAPTIVE LAYOUT                        */
+/* ========================================================================== */
+
+/* Skip link — first tab stop, visible only when focused (WCAG 2.4.1) */
+.md-skip-link {
+  position: absolute;
+  left: 16px;
+  top: -64px;
+  z-index: 300;
+  padding: 10px 16px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--md-sys-motion-standard);
+}
+
+.md-skip-link:focus {
+  top: 12px;
+}
+
+/* Visible keyboard focus on every interactive element (WCAG 2.4.7, 1.4.11) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+/* Main region is a skip-link target, not a focus ring of its own */
+.md-main-content:focus-visible {
+  outline: none;
+}
+
+/* Indeterminate linear progress for in-flight requests */
+.md-linear-progress {
+  height: 3px;
+  overflow: hidden;
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+.md-linear-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 40%;
+  background-color: var(--md-sys-color-primary);
+  animation: mdIndeterminate 1.4s infinite linear;
+}
+
+@keyframes mdIndeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* Loading, empty, error and permission states */
+.md-state-block {
+  padding: 20px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  margin-bottom: 16px;
+}
+
+.md-state-error {
+  background-color: var(--md-sys-color-error-container);
+  border-color: var(--md-sys-color-error);
+}
+
+.md-state-empty {
+  border-style: dashed;
+}
+
+.md-state-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 6px;
+}
+
+.md-state-error .md-state-title {
+  color: var(--md-sys-color-on-error-container);
+}
+
+.md-state-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+.md-state-error .md-state-text {
+  color: var(--md-sys-color-on-error-container);
+}
+
+/* Status dot with no state class yet (nothing measured) */
+.md-badge-dot {
+  background-color: var(--md-sys-color-outline);
+}
+
+.md-badge-dot-green { background-color: var(--md-sys-color-success); }
+.md-badge-dot-amber { background-color: var(--md-sys-color-warning); }
+.md-badge-dot-red { background-color: var(--md-sys-color-error); }
+
+/* Snackbar action sits on an inverse surface — use the inverse token so it
+   keeps contrast in both themes instead of a hardcoded light blue. */
+.md-snackbar-btn {
+  color: var(--md-sys-color-inverse-primary);
+}
+
+/* Full-height surfaces: dvh avoids the mobile URL-bar jump */
+body {
+  min-height: 100dvh;
+}
+
+.md-app-layout {
+  min-height: calc(100dvh - 64px);
+}
+
+.md-modal-backdrop {
+  width: 100%;
+  height: 100dvh;
+}
+
+/* Compact: bottom navigation must clear the home indicator and fit 320px */
+@media (max-width: 768px) {
+  .md-nav-rail {
+    height: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .md-nav-item {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px 2px;
+  }
+  .md-nav-label {
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .md-main-content {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+  .md-workflow-stepper {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+  .md-table-container {
+    overflow-x: auto;
+  }
+  .md-segmented-group {
+    flex-wrap: wrap;
+  }
+  /* The app bar wraps to several rows here, so it cannot keep a fixed height.
+     Wrapped, it is too tall to stay stuck to the top of a phone screen. */
+  .md-top-app-bar {
+    position: static;
+    height: auto;
+    min-height: 64px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .md-app-layout {
+    min-height: 0;
+  }
+  /* Full-width snackbar: the centred desktop one overflows a phone screen */
+  .md-snackbar {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
+    max-width: none;
+  }
+  .md-snackbar.show {
+    transform: none;
+  }
+
+  /* Rows built for a wide screen must stack rather than crush their contents */
+  .md-top-app-bar,
+  .md-card-header,
+  .md-top-app-bar-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .md-card-header > * {
+    min-width: 0;
+  }
+  .md-card-header select,
+  .md-card-header input,
+  select,
+  input,
+  textarea {
+    max-width: 100%;
+  }
+  /* Touch target minimum 44px (WCAG 2.5.8) */
+  .md-icon-btn,
+  .md-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Respect the operating-system reduced-motion preference (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .md-linear-progress::after {
+    width: 100%;
+    animation: none;
+  }
 }
 
