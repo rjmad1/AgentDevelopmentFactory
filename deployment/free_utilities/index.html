@@ -1704,6 +1704,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#7-secure-remote-accessibility-zero-trust-cloudflare-tunneling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Secure Remote Accessibility &amp; Zero-Trust Cloudflare Tunneling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Secure Remote Accessibility &amp; Zero-Trust Cloudflare Tunneling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-architecture-zero-trust-https-edge-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Architecture: Zero-Trust HTTPS Edge Tunnel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-defense-in-depth-remote-security-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Defense-in-Depth Remote Security Gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-one-click-secure-remote-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 One-Click Secure Remote Launch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-tearing-down-remote-accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Tearing Down Remote Accessibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2003,6 +2064,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#7-secure-remote-accessibility-zero-trust-cloudflare-tunneling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Secure Remote Accessibility &amp; Zero-Trust Cloudflare Tunneling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Secure Remote Accessibility &amp; Zero-Trust Cloudflare Tunneling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-architecture-zero-trust-https-edge-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Architecture: Zero-Trust HTTPS Edge Tunnel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-defense-in-depth-remote-security-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Defense-in-Depth Remote Security Gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-one-click-secure-remote-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 One-Click Secure Remote Launch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-tearing-down-remote-accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Tearing Down Remote Accessibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2145,6 +2267,45 @@ Whenever code is committed to <code>main</code> impacting the <code>Dockerfile</
 </span></code></pre></div></li>
 </ul>
 <p>This provisions the <code>adf-runtime</code> namespace, starts the worker deployment with liveness and readiness probes, and activates the Horizontal Pod Autoscaler (<code>HPA v2</code>) to dynamically govern worker replicas between 2 and 16 pods based on queue depth and CPU pressure.</p>
+<hr />
+<h2 id="7-secure-remote-accessibility-zero-trust-cloudflare-tunneling">7. Secure Remote Accessibility &amp; Zero-Trust Cloudflare Tunneling<a class="headerlink" href="#7-secure-remote-accessibility-zero-trust-cloudflare-tunneling" title="Permanent link">&para;</a></h2>
+<p>When the Agent Development Factory is deployed for remote access across the public internet, enterprise-grade safety, encryption, and authorization are strictly enforced.</p>
+<h3 id="71-architecture-zero-trust-https-edge-tunnel">7.1 Architecture: Zero-Trust HTTPS Edge Tunnel<a class="headerlink" href="#71-architecture-zero-trust-https-edge-tunnel" title="Permanent link">&para;</a></h3>
+<p>Rather than opening insecure firewall ports or configuring dynamic DNS, the factory utilizes <strong>Cloudflare Quick Tunnels</strong> via the official <code>cloudflare/cloudflared</code> utility:
+* <strong>Zero Firewall Configuration:</strong> The tunnel initiates an outbound-only connection to Cloudflare's nearest edge server.
+* <strong>Full TLS Termination:</strong> Cloudflare manages edge certificates and automatically serves your application over <code>https://&lt;tunnel-id&gt;.trycloudflare.com</code>.
+* <strong>Zero Operational Cost:</strong> 100% free utility with no domain registration, credit card, or subscription required.</p>
+<h3 id="72-defense-in-depth-remote-security-gate">7.2 Defense-in-Depth Remote Security Gate<a class="headerlink" href="#72-defense-in-depth-remote-security-gate" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Cryptographic Token Authorization:</strong> Every non-public API endpoint strictly verifies the <code>ADF_ACCESS_TOKEN</code> using constant-time comparison (<code>crypto.timingSafeEqual</code>) to prevent timing attacks.</li>
+<li>Supported via <code>Authorization: Bearer &lt;token&gt;</code></li>
+<li>Supported via header <code>X-ADF-Access-Token: &lt;token&gt;</code></li>
+<li>Supported via URL parameter <code>?token=&lt;token&gt;</code></li>
+<li><strong>Anti-DDoS Rate Limiting:</strong> An in-memory sliding-window governor enforces a strict limit of 120 requests/minute per client IP to safeguard free resources from abusive traffic.</li>
+<li><strong>Enterprise Security Headers:</strong> All responses include <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>, and strict origin referrer policies.</li>
+<li><strong>SRE Probe Isolation:</strong> Public health and metrics endpoints (<code>/healthz</code>, <code>/readyz</code>, <code>/metrics</code>) remain accessible to Prometheus scrapers while mutating actions remain guarded.</li>
+</ol>
+<h3 id="73-one-click-secure-remote-launch">7.3 One-Click Secure Remote Launch<a class="headerlink" href="#73-one-click-secure-remote-launch" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Windows (PowerShell):</strong>
+  <div class="language-powershell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">.\</span><span class="n">scripts</span><span class="p">\</span><span class="n">deploy-remote</span><span class="p">.</span><span class="n">ps1</span>
+</span></code></pre></div></li>
+<li><strong>Linux / macOS (Bash):</strong>
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/deploy-remote.sh
+</span></code></pre></div></li>
+</ul>
+<p>The deployment script automatically:
+1. Generates a cryptographically strong 32-byte session token (if not already set via <code>ADF_ACCESS_TOKEN</code>).
+2. Boots the container cluster with the <code>adf-tunnel</code> profile active.
+3. Discovers the live public Cloudflare HTTPS URL from the tunnel handshake.
+4. Prints the pre-authenticated remote URL:
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>🌐 Public HTTPS Domain:   https://xxxxxxxx-xxxx.trycloudflare.com
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>🔑 Authenticated Web UI:  https://xxxxxxxx-xxxx.trycloudflare.com/?token=&lt;token&gt;
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>🛡️ Security Access Token: &lt;token&gt;
+</span></code></pre></div></p>
+<h3 id="74-tearing-down-remote-accessibility">7.4 Tearing Down Remote Accessibility<a class="headerlink" href="#74-tearing-down-remote-accessibility" title="Permanent link">&para;</a></h3>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">.\</span><span class="n">scripts</span><span class="p">\</span><span class="n">deploy-remote</span><span class="p">.</span><span class="n">ps1</span> <span class="n">-Down</span>
+</span></code></pre></div>
 
 
 
