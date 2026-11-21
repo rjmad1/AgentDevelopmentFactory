@@ -7,20 +7,22 @@ import json
 import pytest
 from pathlib import Path
 
-# Add src to sys.path
-sys.path.insert(0, str(Path(r"D:\1_Hermes Working Folder_Directory\1_Projects\Agent Development Factory\workspaces\proj_aa59a7bd89\src")))
+# Add src to sys.path relative to this test file
+current_dir = Path(__file__).resolve().parent
+agent_dir = current_dir.parent
+sys.path.insert(0, str(agent_dir / "src"))
 
 from agent import run_agent, DataAnomalyAnalyzer
 
 
 @pytest.fixture
 def clean_csv():
-    return Path(r"D:\1_Hermes Working Folder_Directory\1_Projects\Agent Development Factory\workspaces\proj_aa59a7bd89\fixtures") / "clean_sample.csv"
+    return agent_dir / "fixtures" / "clean_sample.csv"
 
 
 @pytest.fixture
 def anomalous_csv():
-    return Path(r"D:\1_Hermes Working Folder_Directory\1_Projects\Agent Development Factory\workspaces\proj_aa59a7bd89\fixtures") / "anomalous_sample.csv"
+    return agent_dir / "fixtures" / "anomalous_sample.csv"
 
 
 def test_clean_dataset_analysis(clean_csv):
