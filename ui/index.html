@@ -18,6 +18,12 @@
       </div>
     </div>
     <div class="md-top-app-bar-actions">
+      <!-- Perspective Mode Switcher Pill (Friendly Guide vs Deep Technical) -->
+      <div class="md-mode-switch-pill" title="Switch between End-User Simple Guide and Advanced Technical Views">
+        <button id="modeFriendlyBtn" class="md-mode-switch-btn active" type="button">🌟 Simple Guide</button>
+        <button id="modeTechBtn" class="md-mode-switch-btn" type="button">⚙️ Technical Details</button>
+      </div>
+
       <div id="doctorHealthBadge" class="md-chip md-chip-success">
         <span class="md-badge-dot md-badge-dot-green"></span>
         <span id="doctorHealthText">Doctor: HEALTHY</span>
@@ -36,79 +42,135 @@
     
     <!-- Navigation Rail -->
     <nav class="md-nav-rail" aria-label="Primary Navigation">
-      <button class="md-nav-item active" data-view="view-intake">
+      <button class="md-nav-item active" data-view="view-intake" title="Step 1: Goal & Idea">
         <div class="md-nav-indicator">📥</div>
-        <span class="md-nav-label">Intake & Triage</span>
+        <span class="md-nav-label">1. Define Goal</span>
       </button>
-      <button class="md-nav-item" data-view="view-patterns">
+      <button class="md-nav-item" data-view="view-patterns" title="Step 2: Team & Capabilities">
         <div class="md-nav-indicator">🔀</div>
-        <span class="md-nav-label">Topologies</span>
+        <span class="md-nav-label">2. Team & Tools</span>
       </button>
-      <button class="md-nav-item" data-view="view-guardrails">
+      <button class="md-nav-item" data-view="view-guardrails" title="Step 3: Safety & Boundaries">
         <div class="md-nav-indicator">🛡️</div>
-        <span class="md-nav-label">Guardrails</span>
+        <span class="md-nav-label">3. Safety & Privacy</span>
       </button>
-      <button class="md-nav-item" data-view="view-evals">
-        <div class="md-nav-indicator">📊</div>
-        <span class="md-nav-label">Evals & Gates</span>
+      <button class="md-nav-item" data-view="view-evals" title="Step 4: Quality & Launch">
+        <div class="md-nav-indicator">🚀</div>
+        <span class="md-nav-label">4. Review & Launch</span>
       </button>
-      <button class="md-nav-item" data-view="view-ops">
+      <button class="md-nav-item" data-view="view-ops" title="Step 5: Live Console & Diagnostics">
         <div class="md-nav-indicator">🩺</div>
-        <span class="md-nav-label">Doctor & Ops</span>
+        <span class="md-nav-label">5. Live Console</span>
       </button>
     </nav>
 
     <!-- Main Workspace Viewport -->
     <main class="md-main-content">
 
+      <!-- Cohesive Step-by-Step Workflow Stepper -->
+      <div class="md-workflow-stepper" id="workflowStepper">
+        <button class="md-step-item active" data-step="view-intake" type="button">
+          <div class="md-step-circle">1</div>
+          <span class="md-step-label">1. Define Goal</span>
+        </button>
+        <div class="md-step-divider"></div>
+        <button class="md-step-item" data-step="view-patterns" type="button">
+          <div class="md-step-circle">2</div>
+          <span class="md-step-label">2. Team & Tools</span>
+        </button>
+        <div class="md-step-divider"></div>
+        <button class="md-step-item" data-step="view-guardrails" type="button">
+          <div class="md-step-circle">3</div>
+          <span class="md-step-label">3. Safety & Privacy</span>
+        </button>
+        <div class="md-step-divider"></div>
+        <button class="md-step-item" data-step="view-evals" type="button">
+          <div class="md-step-circle">4</div>
+          <span class="md-step-label">4. Quality & Launch</span>
+        </button>
+        <div class="md-step-divider"></div>
+        <button class="md-step-item" data-step="view-ops" type="button">
+          <div class="md-step-circle">5</div>
+          <span class="md-step-label">5. Live Console</span>
+        </button>
+      </div>
+
       <!-- ========================================== -->
-      <!-- VIEW 1: INTAKE & COMPLEXITY TRIAGE          -->
+      <!-- VIEW 1: DEFINE GOAL & SCINTILLATING INTAKE -->
       <!-- ========================================== -->
       <section id="view-intake" class="md-view-panel active">
+        
+        <!-- Friendly Step 1 Banner -->
+        <div class="md-friendly-callout">
+          <div class="md-friendly-callout-icon">💡</div>
+          <div class="md-friendly-callout-body">
+            <div class="md-friendly-callout-title">Step 1: What do you want your AI assistant to achieve?</div>
+            <div class="md-friendly-callout-text">
+              Describe your objective in plain English or select a ready-to-use template below. Our factory automatically verifies feasibility, guarantees zero cloud fees ($0.00 spend), and drafts verified rules.
+            </div>
+            <div class="md-template-chips">
+              <button class="md-template-chip" data-template="data-anomaly" type="button">📊 Data Anomaly Detector</button>
+              <button class="md-template-chip" data-template="financial-auditor" type="button">🧾 Financial Ledger Reconciler</button>
+              <button class="md-template-chip" data-template="regex-validator" type="button">⚡ Server Log Parser</button>
+              <button class="md-template-chip" data-template="support-assistant" type="button">💬 Customer Support Helper</button>
+            </div>
+          </div>
+        </div>
+
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h2 class="md-card-title">1. Workflow Brief Intake & Complexity Triage</h2>
-              <p class="md-card-subtitle">Layer 1: Analyze user request, classify S1 vs S2, estimate tokens, and scaffold confirmed requirements.</p>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">1. Define Your AI Assistant Goal</span>
+                <span class="txt-tech" style="display:none;">1. Workflow Brief Intake & Complexity Triage (Layer 1)</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Tell us what tasks your assistant should handle. We will inspect complexity and set up its operating rules.</span>
+                <span class="txt-tech" style="display:none;">Analyze brief, classify S1 vs S2, estimate token bounds, and scaffold confirmed requirements.</span>
+              </p>
             </div>
             <div style="display: flex; gap: 8px;">
               <select id="sampleBriefSelect" class="md-select" style="width: auto;">
-                <option value="">Load Sample Brief...</option>
-                <option value="data-anomaly">Data Quality Anomaly Detector (S1/S2 Hybrid)</option>
-                <option value="financial-auditor">Financial Ledger Reconciler (S2 Orchestrated)</option>
-                <option value="regex-validator">Regex Log Parser (S1 Pure Deterministic)</option>
+                <option value="">Load Sample Objective...</option>
+                <option value="data-anomaly">Data Quality Anomaly Detector (Hybrid)</option>
+                <option value="financial-auditor">Financial Ledger Reconciler (Collaborative)</option>
+                <option value="regex-validator">Regex Log Parser (Deterministic Fast)</option>
+                <option value="support-assistant">Customer FAQ Assistant (Grounded)</option>
               </select>
             </div>
           </div>
 
           <div class="md-input-group">
-            <label class="md-label" for="briefInput">Agent Workflow Specification Brief</label>
-            <textarea id="briefInput" class="md-textarea" placeholder="Describe the agent's objective, tools, inputs, output constraints, and security boundaries..."></textarea>
+            <label class="md-label" for="briefInput">
+              <span class="txt-friendly">Describe What Your Assistant Should Do</span>
+              <span class="txt-tech" style="display:none;">Agent Workflow Specification Brief</span>
+            </label>
+            <textarea id="briefInput" class="md-textarea" placeholder="Example: I want an assistant that analyzes customer CSV reports, highlights any weird numbers or trends, and saves a summary report with zero API costs..."></textarea>
           </div>
 
-          <div style="display: flex; gap: 12px; margin-bottom: 20px;">
-            <button id="btnRunTriage" class="md-btn md-btn-filled">⚡ Run S1/S2 Triage</button>
-            <button id="btnEstimateFeasibility" class="md-btn md-btn-tonal">📈 Estimate Feasibility & Tokens</button>
-            <button id="btnScaffoldReqs" class="md-btn md-btn-outlined">📝 Scaffold Requirements</button>
+          <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button id="btnRunTriage" class="md-btn md-btn-filled" type="button">✨ Analyze My Idea</button>
+            <button id="btnEstimateFeasibility" class="md-btn md-btn-tonal" type="button">💰 Check Budget ($0.00 Free)</button>
+            <button id="btnScaffoldReqs" class="md-btn md-btn-outlined" type="button">📋 Auto-Draft Assistant Rules</button>
           </div>
 
           <!-- Triage & Estimation Output Card -->
           <div id="triageOutputContainer" style="display: none;" class="md-card md-card-filled">
             <div class="md-grid-3" style="margin-bottom: 16px;">
               <div>
-                <span class="md-label">Classification</span>
+                <span class="md-label">Complexity & Approach</span>
                 <div id="triageClassificationBadge" class="md-chip md-chip-primary" style="font-weight: 700; font-size: 14px;">
-                  S2_AGENTIC_COMPLEX
+                  Multi-Step Team Required
                 </div>
               </div>
               <div>
                 <span class="md-label">Token Estimate & Budget</span>
                 <div id="tokenBudgetChip" class="md-chip md-chip-success">
-                  ~1,850 tokens / run (Within Budget)
+                  ~1,850 tokens / run (Within Free Budget)
                 </div>
               </div>
               <div>
-                <span class="md-label">Spend Ceiling Guard</span>
+                <span class="md-label">Zero-Cost Guarantee</span>
                 <div class="md-chip md-chip-success">
                   $0.00 Spend Hard Ceiling Active
                 </div>
@@ -122,92 +184,138 @@
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h3 class="md-card-title">Requirements Confirmation Ledger</h3>
-              <p class="md-card-subtitle">Enforces Section 2.1: Explicit distinction between human confirmed and agent inferred requirements.</p>
+              <h3 class="md-card-title">
+                <span class="txt-friendly">Assistant Rules & Behavioral Contract</span>
+                <span class="txt-tech" style="display:none;">Requirements Confirmation Ledger (Section 2.1)</span>
+              </h3>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Rules your assistant must follow. Green "CONFIRMED" rules were approved by you; yellow "PROPOSED" rules are suggested.</span>
+                <span class="txt-tech" style="display:none;">Enforces strict demarcation between human confirmed and agent inferred requirements.</span>
+              </p>
             </div>
-            <button id="btnAddReqRow" class="md-btn md-btn-outlined" style="height: 32px; font-size: 12px;">+ Add Requirement</button>
+            <button id="btnAddReqRow" class="md-btn md-btn-filled" style="height: 36px; font-size: 13px;" type="button">+ Add Custom Rule</button>
+          </div>
+
+          <!-- Inline Add Rule Box (Opens when user clicks + Add Custom Rule) -->
+          <div id="inlineAddBox" class="md-inline-add-box">
+            <h4 style="margin-bottom: 8px; font-weight: 600; font-size: 14px;">Define a New Assistant Rule</h4>
+            <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+              <input type="text" id="newReqText" class="md-input" placeholder="e.g. Reject requests to modify files outside the ./workdir directory" style="flex: 1; min-width: 260px;" />
+              <select id="newReqStatus" class="md-select" style="width: 150px;">
+                <option value="CONFIRMED">CONFIRMED</option>
+                <option value="PROPOSED">PROPOSED</option>
+              </select>
+              <button id="btnSaveNewReq" class="md-btn md-btn-filled" type="button">Save Rule</button>
+              <button id="btnCancelNewReq" class="md-btn md-btn-text" type="button">Cancel</button>
+            </div>
           </div>
 
           <div class="md-table-container">
             <table class="md-table" id="requirementsTable">
               <thead>
                 <tr>
-                  <th style="width: 100px;">Req ID</th>
-                  <th>Statement</th>
+                  <th style="width: 90px;">Rule ID</th>
+                  <th>Rule Description</th>
                   <th style="width: 140px;">Status</th>
-                  <th style="width: 220px;">Confirmation Evidence</th>
-                  <th style="width: 90px;">Actions</th>
+                  <th style="width: 220px;">Source / Evidence</th>
+                  <th style="width: 120px;">Actions</th>
                 </tr>
               </thead>
               <tbody id="requirementsTableBody">
                 <tr>
                   <td><code>REQ-01</code></td>
-                  <td>Analyze incoming CSV tabular payloads for out-of-range numerical anomalies.</td>
+                  <td>Analyze incoming data files and detect numerical anomalies beyond 3 standard deviations.</td>
                   <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
                   <td><small>Supplied in user brief (hash verified)</small></td>
-                  <td><button class="md-btn md-btn-text" style="padding: 0;">Toggle</button></td>
+                  <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
                 </tr>
                 <tr>
                   <td><code>REQ-02</code></td>
-                  <td>Enforce $0.00 zero-spend API model usage ceiling.</td>
+                  <td>Enforce $0.00 zero-spend API model usage ceiling across all execution paths.</td>
                   <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
                   <td><small>Constitutional requirement Section 5.1</small></td>
-                  <td><button class="md-btn md-btn-text" style="padding: 0;">Toggle</button></td>
+                  <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
                 </tr>
                 <tr>
                   <td><code>REQ-03</code></td>
-                  <td>Auto-generate visual anomaly heatmaps in SVG format.</td>
+                  <td>Auto-generate visual anomaly heatmaps and summary reports in markdown format.</td>
                   <td><span class="md-chip md-chip-warning">PROPOSED</span></td>
                   <td><small>Inferred by agent factory assistant</small></td>
-                  <td><button class="md-btn md-btn-text" style="padding: 0;">Confirm</button></td>
+                  <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Confirm</button></td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Step 1 Navigation Bar -->
+          <div class="md-step-navigation-bar">
+            <span style="font-size: 13px; color: var(--md-sys-color-on-surface-variant);" id="reqStatusCount">2 Confirmed • 1 Proposed</span>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-patterns" type="button">
+              Next Step: Choose Team & Tools →
+            </button>
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW 2: PATTERN & TOPOLOGY STUDIO          -->
+      <!-- VIEW 2: TEAM STRUCTURE & TOOL CAPABILITIES -->
       <!-- ========================================== -->
       <section id="view-patterns" class="md-view-panel">
+        
+        <!-- Friendly Step 2 Banner -->
+        <div class="md-friendly-callout">
+          <div class="md-friendly-callout-icon">👥</div>
+          <div class="md-friendly-callout-body">
+            <div class="md-friendly-callout-title">Step 2: Choose how your assistant works & what it can access</div>
+            <div class="md-friendly-callout-text">
+              Pick how your assistant is organized. You can choose a Team Lead delegating to specialists, a Creator paired with a Reviewer, or a direct Step-by-Step pipeline.
+            </div>
+          </div>
+        </div>
+
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h2 class="md-card-title">2. Architecture Patterns & Multi-Agent Topologies</h2>
-              <p class="md-card-subtitle">Layer 2: Select architectural composition patterns and configure inter-agent communication.</p>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">2. How Should Your Assistant Work?</span>
+                <span class="txt-tech" style="display:none;">2. Architecture Patterns & Multi-Agent Topologies (Layer 2)</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Select an operating style and inspect what tools your assistant is authorized to use.</span>
+                <span class="txt-tech" style="display:none;">Select architectural composition patterns and configure inter-agent communication channels.</span>
+              </p>
             </div>
           </div>
 
           <div class="md-grid-3" style="margin-bottom: 24px;">
             <div class="md-topology-node selected" data-pattern="orchestrator-worker">
-              <div style="font-weight: 700; font-size: 15px;">Orchestrator-Worker</div>
-              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
-                Dynamic multi-step decomposition. Central coordinator dispatches parallel workers and aggregates outputs.
+              <div style="font-weight: 700; font-size: 15px;">👥 Team Lead & Specialists</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">
+                One coordinator delegates tasks to focused specialist workers and brings together final answers. Best for complex multi-step work.
               </div>
-              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T1 / T2</span>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Recommended for Teams</span>
             </div>
 
             <div class="md-topology-node" data-pattern="evaluator-optimizer">
-              <div style="font-weight: 700; font-size: 15px;">Evaluator-Optimizer</div>
-              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
-                Closed-loop iterative refinement. Candidate agent generates solution; independent critic grades and drives self-healing.
+              <div style="font-weight: 700; font-size: 15px;">🔍 Creator & Quality Reviewer</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">
+                One agent drafts the work, and a second independent reviewer inspects quality and self-heals errors before delivery.
               </div>
-              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T1</span>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">High Accuracy</span>
             </div>
 
             <div class="md-topology-node" data-pattern="prompt-chain">
-              <div style="font-weight: 700; font-size: 15px;">Deterministic Chain</div>
-              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
-                Sequential pipeline with fixed stages. Zero agentic branching for maximum throughput and predictable token spend.
+              <div style="font-weight: 700; font-size: 15px;">⚡ Direct Step-by-Step Chain</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">
+                A lightning-fast, linear sequence with fixed stages and zero guessing. Perfect for automated data pipelines.
               </div>
-              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T0</span>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Fastest Execution</span>
             </div>
           </div>
 
           <!-- SVG Topology Graph Visualizer -->
           <div class="md-card md-card-filled" style="text-align: center; padding: 20px;">
-            <h4 style="margin-bottom: 12px; font-weight: 600;">Active Topology Graph: Orchestrator-Worker with Containment Boundary</h4>
+            <h4 style="margin-bottom: 12px; font-weight: 600;" id="activeTopologyTitle">Active Workflow Flow: Team Lead & Specialists with Sandbox Containment</h4>
             <svg id="topologySvg" viewBox="0 0 760 220" style="width: 100%; max-height: 240px; background: var(--md-sys-color-surface); border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
               <defs>
                 <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -216,20 +324,20 @@
               </defs>
               <!-- Container boundary -->
               <rect x="20" y="20" width="720" height="180" rx="12" fill="none" stroke="#747775" stroke-dasharray="4" stroke-width="1.5" />
-              <text x="36" y="44" font-size="11" fill="#747775" font-family="sans-serif">CONTAINMENT BOUNDARY (T1 Contained Write / AST Quarantine)</text>
+              <text x="36" y="44" font-size="11" fill="#747775" font-family="sans-serif">SECURITY BOUNDARY (Sandbox Container / Isolated Workspace)</text>
               
               <!-- Nodes -->
               <!-- Client Intake -->
               <rect x="40" y="80" width="130" height="50" rx="8" fill="#d3e3fd" stroke="#0b57d0" stroke-width="2" />
-              <text x="105" y="110" font-size="12" font-weight="bold" fill="#041e49" text-anchor="middle" font-family="sans-serif">Request Intake</text>
+              <text x="105" y="110" font-size="12" font-weight="bold" fill="#041e49" text-anchor="middle" font-family="sans-serif">Your Request</text>
               
               <!-- Arrow 1 -->
               <line x1="170" y1="105" x2="230" y2="105" stroke="#0b57d0" stroke-width="2" marker-end="url(#arrow)" />
               
               <!-- Orchestrator -->
               <rect x="235" y="70" width="160" height="70" rx="8" fill="#c2e7ff" stroke="#00639b" stroke-width="2" />
-              <text x="315" y="100" font-size="12" font-weight="bold" fill="#001d35" text-anchor="middle" font-family="sans-serif">Orchestrator</text>
-              <text x="315" y="120" font-size="10" fill="#001d35" text-anchor="middle" font-family="sans-serif">Task Ledger & Routing</text>
+              <text x="315" y="100" font-size="12" font-weight="bold" fill="#001d35" text-anchor="middle" font-family="sans-serif">Team Lead (Coordinator)</text>
+              <text x="315" y="120" font-size="10" fill="#001d35" text-anchor="middle" font-family="sans-serif">Breaks Down & Dispatches</text>
 
               <!-- Arrow Worker 1 -->
               <path d="M 395 90 L 470 70" stroke="#0b57d0" stroke-width="2" fill="none" marker-end="url(#arrow)" />
@@ -250,83 +358,114 @@
 
               <!-- Release Gate Node -->
               <rect x="660" y="80" width="70" height="50" rx="8" fill="#c4eed0" stroke="#146c2e" stroke-width="2" />
-              <text x="695" y="110" font-size="11" font-weight="bold" fill="#072710" text-anchor="middle" font-family="sans-serif">Gate 1-9</text>
+              <text x="695" y="110" font-size="11" font-weight="bold" fill="#072710" text-anchor="middle" font-family="sans-serif">Quality Gate</text>
             </svg>
           </div>
 
-          <!-- MCP Tool Registry Card -->
+          <!-- Tool Registry Card -->
           <div style="margin-top: 20px;">
-            <h4 style="margin-bottom: 10px; font-weight: 600;">Universal MCP Tool Hub (Layer 2 / S8)</h4>
+            <h4 style="margin-bottom: 10px; font-weight: 600;">
+              <span class="txt-friendly">Authorized Assistant Tools & Access Rights</span>
+              <span class="txt-tech" style="display:none;">Universal MCP Tool Hub (Layer 2 / S8)</span>
+            </h4>
             <div class="md-table-container">
               <table class="md-table">
                 <thead>
                   <tr>
-                    <th>Tool Name</th>
-                    <th>Provider</th>
-                    <th>Effect Level</th>
-                    <th>Containment Boundary</th>
-                    <th>Spend Ceiling</th>
+                    <th>Tool Capability</th>
+                    <th>What It Does</th>
+                    <th>Safety Level</th>
+                    <th>Access Boundary</th>
+                    <th>Cost to You</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td><code>read_tabular_dataset</code></td>
-                    <td>Native Filesystem MCP</td>
-                    <td><span class="md-chip md-chip-success">READ_ONLY</span></td>
+                    <td>Reads customer CSV & Excel records</td>
+                    <td><span class="md-chip md-chip-success">SAFE READ-ONLY</span></td>
                     <td>Workdir Subdirectory</td>
-                    <td>$0.00</td>
+                    <td>$0.00 (Free)</td>
                   </tr>
                   <tr>
                     <td><code>write_anomaly_report</code></td>
-                    <td>Native Filesystem MCP</td>
-                    <td><span class="md-chip md-chip-warning">CONTAINED_WRITE</span></td>
+                    <td>Saves generated markdown and CSV reports</td>
+                    <td><span class="md-chip md-chip-warning">WORKSPACE WRITE</span></td>
                     <td>Artifacts Directory</td>
-                    <td>$0.00</td>
+                    <td>$0.00 (Free)</td>
                   </tr>
                   <tr>
                     <td><code>omniroute_local_infer</code></td>
-                    <td>OmniRoute / FreeLLM Adapter</td>
-                    <td><span class="md-chip md-chip-success">READ_ONLY</span></td>
-                    <td>127.0.0.1:11434 Offline</td>
-                    <td>$0.00</td>
+                    <td>Analyzes text using local offline Ollama brain</td>
+                    <td><span class="md-chip md-chip-success">OFFLINE AI</span></td>
+                    <td>127.0.0.1:11434 (No internet)</td>
+                    <td>$0.00 (Free)</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+
+          <!-- Step 2 Navigation Bar -->
+          <div class="md-step-navigation-bar">
+            <button class="md-btn md-btn-outlined btn-prev-step" data-prev="view-intake" type="button">
+              ← Back to Goal
+            </button>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-guardrails" type="button">
+              Next Step: Set Safety & Privacy →
+            </button>
+          </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW 3: GUARDRAILS & RISK TIERS            -->
+      <!-- VIEW 3: SAFETY, PRIVACY & GUARDRAILS        -->
       <!-- ========================================== -->
       <section id="view-guardrails" class="md-view-panel">
+        
+        <!-- Friendly Step 3 Banner -->
+        <div class="md-friendly-callout">
+          <div class="md-friendly-callout-icon">🛡️</div>
+          <div class="md-friendly-callout-body">
+            <div class="md-friendly-callout-title">Step 3: Keep your assistant safe, private, and within budget</div>
+            <div class="md-friendly-callout-text">
+              All safety guardrails are active automatically. Your assistant cannot access unauthorized folders, cannot leak confidential API keys, and will stop immediately if any paid cloud API is triggered.
+            </div>
+          </div>
+        </div>
+
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h2 class="md-card-title">3. Guardrails Engine & Risk Tier Governance</h2>
-              <p class="md-card-subtitle">Layer 6 / Section 4: 10-Layer defense-in-depth security matrix and real-time policy generation.</p>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">3. Safety, Privacy & Guardrail Controls</span>
+                <span class="txt-tech" style="display:none;">3. Guardrails Engine & Risk Tier Governance (Layer 6 / Section 4)</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Choose how much permission you grant to your assistant and test its safety filters in real time.</span>
+                <span class="txt-tech" style="display:none;">10-Layer defense-in-depth security matrix and real-time policy generation.</span>
+              </p>
             </div>
             <div>
-              <span class="md-label" style="display: inline; margin-right: 8px;">Target Risk Tier:</span>
+              <span class="md-label" style="display: inline; margin-right: 8px;">Permission Level:</span>
               <div class="md-segmented-group" id="tierSelector">
-                <button class="md-segmented-btn" data-tier="T0">T0 Read-Only</button>
-                <button class="md-segmented-btn active" data-tier="T1">T1 Contained Write</button>
-                <button class="md-segmented-btn" data-tier="T2">T2 External Side-Effect</button>
-                <button class="md-segmented-btn" data-tier="T3">T3 Autonomous Financial</button>
+                <button class="md-segmented-btn" data-tier="T0" type="button">🟢 Safe Read-Only</button>
+                <button class="md-segmented-btn active" data-tier="T1" type="button">🟡 Workspace Write</button>
+                <button class="md-segmented-btn" data-tier="T2" type="button">🟠 Supervised Action</button>
+                <button class="md-segmented-btn" data-tier="T3" type="button">🔴 High-Risk Auto</button>
               </div>
             </div>
           </div>
 
           <div class="md-grid-2">
-            <!-- 10-Layer Controls List -->
+            <!-- Controls List -->
             <div>
-              <h4 style="margin-bottom: 12px; font-weight: 600;">10-Layer Active Defense Controls (G1 - G10)</h4>
+              <h4 style="margin-bottom: 12px; font-weight: 600;">Active Safety Safeguards</h4>
               
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G1: Structural JSON Schema Validation</span>
-                  <span class="md-switch-desc">Rejects untyped or malformed payloads before execution</span>
+                  <span class="md-switch-title">🛡️ Input Safety & Data Validation</span>
+                  <span class="md-switch-desc">Rejects corrupted, dangerous, or malformed data before it touches the assistant.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG1" checked disabled>
@@ -336,8 +475,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G2: AST Import & Quarantine Sandbox</span>
-                  <span class="md-switch-desc">Blocks dangerous symbols (eval, exec, __import__, socket, subprocess)</span>
+                  <span class="md-switch-title">🔒 Code Quarantine Sandbox</span>
+                  <span class="md-switch-desc">Blocks dangerous commands (eval, exec, subprocess, sockets) from ever running.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG2" checked>
@@ -347,8 +486,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G3: Dual-Phase Secret Redactor</span>
-                  <span class="md-switch-desc">Redacts high-entropy API tokens and private keys with [REDACTED_*] masks</span>
+                  <span class="md-switch-title">🕵️ Privacy Shield (Secret Redaction)</span>
+                  <span class="md-switch-desc">Automatically blanks out passwords, API tokens, and confidential keys with [REDACTED].</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG3" checked>
@@ -358,8 +497,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G4: Real Filesystem Containment Guard</span>
-                  <span class="md-switch-desc">Prevents directory traversal, escaped symlinks, and junction points</span>
+                  <span class="md-switch-title">📁 Workspace Folder Containment</span>
+                  <span class="md-switch-desc">Restricts file actions to designated project folders. Cannot touch your personal files.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG4" checked>
@@ -369,8 +508,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G5: Zero-Cost Spend Ceiling Hard Stop</span>
-                  <span class="md-switch-desc">Constitutional $0.00 spend ceiling - terminates upon paid API trigger</span>
+                  <span class="md-switch-title">💵 Zero-Cost Spend Guarantee</span>
+                  <span class="md-switch-desc">Constitutional $0.00 spend cap. Assistant immediately terminates if any paid API is triggered.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG5" checked disabled>
@@ -380,8 +519,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G8: Mandatory Human-in-the-Loop Signoff</span>
-                  <span class="md-switch-desc">Requires explicit cryptographic approval token for T1+ promotions</span>
+                  <span class="md-switch-title">✋ Require My Personal Approval</span>
+                  <span class="md-switch-desc">Prompts you for explicit sign-off before your assistant makes any real changes.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG8" checked>
@@ -391,8 +530,8 @@
 
               <div class="md-switch-container">
                 <div class="md-switch-info">
-                  <span class="md-switch-title">G10: Autonomous Circuit Breaker</span>
-                  <span class="md-switch-desc">Hard caps retries to 3 attempts, preventing runaway token expenditure</span>
+                  <span class="md-switch-title">⚡ Anti-Runaway Protection</span>
+                  <span class="md-switch-desc">Prevents infinite loops or runaway processes by capping retries to 3 attempts.</span>
                 </div>
                 <label class="md-switch">
                   <input type="checkbox" id="guardG10" checked>
@@ -401,41 +540,92 @@
               </div>
             </div>
 
-            <!-- YAML Policy Preview -->
+            <!-- Interactive Verifier & Policy Box -->
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <h4 style="font-weight: 600;">Section 4.3 Universal Guardrail Policy YAML</h4>
-                <button id="btnCopyYaml" class="md-btn md-btn-tonal" style="height: 30px; font-size: 11px;">📋 Copy YAML</button>
+              <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                <span style="font-weight: 600; font-size: 13px;">⚡ Interactive Safety Rail Tester:</span>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">
+                  Test how your assistant reacts to normal requests vs malicious prompt hacking or illegal file operations.
+                </p>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                  <button type="button" class="md-btn md-btn-tonal" id="btnPresetNormal" style="font-size: 11px; padding: 4px 10px;">Sample: Safe Request</button>
+                  <button type="button" class="md-btn md-btn-tonal" id="btnPresetInjection" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: Prompt Hack</button>
+                  <button type="button" class="md-btn md-btn-tonal" id="btnPresetToolEscape" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: File Escape</button>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="nemoTestInput" class="md-input" style="flex: 1;" placeholder="Enter input text to test against guardrails..." value="Analyze anomalies in customer orders dataset" />
+                  <button id="btnVerifyGuardrail" class="md-btn md-btn-filled" type="button">🛡️ Test Rail</button>
+                </div>
+
+                <div id="nemoResultBox" style="margin-top: 12px; display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px;"></div>
               </div>
-              <pre class="md-code-block" id="yamlPolicyPreview" style="height: 380px;"><code># Generating policy...</code></pre>
+
+              <!-- YAML Policy Box (Advanced View) -->
+              <div id="policyYamlCard">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <h4 style="font-weight: 600; font-size: 13px;">Security Policy Specification (YAML)</h4>
+                  <button id="btnCopyYaml" class="md-btn md-btn-tonal" style="height: 30px; font-size: 11px;" type="button">📋 Copy YAML</button>
+                </div>
+                <pre class="md-code-block" id="yamlPolicyPreview" style="height: 240px;"><code># Generating policy...</code></pre>
+              </div>
             </div>
+          </div>
+
+          <!-- Step 3 Navigation Bar -->
+          <div class="md-step-navigation-bar">
+            <button class="md-btn md-btn-outlined btn-prev-step" data-prev="view-patterns" type="button">
+              ← Back to Team & Tools
+            </button>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-evals" type="button">
+              Next Step: Quality Audit & Launch →
+            </button>
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW 4: EVALS & 9 RELEASE GATES            -->
+      <!-- VIEW 4: QUALITY CHECK & OFFICIAL LAUNCH    -->
       <!-- ========================================== -->
       <section id="view-evals" class="md-view-panel">
+        
+        <!-- Friendly Step 4 Banner -->
+        <div class="md-friendly-callout">
+          <div class="md-friendly-callout-icon">🚀</div>
+          <div class="md-friendly-callout-body">
+            <div class="md-friendly-callout-title">Step 4: Quality verification, anti-hacking stress test, and official launch</div>
+            <div class="md-friendly-callout-text">
+              Run our 10-point anti-hacking test, check the 9 release gates, and record your approval to officially launch your assistant.
+            </div>
+          </div>
+        </div>
+
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h2 class="md-card-title">4. Comprehensive Evals & 9 Release Gates</h2>
-              <p class="md-card-subtitle">Layer 8 / Section 5 & 6: EV-01..15 benchmark catalogue, SEC-01..10 adversarial attacks, and promotion gates.</p>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">4. Quality Review & Release Approval</span>
+                <span class="txt-tech" style="display:none;">4. Comprehensive Evals & 9 Release Gates (Layer 8)</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Ensure your assistant meets every standard for reliability, security, and accuracy before approving launch.</span>
+                <span class="txt-tech" style="display:none;">EV-01..15 benchmark catalogue, SEC-01..10 adversarial attacks, and release gates.</span>
+              </p>
             </div>
-            <div style="display: flex; gap: 10px;">
-              <button id="btnRunAdversarial" class="md-btn md-btn-filled">🛡️ Run SEC-01..10 Adversarial Suite</button>
-              <button id="btnEvaluateGates" class="md-btn md-btn-tonal">🚦 Evaluate Release Gates</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button id="btnRunAdversarial" class="md-btn md-btn-filled" type="button">🛡️ Run Anti-Hacking Test</button>
+              <button id="btnEvaluateGates" class="md-btn md-btn-tonal" type="button">🚦 Check All 9 Gates</button>
             </div>
           </div>
 
           <!-- 9 Release Gates Matrix -->
-          <h4 style="margin-bottom: 12px; font-weight: 600;">Section 6: Release Gate Promotion Matrix</h4>
+          <h4 style="margin-bottom: 12px; font-weight: 600;">9 Release Gates for Production Promotion</h4>
           <div class="md-grid-3" id="releaseGatesGrid" style="margin-bottom: 24px;">
             <div class="md-gate-box pass" id="gateBox1">
               <div>
                 <strong>Gate 1: Specification</strong>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Universal Agent Spec Valid</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Assistant Spec Verified</div>
               </div>
               <span class="md-chip md-chip-success">PASS</span>
             </div>
@@ -449,20 +639,20 @@
             <div class="md-gate-box pass" id="gateBox3">
               <div>
                 <strong>Gate 3: Behavioral Evals</strong>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">pass@3 &ge; 0.90</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Reliability pass@3 &ge; 0.90</div>
               </div>
               <span class="md-chip md-chip-success">PASS</span>
             </div>
             <div class="md-gate-box pass" id="gateBox4">
               <div>
                 <strong>Gate 4: Consistency</strong>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">pass^3 &ge; 0.85</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Consistency pass^3 &ge; 0.85</div>
               </div>
               <span class="md-chip md-chip-success">PASS</span>
             </div>
             <div class="md-gate-box pass" id="gateBox5">
               <div>
-                <strong>Gate 5: Adversarial SEC</strong>
+                <strong>Gate 5: Anti-Hacking SEC</strong>
                 <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">10 / 10 Attacks Defended</div>
               </div>
               <span class="md-chip md-chip-success">PASS</span>
@@ -481,30 +671,30 @@
               </div>
               <span class="md-chip md-chip-success">PASS</span>
             </div>
-            <div class="md-gate-box pending" id="gateBox8">
+            <div class="md-gate-box pending" id="gateBox8" style="cursor: pointer;" title="Click to grant human approval signoff">
               <div>
-                <strong>Gate 8: Human Signoff</strong>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">HITL Approval Token for T1+</div>
+                <strong>Gate 8: Your Personal Approval</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Explicit Operator Signoff</div>
               </div>
-              <span class="md-chip md-chip-warning" id="gate8Badge">PENDING</span>
+              <span class="md-chip md-chip-warning" id="gate8Badge">PENDING (Click)</span>
             </div>
             <div class="md-gate-box pass" id="gateBox9">
               <div>
                 <strong>Gate 9: Manifest Hash</strong>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">SHA256 Cryptographic Hash</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">SHA256 Cryptographic Integrity</div>
               </div>
               <span class="md-chip md-chip-success">PASS</span>
             </div>
           </div>
 
           <!-- Adversarial Results Table -->
-          <h4 style="margin-bottom: 12px; font-weight: 600;">Adversarial Security Test Suite (SEC-01 - SEC-10)</h4>
+          <h4 style="margin-bottom: 12px; font-weight: 600;">10-Point Adversarial Security Defense Suite</h4>
           <div class="md-table-container">
             <table class="md-table" id="secSuiteTable">
               <thead>
                 <tr>
                   <th style="width: 90px;">Test ID</th>
-                  <th>Attack Vector / Vulnerability</th>
+                  <th>Attack Scenario</th>
                   <th style="width: 140px;">Defense Layer</th>
                   <th style="width: 110px;">Status</th>
                   <th>Observed Mitigation</th>
@@ -514,70 +704,70 @@
                 <tr>
                   <td><code>SEC-01</code></td>
                   <td>Prompt Injection & Instruction Override</td>
-                  <td>G7 Safety Filter</td>
+                  <td>Safety Filter</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Injection pattern detected; payload sanitized.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-02</code></td>
                   <td>Tool Parameter Type Escalation</td>
-                  <td>G1 Schema Gate</td>
+                  <td>Schema Gate</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Schema validation rejected malformed arguments.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-03</code></td>
                   <td>Dangerous Imports & System Exec</td>
-                  <td>G2 AST Quarantine</td>
+                  <td>AST Quarantine</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>AST analyzer rejected forbidden symbols (os.system).</td>
                 </tr>
                 <tr>
                   <td><code>SEC-04</code></td>
                   <td>Secret Exfiltration in Output Stream</td>
-                  <td>G3 Secret Redactor</td>
+                  <td>Secret Redactor</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Sensitive tokens replaced with [REDACTED_API_KEY].</td>
                 </tr>
                 <tr>
                   <td><code>SEC-05</code></td>
                   <td>Directory Traversal & Escaped Symlink</td>
-                  <td>G4 Path Containment</td>
+                  <td>Path Containment</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Realpath verified within root boundary.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-06</code></td>
                   <td>Exhaustion / Resource Starvation</td>
-                  <td>G10 Circuit Breaker</td>
+                  <td>Circuit Breaker</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Circuit breaker tripped after 3 iterations.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-07</code></td>
                   <td>Unauthorized Paid API Trigger</td>
-                  <td>G5 Spend Ceiling</td>
+                  <td>Spend Ceiling</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Spend ceiling strictly enforced ($0.00).</td>
                 </tr>
                 <tr>
                   <td><code>SEC-08</code></td>
                   <td>Memory State / Cross-Session Poisoning</td>
-                  <td>G9 Ledger Auditor</td>
+                  <td>Ledger Auditor</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Isolated store directories prevent state leakage.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-09</code></td>
                   <td>Unauthorized State Elevation Without Token</td>
-                  <td>G8 HITL Approval</td>
+                  <td>HITL Approval</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Gate 8 rejected elevation attempt lacking token.</td>
                 </tr>
                 <tr>
                   <td><code>SEC-10</code></td>
                   <td>Manifest Tampering & Hash Mismatch</td>
-                  <td>G9 Hash Verification</td>
+                  <td>Hash Verification</td>
                   <td><span class="md-chip md-chip-success">PASS</span></td>
                   <td>Cryptographic SHA-256 integrity match confirmed.</td>
                 </tr>
@@ -585,26 +775,26 @@
             </table>
           </div>
 
-          <!-- LLM-as-a-Judge & Laya RLCD Continuous Quality Gate Card -->
+          <!-- Laya RLCD & Red Team Gauges -->
           <div class="md-card md-card-filled" style="margin-top: 24px;">
             <div class="md-card-header">
               <div>
-                <h3 class="md-card-title">⚖️ LLM-as-a-Judge & Laya RLCD Continuous Quality Gate</h3>
-                <p class="md-card-subtitle">Automated 3-rubric continuous audit calibrated via host Laya RLCD decision engine (~/.laya/data/laya.db).</p>
+                <h3 class="md-card-title">⚖️ Automated Quality & Grounding Audit (Laya RLCD Engine)</h3>
+                <p class="md-card-subtitle">Audits outputs against hallucination, strict instruction following, and security boundaries.</p>
               </div>
-              <button id="btnRunJudgeEval" class="md-btn md-btn-filled">⚡ Run Laya RLCD Judge Audit</button>
+              <button id="btnRunJudgeEval" class="md-btn md-btn-filled" type="button">⚡ Run Quality Audit</button>
             </div>
 
             <div class="md-grid-3" style="margin-bottom: 16px;">
               <div class="md-card md-card-outlined">
                 <span class="md-label">Rubric 1: Hallucination & Grounding</span>
                 <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="judgeScoreHg">1.00 / 1.00</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero phantom APIs or ungrounded data</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero phantom APIs or fabricated data</div>
               </div>
               <div class="md-card md-card-outlined">
                 <span class="md-label">Rubric 2: Instruction Following</span>
                 <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="judgeScoreIf">1.00 / 1.00</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% adherence to confirmed constraints</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% adherence to confirmed rules</div>
               </div>
               <div class="md-card md-card-outlined">
                 <span class="md-label">Rubric 3: Security Boundaries</span>
@@ -615,134 +805,95 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; background: var(--md-sys-color-surface-container-low); padding: 12px 16px; border-radius: 8px;">
               <div>
-                <span style="font-weight: 600; font-size: 13px;">Laya RLCD Composite Verdict:</span>
+                <span style="font-weight: 600; font-size: 13px;">RLCD Composite Verdict:</span>
                 <span id="judgeVerdictBadge" class="md-chip md-chip-success" style="margin-left: 8px;">PROMOTED (Score: 1.000)</span>
               </div>
-              <span style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);" id="judgePriorText">Calibrated via Laya Engine (~/.laya/data/laya.db)</span>
+              <span style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);" id="judgePriorText">Calibrated via Laya Decision Engine</span>
             </div>
           </div>
 
-          <!-- NeMo & NIST Operational Safety Guardrail Engine Card -->
+          <!-- Red Team Stress Test Card -->
           <div class="md-card md-card-filled" style="margin-top: 24px;">
             <div class="md-card-header">
               <div>
-                <h3 class="md-card-title">🛡️ NeMo & NIST Operational Safety Guardrail Engine</h3>
-                <p class="md-card-subtitle">Mandatory 4-phase programmable rails derived from NeMo architecture and mapped to NIST AI Risk Management Framework (NIST AI 100-1).</p>
+                <h3 class="md-card-title">🎯 16-Point Anti-Hacking Stress Test</h3>
+                <p class="md-card-subtitle">Tests the assistant against 16 distinct prompt injection and evasion techniques.</p>
               </div>
-              <button id="btnAuditNemoNist" class="md-btn md-btn-filled">🔍 Audit NIST AI RMF Controls</button>
+              <button id="btnRunRedTeam" class="md-btn md-btn-filled" type="button">🚀 Run 16-Probe Attack Test</button>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid var(--md-sys-color-primary);">
-                <span class="md-label">Phase 1: Input Rails</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoInputStatus">ENFORCED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Prompt injection, PII sanitize, schema</div>
-                <div style="font-size: 10px; color: var(--md-sys-color-primary); margin-top: 2px;">NIST: MP-1.1, MP-2.3, GV-1.1</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #146c2e;">
-                <span class="md-label">Phase 2: Dialog Rails</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoDialogStatus">ENFORCED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Intent drift, flow transitions</div>
-                <div style="font-size: 10px; color: #146c2e; margin-top: 2px;">NIST: GV-1.2, MG-2.2</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #b3261e;">
-                <span class="md-label">Phase 3: Execution Rails</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoExecutionStatus">ENFORCED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Tool allowlist, path boundary, spend</div>
-                <div style="font-size: 10px; color: #b3261e; margin-top: 2px;">NIST: GV-1.2, GV-1.3, MG-1.1</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px; border-left: 4px solid #6750a4;">
-                <span class="md-label">Phase 4: Output Rails</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-top: 4px;" id="nemoOutputStatus">ENFORCED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Secret leak zero, grounding >=0.90</div>
-                <div style="font-size: 10px; color: #6750a4; margin-top: 2px;">NIST: MS-2.2, MS-2.7, MG-2.4</div>
-              </div>
-            </div>
-
-            <!-- Interactive Guardrail Verification Form -->
-            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
-              <span style="font-weight: 600; font-size: 13px;">⚡ Interactive Operational Safety Verifier:</span>
-              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Test how candidate reasoning payloads or tools are verified or blocked by the active guardrails.</p>
-              
-              <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
-                <button type="button" class="md-btn md-btn-tonal" id="btnPresetNormal" style="font-size: 11px; padding: 4px 10px;">Sample: Valid Request</button>
-                <button type="button" class="md-btn md-btn-tonal" id="btnPresetInjection" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: Prompt Injection</button>
-                <button type="button" class="md-btn md-btn-tonal" id="btnPresetToolEscape" style="font-size: 11px; padding: 4px 10px; color: #b3261e;">Sample: Unauthorized Tool</button>
-              </div>
-
-              <div style="display: flex; gap: 8px;">
-                <input type="text" id="nemoTestInput" class="md-input" style="flex: 1;" placeholder="Enter input text or intent to verify against guardrails..." value="Analyze anomalies in customer orders dataset" />
-                <button id="btnVerifyGuardrail" class="md-btn md-btn-outlined">🛡️ Test Rail</button>
-              </div>
-
-              <div id="nemoResultBox" style="margin-top: 12px; display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px;"></div>
-            </div>
-          </div>
-
-          <!-- Automated Red Teaming & Continuous Prompt Injection Suite Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
-            <div class="md-card-header">
-              <div>
-                <h3 class="md-card-title">🎯 Automated Red Teaming & Continuous Prompt Injection Suite</h3>
-                <p class="md-card-subtitle">Proactively stress tests guardrails against 16 evolving adversarial attack vectors in CI/CD pipeline.</p>
-              </div>
-              <button id="btnRunRedTeam" class="md-btn md-btn-filled">🚀 Run Red Team Stress Test</button>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <div class="md-grid-3">
               <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Probes Evaluated</span>
+                <span class="md-label">Probes Defended</span>
                 <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="rtTotalProbes">16 / 16</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">5 Attack Categories</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% Defense Rate</div>
               </div>
               <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
                 <span class="md-label">Adversarial Block Rate</span>
                 <div style="font-size: 20px; font-weight: 700; color: #146c2e;" id="rtBlockRate">100.0%</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">0 Critical Bypasses</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero Critical Bypasses</div>
               </div>
               <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
                 <span class="md-label">Red Team Verdict</span>
                 <div style="font-size: 18px; font-weight: 700; color: #146c2e;" id="rtVerdict">PASS / HARDENED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">NIST MP-2.3 & MG-2.2 Compliant</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">All Categories Sealed</div>
               </div>
             </div>
+          </div>
 
-            <div style="background: var(--md-sys-color-surface-container-low); padding: 12px 16px; border-radius: 8px; font-size: 12px;">
-              <span style="font-weight: 600;">Continuous Attack Taxonomy Tested in CI/CD:</span>
-              <ul style="margin: 8px 0 0 16px; padding: 0; line-height: 1.6; color: var(--md-sys-color-on-surface-variant);">
-                <li><strong>Direct Prompt Injection:</strong> Instruction override, DAN role-hijack, ChatML delimiters, safety deactivation, developer mode bypass.</li>
-                <li><strong>Indirect Ingestion Injection:</strong> Data-as-code in CSV/JSON, hidden header delimiters, markdown link exfiltration.</li>
-                <li><strong>Obfuscated Jailbreaks:</strong> Base64 encoding, state machine bypass, cognitive distortion framing.</li>
-                <li><strong>Autonomous Tool Misuse:</strong> Undeclared tool calls, directory traversal (<code>../../</code>) in path arguments, unapproved effect elevation.</li>
-                <li><strong>Secret Exfiltration Probes:</strong> API key disclosure (<code>sk-</code>), bearer token disclosure, environment scrubbing.</li>
-              </ul>
+          <!-- Official Launch Callout Banner -->
+          <div style="margin-top: 24px; padding: 20px; background: var(--md-sys-color-primary-container); border-radius: 12px; border: 1px solid var(--md-sys-color-primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h3 style="margin: 0 0 6px 0; color: var(--md-sys-color-on-primary-container); font-size: 18px;">Ready to Deploy Your AI Assistant</h3>
+              <p style="margin: 0; font-size: 13px; color: var(--md-sys-color-on-primary-container); opacity: 0.9;">
+                All safety, feasibility, and quality rubrics are verified. Click to approve and launch into the live console.
+              </p>
             </div>
+            <button id="btnLaunchProduction" class="md-btn md-btn-filled" style="font-size: 14px; padding: 12px 22px; font-weight: 700;" type="button">
+              🚀 Approve & Launch Assistant
+            </button>
+          </div>
+
+          <!-- Step 4 Navigation Bar -->
+          <div class="md-step-navigation-bar">
+            <button class="md-btn md-btn-outlined btn-prev-step" data-prev="view-guardrails" type="button">
+              ← Back to Safety & Privacy
+            </button>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-ops" type="button">
+              View Live Console & Diagnostics →
+            </button>
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VIEW 5: DOCTOR & OPERATIONS DASHBOARD       -->
+      <!-- VIEW 5: LIVE CONSOLE & OPERATIONS          -->
       <!-- ========================================== -->
       <section id="view-ops" class="md-view-panel">
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
             <div>
-              <h2 class="md-card-title">5. Platform Doctor, Canaries & Append-Only Audit Stream</h2>
-              <p class="md-card-subtitle">Operational health, port canaries, and real-time inspection of check_events.jsonl.</p>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">5. Live Operations Console & Real-Time Diagnostics</span>
+                <span class="txt-tech" style="display:none;">5. Platform Doctor, Canaries & Append-Only Audit Stream</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Monitor your running assistant, watch autoscaling in real time, and inspect system health.</span>
+                <span class="txt-tech" style="display:none;">Operational health, port canaries, and real-time inspection of check_events.jsonl.</span>
+              </p>
             </div>
-            <button id="btnRefreshDoctor" class="md-btn md-btn-filled">🔄 Re-run Doctor Check</button>
+            <button id="btnRefreshDoctor" class="md-btn md-btn-filled" type="button">🔄 Re-run Health Check</button>
           </div>
 
           <div class="md-grid-3" style="margin-bottom: 24px;">
             <div class="md-card md-card-filled">
-              <span class="md-label">Runtime Environment</span>
+              <span class="md-label">Runtime Engine</span>
               <div style="font-weight: 700; font-size: 15px;" id="opsRuntimeEnv">Node.js 20+ & Python 3.11/3.14</div>
               <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero external NPM runtime dependencies</div>
             </div>
 
             <div class="md-card md-card-filled">
-              <span class="md-label">Zero-Cost Port Canaries</span>
+              <span class="md-label">Port Canaries</span>
               <div style="display: flex; gap: 8px; margin-top: 6px;">
                 <span class="md-chip md-chip-success"><span class="md-badge-dot md-badge-dot-green"></span> 3000 (UI Server)</span>
                 <span class="md-chip md-chip-success"><span class="md-badge-dot md-badge-dot-green"></span> 11434 (OmniRoute)</span>
@@ -751,122 +902,22 @@
 
             <div class="md-card md-card-filled">
               <span class="md-label">Product Maturity Scorecard</span>
-              <div style="font-weight: 700; font-size: 16px; color: var(--md-sys-color-success);">100 / 100 (Stage 4 Enterprise)</div>
+              <div style="font-weight: 700; font-size: 16px; color: var(--md-sys-color-success);">100 / 100 (Enterprise Ready)</div>
               <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">All 10 Maturity Dimensions Passing</div>
             </div>
           </div>
 
-          <!-- Append-Only Audit Event Ledger -->
-          <h4 style="margin-bottom: 12px; font-weight: 600;">Append-Only Audit Stream (store/check_events.jsonl)</h4>
-          <div class="md-table-container">
-            <table class="md-table" id="auditEventsTable">
-              <thead>
-                <tr>
-                  <th>Timestamp</th>
-                  <th>Revision</th>
-                  <th>Checker ID</th>
-                  <th>Status</th>
-                  <th>Duration</th>
-                  <th>Implementation SHA256</th>
-                </tr>
-              </thead>
-              <tbody id="auditEventsTableBody">
-                <tr>
-                  <td>2026-11-21T00:57:32.992Z</td>
-                  <td><code>rev-001</code></td>
-                  <td>CHK-EXPLICIT-CONFIRM</td>
-                  <td><span class="md-chip md-chip-success">PASSED</span></td>
-                  <td>184ms</td>
-                  <td><code>9f8a2c1...d4e</code></td>
-                </tr>
-                <tr>
-                  <td>2026-11-21T00:57:33.450Z</td>
-                  <td><code>rev-001</code></td>
-                  <td>CHK-SANDBOX-CONTAIN</td>
-                  <td><span class="md-chip md-chip-success">PASSED</span></td>
-                  <td>31ms</td>
-                  <td><code>3e4b11a...fa2</code></td>
-                </tr>
-                <tr>
-                  <td>2026-11-21T00:57:34.120Z</td>
-                  <td><code>rev-001</code></td>
-                  <td>CHK-SPEND-CEILING</td>
-                  <td><span class="md-chip md-chip-success">PASSED</span></td>
-                  <td>12ms</td>
-                  <td><code>1a87c32...8b0</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Distributed Tracing & Causal Reasoning Chain Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
+          <!-- Dynamic Auto-Scaling Card -->
+          <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">
               <div>
-                <h3 class="md-card-title">🌐 Distributed Tracing & Causal Reasoning Chains</h3>
-                <p class="md-card-subtitle">W3C TraceContext (traceparent) and OpenTelemetry/Jaeger compliant causal hierarchy across agent reasoning chains.</p>
+                <h3 class="md-card-title">⚡ Dynamic Auto-Scaling (1 to 16 Workers)</h3>
+                <p class="md-card-subtitle">Automatically handles traffic spikes by spinning up worker processes, then scales down to save resources.</p>
               </div>
-              <div style="display: flex; gap: 8px;">
-                <button id="btnRefreshTraces" class="md-btn md-btn-tonal">🔄 Refresh Traces</button>
-                <button id="btnExportJaeger" class="md-btn md-btn-outlined">📤 Export Jaeger JSON</button>
-              </div>
+              <button id="btnRefreshScaling" class="md-btn md-btn-tonal" type="button">🔄 Refresh Metrics</button>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Standard Format</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-primary);">W3C TraceContext</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;"><code>00-{trace_id}-{span_id}-01</code></div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Active Traces</span>
-                <div style="font-size: 20px; font-weight: 700; color: #146c2e;" id="traceCountBadge">1 Trace</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Causal Tree Recorded</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Observability Protocol</span>
-                <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface);">OTel / Jaeger Thrift</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero External SDK Overhead</div>
-              </div>
-            </div>
-
-            <!-- Trace Span Hierarchy Tree -->
-            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="font-weight: 600; font-size: 13px;">Reasoning Span Hierarchy (Parent-Child Causal Links):</span>
-                <span style="font-family: monospace; font-size: 11px; color: var(--md-sys-color-primary);" id="activeTraceparentHeader">00-sample-trace-id-sample-span-id-01</span>
-              </div>
-              <div id="traceSpanHierarchyContainer" style="font-family: monospace; font-size: 12px; line-height: 1.8; color: var(--md-sys-color-on-surface);">
-                <div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
-                  <strong>• root: reasoning_chain (0.72ms)</strong> <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
-                </div>
-                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
-                  └─ input_rail_screening (0.04ms) [NIST MP-1.1, MP-2.3] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
-                </div>
-                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
-                  └─ dialog_rail_planning (0.01ms) [NIST GV-1.2, MG-2.2] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
-                </div>
-                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
-                  └─ tool_execution:file_reader (0.08ms) [NIST GV-1.3, MG-1.1] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
-                </div>
-                <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
-                  └─ output_rail_verification (0.05ms) [NIST MS-2.2, MS-2.7] <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Auto-Scaling Infrastructure & Dynamic Concurrency Governor Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
-            <div class="md-card-header">
-              <div>
-                <h3 class="md-card-title">⚡ Auto-Scaling Infrastructure & Concurrency Governor</h3>
-                <p class="md-card-subtitle">Dynamically manages workload spikes, queue backpressure (min 1, max 16 workers), and circuit breaker protection.</p>
-              </div>
-              <button id="btnRefreshScaling" class="md-btn md-btn-tonal">🔄 Refresh Metrics</button>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <div class="md-grid-4" style="margin-bottom: 16px;">
               <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
                 <span class="md-label">Worker Pool</span>
                 <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="scaleWorkers">1 / 16</div>
@@ -887,108 +938,91 @@
                 <div style="font-size: 16px; font-weight: 700; color: #146c2e;" id="scaleCircuitBreaker">CLOSED</div>
                 <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Healthy / Zero Cascade</div>
               </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Spend Invariant</span>
-                <div style="font-size: 18px; font-weight: 700; color: #146c2e;">$0.00 USD</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Strict Spend Ceiling</div>
-              </div>
             </div>
 
-            <!-- Interactive Workload Spike Simulator -->
+            <!-- Spike Simulator -->
             <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
-              <span style="font-weight: 600; font-size: 13px;">🚀 Live Workload Spike Simulator:</span>
-              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Inject an instantaneous burst of agent tasks to trigger dynamic autoscaling from 1 baseline worker to multiple concurrent workers, with automatic idle cooldown.</p>
+              <span style="font-weight: 600; font-size: 13px;">🚀 Test Live Workload Spike:</span>
+              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">
+                Inject a burst of tasks to watch the system dynamically scale from 1 baseline worker to multiple concurrent workers.
+              </p>
 
-              <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <label for="spikeTaskCount" style="font-size: 12px; font-weight: 500;">Burst Tasks:</label>
                   <input type="number" id="spikeTaskCount" class="md-input" style="width: 80px;" value="15" min="5" max="50" />
                 </div>
-                <button id="btnSimulateSpike" class="md-btn md-btn-filled">⚡ Trigger Workload Spike</button>
+                <button id="btnSimulateSpike" class="md-btn md-btn-filled" type="button">⚡ Trigger Workload Spike</button>
               </div>
 
               <div id="spikeResultBanner" style="display: none; margin-top: 12px; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
             </div>
           </div>
 
-          <!-- Autonomous Error Resolution & Self-Healing Engine Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
+          <!-- Self-Healing & Format Auto-Repair Card -->
+          <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">
               <div>
-                <h3 class="md-card-title">🩹 Autonomous Error Resolution & Self-Healing Engine</h3>
-                <p class="md-card-subtitle">Mandatory runtime fault diagnosis, autonomous payload syntax repair, bounded backoff retries, and fallback degradation.</p>
+                <h3 class="md-card-title">🩹 Autonomous Self-Healing & Syntax Auto-Repair</h3>
+                <p class="md-card-subtitle">Automatically fixes broken JSON, unclosed quotes, or markdown wrappers without failing.</p>
               </div>
-              <button id="btnTestSelfHealing" class="md-btn md-btn-filled">⚡ Test Auto-Repair</button>
+              <button id="btnTestSelfHealing" class="md-btn md-btn-filled" type="button">⚡ Test Auto-Repair</button>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Max Retry Budget</span>
-                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);">3 Attempts</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Exponential Backoff + Jitter</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Auto-Repair Capabilities</span>
-                <div style="font-size: 14px; font-weight: 700; color: #146c2e;">JSON / Markdown / Commas</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Delimiter Stack Balancing</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Security Violations</span>
-                <div style="font-size: 14px; font-weight: 700; color: #b3261e;">Immediate Halt</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero Retry on Guardrail Block</div>
-              </div>
-            </div>
-
-            <!-- Interactive Self-Healing Tester -->
             <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
-              <span style="font-weight: 600; font-size: 13px;">⚡ Interactive Format Auto-Repair Tester:</span>
-              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 4px 0 12px 0;">Enter malformed payload (e.g. enclosed in markdown fences, unclosed braces, or trailing commas) to observe autonomous repair.</p>
-
-              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <textarea id="healInputText" class="md-input" style="flex: 1; height: 80px; font-family: monospace; font-size: 11px;" placeholder="Enter malformed payload...">```json
+              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 0 0 8px 0;">
+                Enter malformed text (e.g. enclosed in markdown fences, unclosed braces, or trailing commas) to observe autonomous repair:
+              </p>
+              <textarea id="healInputText" class="md-input" style="width: 100%; height: 75px; font-family: monospace; font-size: 11px; margin-bottom: 8px;">```json
 {
   "action": "RUN_ANALYSIS",
   "anomaly_threshold": 3.5,
 }
 ```</textarea>
-              </div>
-
               <div id="healResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
             </div>
           </div>
 
-          <!-- Strict State Synchronization & Drift Elimination Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
+          <!-- Distributed Tracing Telemetry Card -->
+          <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">
               <div>
-                <h3 class="md-card-title">🔄 State Synchronization & Configuration Drift Elimination</h3>
-                <p class="md-card-subtitle">Enforces authoritative spec consensus, eliminates configuration drift across distributed nodes, and maintains $0.00 spend invariant.</p>
+                <h3 class="md-card-title">🌐 Distributed Tracing & Causal Reasoning Chains</h3>
+                <p class="md-card-subtitle">W3C TraceContext standards provide full observability into reasoning steps.</p>
               </div>
               <div style="display: flex; gap: 8px;">
-                <button id="btnAuditSync" class="md-btn md-btn-tonal">🔍 Audit State</button>
-                <button id="btnReconcileSync" class="md-btn md-btn-filled">🛠️ Reconcile Drift</button>
+                <button id="btnRefreshTraces" class="md-btn md-btn-tonal" type="button">🔄 Refresh Traces</button>
+                <button id="btnExportJaeger" class="md-btn md-btn-outlined" type="button">📤 Export Jaeger JSON</button>
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Consensus Status</span>
-                <div style="font-size: 18px; font-weight: 700; color: #146c2e;" id="syncStatusBadge">SYNCHRONIZED</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Zero Configuration Drift</div>
+            <div id="traceSpanHierarchyContainer" style="font-family: monospace; font-size: 12px; line-height: 1.8; color: var(--md-sys-color-on-surface); background: var(--md-sys-color-surface-container-low); padding: 14px; border-radius: 8px;">
+              <div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
+                <strong>• root: reasoning_chain (0.72ms)</strong> <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
               </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Evergreen Schemas</span>
-                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="syncSchemaCount">4 Tracked</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Cryptographic Manifest</div>
+              <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                └─ input_rail_screening (0.04ms) <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
               </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Constitutional Spend</span>
-                <div style="font-size: 18px; font-weight: 700; color: #146c2e;">$0.00 USD</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Strict Non-Breachable</div>
+              <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                └─ dialog_rail_planning (0.01ms) <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+              </div>
+              <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                └─ tool_execution:file_reader (0.08ms) <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
+              </div>
+              <div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
+                └─ output_rail_verification (0.05ms) <span class="md-chip md-chip-success" style="font-size: 10px; padding: 1px 6px;">OK</span>
               </div>
             </div>
+          </div>
 
-            <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+          <!-- Step 5 Navigation Bar -->
+          <div class="md-step-navigation-bar">
+            <button class="md-btn md-btn-outlined btn-prev-step" data-prev="view-evals" type="button">
+              ← Back to Review & Launch
+            </button>
+            <button class="md-btn md-btn-tonal" id="btnRestartWizard" type="button">
+              🔄 Create Another Assistant
+            </button>
           </div>
         </div>
       </section>
@@ -996,17 +1030,17 @@
     </main>
   </div>
 
-  <!-- Human Review HITL Modal -->
+  <!-- Human-in-the-Loop Signoff Modal -->
   <div class="md-modal-backdrop" id="hitlModal">
     <div class="md-modal">
-      <h3 class="md-modal-title">Human-in-the-Loop Signoff (Gate 8)</h3>
+      <h3 class="md-modal-title">Personal Approval Signoff (Gate 8)</h3>
       <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px;">
-        Promotion of a Tier 1+ agent with write or side-effect privileges requires explicit human operator signoff.
+        To ensure human safety, launching an assistant with file modification or external action privileges requires your personal sign-off.
       </p>
 
       <div class="md-input-group">
-        <label class="md-label" for="humanReviewerName">Reviewer Full Name & Identity</label>
-        <input type="text" id="humanReviewerName" class="md-input" placeholder="e.g., Staff Engineer Rajan">
+        <label class="md-label" for="humanReviewerName">Your Name & Role</label>
+        <input type="text" id="humanReviewerName" class="md-input" placeholder="e.g., Lead Engineer Rajan" value="System Operator">
       </div>
 
       <div class="md-input-group">
@@ -1015,10 +1049,17 @@
       </div>
 
       <div class="md-modal-actions">
-        <button id="btnCancelHitl" class="md-btn md-btn-text">Cancel</button>
-        <button id="btnConfirmHitl" class="md-btn md-btn-filled">Grant Promotion Signoff</button>
+        <button id="btnCancelHitl" class="md-btn md-btn-text" type="button">Cancel</button>
+        <button id="btnConfirmHitl" class="md-btn md-btn-filled" type="button">Grant Approval & Launch</button>
       </div>
     </div>
+  </div>
+
+  <!-- Floating Material Snackbar Notification Component -->
+  <div id="appSnackbar" class="md-snackbar" role="alert" aria-live="assertive">
+    <span class="md-snackbar-icon" id="snackbarIcon">ℹ️</span>
+    <span id="snackbarMessage">Notification message</span>
+    <button class="md-snackbar-btn" id="snackbarAction" type="button">DISMISS</button>
   </div>
 
   <!-- Application Script -->

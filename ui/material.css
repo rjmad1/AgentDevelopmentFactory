@@ -822,3 +822,235 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================================================== */
+/* COHESIVE WORKFLOW STEPPER & MATERIAL SNACKBAR EXTENSIONS                    */
+/* ========================================================================== */
+
+.md-workflow-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  overflow-x: auto;
+  gap: 12px;
+}
+
+.md-step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: var(--md-sys-shape-corner-full);
+  transition: all var(--md-sys-motion-standard);
+  user-select: none;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  font-family: var(--md-sys-font-family);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-step-item:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.md-step-item.active {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-weight: 600;
+}
+
+.md-step-item.completed .md-step-circle {
+  background-color: var(--md-sys-color-success);
+  color: var(--md-sys-color-on-success);
+}
+
+.md-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  font-size: 13px;
+  font-weight: 700;
+  transition: all var(--md-sys-motion-standard);
+}
+
+.md-step-item.active .md-step-circle {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.md-step-divider {
+  flex: 1;
+  height: 2px;
+  background-color: var(--md-sys-color-outline-variant);
+  min-width: 16px;
+}
+
+.md-step-navigation-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* Material Floating Snackbar */
+.md-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-surface);
+  padding: 14px 22px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  box-shadow: var(--md-sys-elevation-level-3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  z-index: 2000;
+  opacity: 0;
+  transition: all 250ms cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.md-snackbar.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.md-snackbar-icon {
+  font-size: 18px;
+}
+
+.md-snackbar-btn {
+  background: transparent;
+  border: none;
+  color: #a8c7fa;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+/* Mode Switcher Pill (Friendly / Technical) */
+.md-mode-switch-pill {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--md-sys-color-surface-container-high);
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 2px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.md-mode-switch-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: all var(--md-sys-motion-standard);
+}
+
+.md-mode-switch-btn.active {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-weight: 700;
+  box-shadow: var(--md-sys-elevation-level-1);
+}
+
+/* Friendly Explainer Callout Card */
+.md-friendly-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-left: 4px solid var(--md-sys-color-primary);
+  margin-bottom: 20px;
+}
+
+.md-friendly-callout-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.md-friendly-callout-body {
+  flex: 1;
+}
+
+.md-friendly-callout-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 4px;
+}
+
+.md-friendly-callout-text {
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.5;
+}
+
+/* Quick Idea Chips */
+.md-template-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.md-template-chip {
+  background-color: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--md-sys-color-on-surface);
+  transition: all var(--md-sys-motion-standard);
+}
+
+.md-template-chip:hover {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: var(--md-sys-color-primary);
+}
+
+/* Inline Add Rule Form */
+.md-inline-add-box {
+  background-color: var(--md-sys-color-surface-container);
+  padding: 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin-bottom: 16px;
+  border: 1px dashed var(--md-sys-color-outline);
+  display: none;
+}
+
+.md-inline-add-box.open {
+  display: block;
+}
+
