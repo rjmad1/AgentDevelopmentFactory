@@ -53,6 +53,8 @@ function scanDirJson(dirRel) {
 // 1. Check core JS files
 checkJsSyntax('src/core.js');
 checkJsSyntax('src/cli.js');
+checkJsSyntax('src/server.js');
+checkJsSyntax('ui/app.js');
 checkJsSyntax('test/runner.js');
 checkJsSyntax('test/evals/runner.js');
 checkJsSyntax('test/evals/langsmith-client.js');

@@ -120,6 +120,10 @@ Commands:
     --human-review         Confirm human review token sign-off (required for T1+)
     --retry <count>        Current retry attempt (default: 1)
     --store <path>         Path to revision storage directory (default: ./store)
+
+  ui                   Launch Google Material Design 3 Hybrid Web Platform
+    --port <number>        Port to bind HTTP server (default: 3000)
+    --store <path>         Path to revision storage directory (default: ./store)
 `);
 }
 
@@ -447,6 +451,21 @@ function main() {
         if (!res.promotionGranted) {
           process.exit(1);
         }
+        break;
+      }
+
+      case 'ui': {
+        const port = options.port ? parseInt(options.port, 10) : 3000;
+        import('./server.js').then(({ startServer }) => {
+          startServer(port, storeDir).then(({ url }) => {
+            console.log(`[ADF HYBRID UI] Server running at: ${url}`);
+            console.log(`[ADF HYBRID UI] Mode: Google Material Design 3 (M3) Hybrid Platform`);
+            console.log(`[ADF HYBRID UI] Press Ctrl+C to stop.`);
+          }).catch((err) => {
+            console.error(`[SERVER ERROR] ${err.message}`);
+            process.exit(1);
+          });
+        });
         break;
       }
 

@@ -81,12 +81,11 @@ jobs:
     needs: verify
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -107,21 +106,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Build MkDocs Site with mkdocstrings
+      - name: Build & Deploy MkDocs to gh-pages
         env:
           PYTHONPATH: .
         run: |
-          echo "=== BUILDING EVERGREEN DOCUMENTATION ==="
-          mkdocs build
-
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site/
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          echo "=== BUILDING & DEPLOYING EVERGREEN DOCUMENTATION ==="
+          mkdocs gh-deploy --force

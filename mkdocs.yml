@@ -86,6 +86,7 @@ nav:
       - Development Pipeline Playbook: DEVELOPMENT_PIPELINE.md
       - Autonomous Engineering Loop: AUTONOMOUS_LOOP.md
   - Platform Architecture:
+      - Role-Based Architecture & Diagrams: architecture/diagrams.md
       - Master Architecture: architecture/master.md
       - Three-Plane Model: architecture/three_plane.md
       - Component Architecture: architecture/components.md
@@ -107,6 +108,7 @@ nav:
       - Registry & Discovery: api/registry.md
       - Provider Adapters: api/adapters.md
   - Guides & Operations:
+      - End-User Operating Manual: guides/user_manual.md
       - Getting Started: guides/getting_started.md
       - Operations Runbook: guides/operations.md
       - Recovery Runbook: guides/recovery.md

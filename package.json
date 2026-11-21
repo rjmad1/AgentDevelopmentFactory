@@ -18,6 +18,7 @@
     "auto": "node scripts/autonomous-loop.js --once",
     "setup:hooks": "node scripts/setup-hooks.js",
     "doctor": "node src/cli.js doctor",
-    "maturity": "node scripts/evaluate-product-maturity.js"
+    "maturity": "node scripts/evaluate-product-maturity.js",
+    "ui": "node src/cli.js ui"
   }
 }

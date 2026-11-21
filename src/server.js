@@ -1,0 +1,332 @@
+/**
+ * Agent Development Factory — Native HTTP Bridge Server
+ * Pure Node.js (node:http, node:fs, node:path) — Zero External Runtime Dependencies
+ * Hosts the Material Design Hybrid UI and provides REST API endpoints.
+ */
+
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  runDoctorCheck,
+  triageSolutionComplexity,
+  estimateTokenAndCostFeasibility,
+  generateGuardrailPolicy,
+  runAdversarialSecuritySuite,
+  evaluateReleaseGates,
+} from './core.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, '..');
+const uiDir = path.join(projectRoot, 'ui');
+
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
+};
+
+function readJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    let raw = '';
+    req.on('data', (chunk) => {
+      raw += chunk;
+      if (raw.length > 10 * 1024 * 1024) {
+        // 10MB limit
+        reject(new Error('Payload too large'));
+      }
+    });
+    req.on('end', () => {
+      if (!raw) return resolve({});
+      try {
+        resolve(JSON.parse(raw));
+      } catch (err) {
+        reject(new Error(`Invalid JSON payload: ${err.message}`));
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+function sendJson(res, statusCode, data) {
+  const payload = JSON.stringify(data, null, 2);
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Content-Length': Buffer.byteLength(payload),
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval',
+  });
+  res.end(payload);
+}
+
+function sendText(res, statusCode, text) {
+  res.writeHead(statusCode, {
+    'Content-Type': 'text/plain; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+  });
+  res.end(text);
+}
+
+export function createAppHandler(customStoreDir = null) {
+  const storeDir = customStoreDir || path.join(projectRoot, 'store');
+
+  return async function requestHandler(req, res) {
+    const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const pathname = parsedUrl.pathname;
+    const method = req.method.toUpperCase();
+
+    // CORS preflight
+    if (method === 'OPTIONS') {
+      res.writeHead(204, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-ADF-HITL-Approval',
+      });
+      res.end();
+      return;
+    }
+
+    // ==========================================
+    // REST API ENDPOINTS
+    // ==========================================
+
+    // GET /api/health
+    if (pathname === '/api/health' && method === 'GET') {
+      try {
+        const docResult = runDoctorCheck({ storeDir });
+        sendJson(res, 200, {
+          status: 'HEALTHY',
+          timestamp: new Date().toISOString(),
+          doctorReport: docResult,
+          zeroSpendCeilingEnforced: true,
+        });
+      } catch (err) {
+        sendJson(res, 500, { status: 'ERROR', error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/triage
+    if (pathname === '/api/triage' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const triageResult = triageSolutionComplexity({
+          briefText: body.briefText || '',
+        });
+        sendJson(res, 200, {
+          ...triageResult,
+          type: triageResult.solutionType,
+          rationale: `${triageResult.reasoning} Pattern: ${triageResult.recommendedPattern}. ${triageResult.simplicityRationale}`,
+        });
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/estimate
+    if (pathname === '/api/estimate' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const estimateResult = estimateTokenAndCostFeasibility({
+          briefText: body.briefText || '',
+          baseTokens: body.baseTokens || 1000,
+        });
+        sendJson(res, 200, estimateResult);
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/guardrails
+    if (pathname === '/api/guardrails' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const riskTier = body.riskTier || 'T1';
+        let manifestPath = body.manifestPath;
+
+        if (!manifestPath || !fs.existsSync(manifestPath)) {
+          const rev001Manifest = path.join(storeDir, 'rev-001', 'manifest.json');
+          if (fs.existsSync(rev001Manifest)) {
+            manifestPath = rev001Manifest;
+          } else if (fs.existsSync(storeDir)) {
+            const revs = fs.readdirSync(storeDir).filter((f) => f.startsWith('rev-'));
+            for (const r of revs) {
+              const candidate = path.join(storeDir, r, 'manifest.json');
+              if (fs.existsSync(candidate)) {
+                manifestPath = candidate;
+                break;
+              }
+            }
+          }
+        }
+
+        if (manifestPath && fs.existsSync(manifestPath)) {
+          const policyResult = generateGuardrailPolicy({
+            riskTier,
+            manifestPath,
+          });
+          sendJson(res, 200, {
+            riskTier,
+            yaml: policyResult.yamlString,
+            policy: policyResult.policy,
+          });
+        } else {
+          const isT0 = riskTier === 'T0';
+          const defaultYaml = `# Section 4.3 Canonical Guardrail Policy
+agent: "agent-default"
+version: "1.0.0"
+risk_tier: "${riskTier}"
+tools:
+  allow:
+    - read_public_data
+    - compute_metrics
+  deny: ${isT0 ? '\n    - write_external_record' : '[]'}
+  approval_required: ${!isT0 ? '\n    - write_external_record' : '[]'}
+limits:
+  max_steps: 20
+  max_tokens_per_run: ${isT0 ? 8000 : 50000}
+  max_cost_per_run_usd: ${isT0 ? 0.0 : 0.50}
+  max_wall_time_s: 60
+hitl:
+  confirmation_token_required: ${!isT0}
+  action_on_escalation: "SUSPEND_AND_ALERT"
+zero_spend_ceiling_usd: 0.00`;
+          sendJson(res, 200, { riskTier, yaml: defaultYaml });
+        }
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/sec-evals
+    if (pathname === '/api/sec-evals' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const secResult = runAdversarialSecuritySuite({
+          riskTier: body.riskTier || 'T1',
+          manifestPath: body.manifestPath || null,
+        });
+        sendJson(res, 200, secResult);
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // POST /api/eval-gates
+    if (pathname === '/api/eval-gates' && method === 'POST') {
+      try {
+        const body = await readJsonBody(req);
+        const gatesResult = evaluateReleaseGates({
+          riskTier: body.riskTier || 'T1',
+          humanReviewConfirmed: Boolean(body.humanReviewConfirmed),
+          retryAttempt: Number(body.retryAttempt || 0),
+          manifestPath: body.manifestPath || null,
+        });
+        sendJson(res, 200, gatesResult);
+      } catch (err) {
+        sendJson(res, 400, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/revisions
+    if (pathname === '/api/revisions' && method === 'GET') {
+      try {
+        if (!fs.existsSync(storeDir)) {
+          sendJson(res, 200, { revisions: [] });
+          return;
+        }
+        const entries = fs.readdirSync(storeDir, { withFileTypes: true });
+        const revisions = entries
+          .filter((e) => e.isDirectory() && e.name.startsWith('rev-'))
+          .map((e) => e.name);
+        sendJson(res, 200, { revisions });
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // GET /api/events
+    if (pathname === '/api/events' && method === 'GET') {
+      try {
+        const eventsPath = path.join(storeDir, 'check_events.jsonl');
+        if (!fs.existsSync(eventsPath)) {
+          sendJson(res, 200, { events: [] });
+          return;
+        }
+        const lines = fs.readFileSync(eventsPath, 'utf-8').trim().split('\n');
+        const recent = lines.slice(-50).map((l) => {
+          try { return JSON.parse(l); } catch { return null; }
+        }).filter(Boolean);
+        sendJson(res, 200, { events: recent });
+      } catch (err) {
+        sendJson(res, 500, { error: err.message });
+      }
+      return;
+    }
+
+    // ==========================================
+    // STATIC ASSETS SERVING (UI)
+    // ==========================================
+    let relativeFile = pathname === '/' ? 'index.html' : pathname;
+    if (relativeFile.startsWith('/ui/')) {
+      relativeFile = relativeFile.replace('/ui/', '');
+    } else if (relativeFile.startsWith('/')) {
+      relativeFile = relativeFile.slice(1);
+    }
+
+    // Prevent directory traversal
+    const safePath = path.resolve(uiDir, relativeFile);
+    if (!safePath.startsWith(uiDir)) {
+      sendText(res, 403, 'Forbidden: Path escape blocked');
+      return;
+    }
+
+    if (fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+      const ext = path.extname(safePath).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      const content = fs.readFileSync(safePath);
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        'Content-Length': content.length,
+        'Cache-Control': 'no-cache',
+      });
+      res.end(content);
+      return;
+    }
+
+    // 404
+    sendText(res, 404, `Not Found: ${pathname}`);
+  };
+}
+
+export function startServer(port = 3000, storeDir = null) {
+  const handler = createAppHandler(storeDir);
+  const server = http.createServer(handler);
+
+  return new Promise((resolve, reject) => {
+    server.listen(port, '127.0.0.1', () => {
+      const addr = server.address();
+      const actualPort = typeof addr === 'object' && addr ? addr.port : port;
+      resolve({
+        server,
+        port: actualPort,
+        url: `http://127.0.0.1:${actualPort}`,
+        close: () => new Promise((res) => server.close(res)),
+      });
+    });
+    server.on('error', reject);
+  });
+}

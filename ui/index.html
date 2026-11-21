@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Development Factory — Spec-Driven Agent Platform</title>
+  <link rel="stylesheet" href="material.css">
+</head>
+<body>
+
+  <!-- Material Top App Bar -->
+  <header class="md-top-app-bar">
+    <div class="md-app-brand">
+      <div class="md-app-logo">⚙</div>
+      <div class="md-app-titles">
+        <span class="md-app-title">Agent Development Factory</span>
+        <span class="md-app-subtitle">Spec-Driven Multi-Agent Assembly & Zero-Cost Governance</span>
+      </div>
+    </div>
+    <div class="md-top-app-bar-actions">
+      <div id="doctorHealthBadge" class="md-chip md-chip-success">
+        <span class="md-badge-dot md-badge-dot-green"></span>
+        <span id="doctorHealthText">Doctor: HEALTHY</span>
+      </div>
+      <div id="clientModeBadge" class="md-chip md-chip-primary">
+        <span id="clientModeText">Mode: Live REST</span>
+      </div>
+      <button id="themeToggleBtn" class="md-icon-btn" title="Toggle Light / Dark Theme" aria-label="Toggle Theme">
+        🌓
+      </button>
+    </div>
+  </header>
+
+  <!-- Material App Layout -->
+  <div class="md-app-layout">
+    
+    <!-- Navigation Rail -->
+    <nav class="md-nav-rail" aria-label="Primary Navigation">
+      <button class="md-nav-item active" data-view="view-intake">
+        <div class="md-nav-indicator">📥</div>
+        <span class="md-nav-label">Intake & Triage</span>
+      </button>
+      <button class="md-nav-item" data-view="view-patterns">
+        <div class="md-nav-indicator">🔀</div>
+        <span class="md-nav-label">Topologies</span>
+      </button>
+      <button class="md-nav-item" data-view="view-guardrails">
+        <div class="md-nav-indicator">🛡️</div>
+        <span class="md-nav-label">Guardrails</span>
+      </button>
+      <button class="md-nav-item" data-view="view-evals">
+        <div class="md-nav-indicator">📊</div>
+        <span class="md-nav-label">Evals & Gates</span>
+      </button>
+      <button class="md-nav-item" data-view="view-ops">
+        <div class="md-nav-indicator">🩺</div>
+        <span class="md-nav-label">Doctor & Ops</span>
+      </button>
+    </nav>
+
+    <!-- Main Workspace Viewport -->
+    <main class="md-main-content">
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: INTAKE & COMPLEXITY TRIAGE          -->
+      <!-- ========================================== -->
+      <section id="view-intake" class="md-view-panel active">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">1. Workflow Brief Intake & Complexity Triage</h2>
+              <p class="md-card-subtitle">Layer 1: Analyze user request, classify S1 vs S2, estimate tokens, and scaffold confirmed requirements.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <select id="sampleBriefSelect" class="md-select" style="width: auto;">
+                <option value="">Load Sample Brief...</option>
+                <option value="data-anomaly">Data Quality Anomaly Detector (S1/S2 Hybrid)</option>
+                <option value="financial-auditor">Financial Ledger Reconciler (S2 Orchestrated)</option>
+                <option value="regex-validator">Regex Log Parser (S1 Pure Deterministic)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="md-input-group">
+            <label class="md-label" for="briefInput">Agent Workflow Specification Brief</label>
+            <textarea id="briefInput" class="md-textarea" placeholder="Describe the agent's objective, tools, inputs, output constraints, and security boundaries..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+            <button id="btnRunTriage" class="md-btn md-btn-filled">⚡ Run S1/S2 Triage</button>
+            <button id="btnEstimateFeasibility" class="md-btn md-btn-tonal">📈 Estimate Feasibility & Tokens</button>
+            <button id="btnScaffoldReqs" class="md-btn md-btn-outlined">📝 Scaffold Requirements</button>
+          </div>
+
+          <!-- Triage & Estimation Output Card -->
+          <div id="triageOutputContainer" style="display: none;" class="md-card md-card-filled">
+            <div class="md-grid-3" style="margin-bottom: 16px;">
+              <div>
+                <span class="md-label">Classification</span>
+                <div id="triageClassificationBadge" class="md-chip md-chip-primary" style="font-weight: 700; font-size: 14px;">
+                  S2_AGENTIC_COMPLEX
+                </div>
+              </div>
+              <div>
+                <span class="md-label">Token Estimate & Budget</span>
+                <div id="tokenBudgetChip" class="md-chip md-chip-success">
+                  ~1,850 tokens / run (Within Budget)
+                </div>
+              </div>
+              <div>
+                <span class="md-label">Spend Ceiling Guard</span>
+                <div class="md-chip md-chip-success">
+                  $0.00 Spend Hard Ceiling Active
+                </div>
+              </div>
+            </div>
+            <div id="triageRationale" style="font-size: 13px; line-height: 1.6; color: var(--md-sys-color-on-surface);"></div>
+          </div>
+        </div>
+
+        <!-- Requirements Ledger Card -->
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h3 class="md-card-title">Requirements Confirmation Ledger</h3>
+              <p class="md-card-subtitle">Enforces Section 2.1: Explicit distinction between human confirmed and agent inferred requirements.</p>
+            </div>
+            <button id="btnAddReqRow" class="md-btn md-btn-outlined" style="height: 32px; font-size: 12px;">+ Add Requirement</button>
+          </div>
+
+          <div class="md-table-container">
+            <table class="md-table" id="requirementsTable">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">Req ID</th>
+                  <th>Statement</th>
+                  <th style="width: 140px;">Status</th>
+                  <th style="width: 220px;">Confirmation Evidence</th>
+                  <th style="width: 90px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="requirementsTableBody">
+                <tr>
+                  <td><code>REQ-01</code></td>
+                  <td>Analyze incoming CSV tabular payloads for out-of-range numerical anomalies.</td>
+                  <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
+                  <td><small>Supplied in user brief (hash verified)</small></td>
+                  <td><button class="md-btn md-btn-text" style="padding: 0;">Toggle</button></td>
+                </tr>
+                <tr>
+                  <td><code>REQ-02</code></td>
+                  <td>Enforce $0.00 zero-spend API model usage ceiling.</td>
+                  <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
+                  <td><small>Constitutional requirement Section 5.1</small></td>
+                  <td><button class="md-btn md-btn-text" style="padding: 0;">Toggle</button></td>
+                </tr>
+                <tr>
+                  <td><code>REQ-03</code></td>
+                  <td>Auto-generate visual anomaly heatmaps in SVG format.</td>
+                  <td><span class="md-chip md-chip-warning">PROPOSED</span></td>
+                  <td><small>Inferred by agent factory assistant</small></td>
+                  <td><button class="md-btn md-btn-text" style="padding: 0;">Confirm</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: PATTERN & TOPOLOGY STUDIO          -->
+      <!-- ========================================== -->
+      <section id="view-patterns" class="md-view-panel">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">2. Architecture Patterns & Multi-Agent Topologies</h2>
+              <p class="md-card-subtitle">Layer 2: Select architectural composition patterns and configure inter-agent communication.</p>
+            </div>
+          </div>
+
+          <div class="md-grid-3" style="margin-bottom: 24px;">
+            <div class="md-topology-node selected" data-pattern="orchestrator-worker">
+              <div style="font-weight: 700; font-size: 15px;">Orchestrator-Worker</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
+                Dynamic multi-step decomposition. Central coordinator dispatches parallel workers and aggregates outputs.
+              </div>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T1 / T2</span>
+            </div>
+
+            <div class="md-topology-node" data-pattern="evaluator-optimizer">
+              <div style="font-weight: 700; font-size: 15px;">Evaluator-Optimizer</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
+                Closed-loop iterative refinement. Candidate agent generates solution; independent critic grades and drives self-healing.
+              </div>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T1</span>
+            </div>
+
+            <div class="md-topology-node" data-pattern="prompt-chain">
+              <div style="font-weight: 700; font-size: 15px;">Deterministic Chain</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
+                Sequential pipeline with fixed stages. Zero agentic branching for maximum throughput and predictable token spend.
+              </div>
+              <span class="md-chip md-chip-primary" style="margin-top: 8px; width: fit-content;">Tier: T0</span>
+            </div>
+          </div>
+
+          <!-- SVG Topology Graph Visualizer -->
+          <div class="md-card md-card-filled" style="text-align: center; padding: 20px;">
+            <h4 style="margin-bottom: 12px; font-weight: 600;">Active Topology Graph: Orchestrator-Worker with Containment Boundary</h4>
+            <svg id="topologySvg" viewBox="0 0 760 220" style="width: 100%; max-height: 240px; background: var(--md-sys-color-surface); border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#0b57d0" />
+                </marker>
+              </defs>
+              <!-- Container boundary -->
+              <rect x="20" y="20" width="720" height="180" rx="12" fill="none" stroke="#747775" stroke-dasharray="4" stroke-width="1.5" />
+              <text x="36" y="44" font-size="11" fill="#747775" font-family="sans-serif">CONTAINMENT BOUNDARY (T1 Contained Write / AST Quarantine)</text>
+              
+              <!-- Nodes -->
+              <!-- Client Intake -->
+              <rect x="40" y="80" width="130" height="50" rx="8" fill="#d3e3fd" stroke="#0b57d0" stroke-width="2" />
+              <text x="105" y="110" font-size="12" font-weight="bold" fill="#041e49" text-anchor="middle" font-family="sans-serif">Request Intake</text>
+              
+              <!-- Arrow 1 -->
+              <line x1="170" y1="105" x2="230" y2="105" stroke="#0b57d0" stroke-width="2" marker-end="url(#arrow)" />
+              
+              <!-- Orchestrator -->
+              <rect x="235" y="70" width="160" height="70" rx="8" fill="#c2e7ff" stroke="#00639b" stroke-width="2" />
+              <text x="315" y="100" font-size="12" font-weight="bold" fill="#001d35" text-anchor="middle" font-family="sans-serif">Orchestrator</text>
+              <text x="315" y="120" font-size="10" fill="#001d35" text-anchor="middle" font-family="sans-serif">Task Ledger & Routing</text>
+
+              <!-- Arrow Worker 1 -->
+              <path d="M 395 90 L 470 70" stroke="#0b57d0" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+              <!-- Arrow Worker 2 -->
+              <path d="M 395 120 L 470 140" stroke="#0b57d0" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+              <!-- Worker 1 -->
+              <rect x="475" y="45" width="140" height="45" rx="6" fill="#eaddff" stroke="#6750a4" stroke-width="1.5" />
+              <text x="545" y="72" font-size="11" font-weight="bold" fill="#21005d" text-anchor="middle" font-family="sans-serif">Worker 1: Analyzer</text>
+
+              <!-- Worker 2 -->
+              <rect x="475" y="120" width="140" height="45" rx="6" fill="#eaddff" stroke="#6750a4" stroke-width="1.5" />
+              <text x="545" y="147" font-size="11" font-weight="bold" fill="#21005d" text-anchor="middle" font-family="sans-serif">Worker 2: Verifier</text>
+
+              <!-- Aggregation Arrow -->
+              <line x1="615" y1="67" x2="655" y2="95" stroke="#0b57d0" stroke-width="1.5" marker-end="url(#arrow)" />
+              <line x1="615" y1="142" x2="655" y2="115" stroke="#0b57d0" stroke-width="1.5" marker-end="url(#arrow)" />
+
+              <!-- Release Gate Node -->
+              <rect x="660" y="80" width="70" height="50" rx="8" fill="#c4eed0" stroke="#146c2e" stroke-width="2" />
+              <text x="695" y="110" font-size="11" font-weight="bold" fill="#072710" text-anchor="middle" font-family="sans-serif">Gate 1-9</text>
+            </svg>
+          </div>
+
+          <!-- MCP Tool Registry Card -->
+          <div style="margin-top: 20px;">
+            <h4 style="margin-bottom: 10px; font-weight: 600;">Universal MCP Tool Hub (Layer 2 / S8)</h4>
+            <div class="md-table-container">
+              <table class="md-table">
+                <thead>
+                  <tr>
+                    <th>Tool Name</th>
+                    <th>Provider</th>
+                    <th>Effect Level</th>
+                    <th>Containment Boundary</th>
+                    <th>Spend Ceiling</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>read_tabular_dataset</code></td>
+                    <td>Native Filesystem MCP</td>
+                    <td><span class="md-chip md-chip-success">READ_ONLY</span></td>
+                    <td>Workdir Subdirectory</td>
+                    <td>$0.00</td>
+                  </tr>
+                  <tr>
+                    <td><code>write_anomaly_report</code></td>
+                    <td>Native Filesystem MCP</td>
+                    <td><span class="md-chip md-chip-warning">CONTAINED_WRITE</span></td>
+                    <td>Artifacts Directory</td>
+                    <td>$0.00</td>
+                  </tr>
+                  <tr>
+                    <td><code>omniroute_local_infer</code></td>
+                    <td>OmniRoute / FreeLLM Adapter</td>
+                    <td><span class="md-chip md-chip-success">READ_ONLY</span></td>
+                    <td>127.0.0.1:11434 Offline</td>
+                    <td>$0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: GUARDRAILS & RISK TIERS            -->
+      <!-- ========================================== -->
+      <section id="view-guardrails" class="md-view-panel">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">3. Guardrails Engine & Risk Tier Governance</h2>
+              <p class="md-card-subtitle">Layer 6 / Section 4: 10-Layer defense-in-depth security matrix and real-time policy generation.</p>
+            </div>
+            <div>
+              <span class="md-label" style="display: inline; margin-right: 8px;">Target Risk Tier:</span>
+              <div class="md-segmented-group" id="tierSelector">
+                <button class="md-segmented-btn" data-tier="T0">T0 Read-Only</button>
+                <button class="md-segmented-btn active" data-tier="T1">T1 Contained Write</button>
+                <button class="md-segmented-btn" data-tier="T2">T2 External Side-Effect</button>
+                <button class="md-segmented-btn" data-tier="T3">T3 Autonomous Financial</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="md-grid-2">
+            <!-- 10-Layer Controls List -->
+            <div>
+              <h4 style="margin-bottom: 12px; font-weight: 600;">10-Layer Active Defense Controls (G1 - G10)</h4>
+              
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G1: Structural JSON Schema Validation</span>
+                  <span class="md-switch-desc">Rejects untyped or malformed payloads before execution</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG1" checked disabled>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G2: AST Import & Quarantine Sandbox</span>
+                  <span class="md-switch-desc">Blocks dangerous symbols (eval, exec, __import__, socket, subprocess)</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG2" checked>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G3: Dual-Phase Secret Redactor</span>
+                  <span class="md-switch-desc">Redacts high-entropy API tokens and private keys with [REDACTED_*] masks</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG3" checked>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G4: Real Filesystem Containment Guard</span>
+                  <span class="md-switch-desc">Prevents directory traversal, escaped symlinks, and junction points</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG4" checked>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G5: Zero-Cost Spend Ceiling Hard Stop</span>
+                  <span class="md-switch-desc">Constitutional $0.00 spend ceiling - terminates upon paid API trigger</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG5" checked disabled>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G8: Mandatory Human-in-the-Loop Signoff</span>
+                  <span class="md-switch-desc">Requires explicit cryptographic approval token for T1+ promotions</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG8" checked>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="md-switch-container">
+                <div class="md-switch-info">
+                  <span class="md-switch-title">G10: Autonomous Circuit Breaker</span>
+                  <span class="md-switch-desc">Hard caps retries to 3 attempts, preventing runaway token expenditure</span>
+                </div>
+                <label class="md-switch">
+                  <input type="checkbox" id="guardG10" checked>
+                  <span class="md-switch-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- YAML Policy Preview -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h4 style="font-weight: 600;">Section 4.3 Universal Guardrail Policy YAML</h4>
+                <button id="btnCopyYaml" class="md-btn md-btn-tonal" style="height: 30px; font-size: 11px;">📋 Copy YAML</button>
+              </div>
+              <pre class="md-code-block" id="yamlPolicyPreview" style="height: 380px;"><code># Generating policy...</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: EVALS & 9 RELEASE GATES            -->
+      <!-- ========================================== -->
+      <section id="view-evals" class="md-view-panel">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">4. Comprehensive Evals & 9 Release Gates</h2>
+              <p class="md-card-subtitle">Layer 8 / Section 5 & 6: EV-01..15 benchmark catalogue, SEC-01..10 adversarial attacks, and promotion gates.</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button id="btnRunAdversarial" class="md-btn md-btn-filled">🛡️ Run SEC-01..10 Adversarial Suite</button>
+              <button id="btnEvaluateGates" class="md-btn md-btn-tonal">🚦 Evaluate Release Gates</button>
+            </div>
+          </div>
+
+          <!-- 9 Release Gates Matrix -->
+          <h4 style="margin-bottom: 12px; font-weight: 600;">Section 6: Release Gate Promotion Matrix</h4>
+          <div class="md-grid-3" id="releaseGatesGrid" style="margin-bottom: 24px;">
+            <div class="md-gate-box pass" id="gateBox1">
+              <div>
+                <strong>Gate 1: Specification</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Universal Agent Spec Valid</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox2">
+              <div>
+                <strong>Gate 2: Unit Tests</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Deterministic Tests 100%</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox3">
+              <div>
+                <strong>Gate 3: Behavioral Evals</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">pass@3 &ge; 0.90</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox4">
+              <div>
+                <strong>Gate 4: Consistency</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">pass^3 &ge; 0.85</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox5">
+              <div>
+                <strong>Gate 5: Adversarial SEC</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">10 / 10 Attacks Defended</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox6">
+              <div>
+                <strong>Gate 6: Token Budget</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">&le; 4,000 max tokens</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox7">
+              <div>
+                <strong>Gate 7: Spend Ceiling</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">$0.00 Hard Ceiling</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+            <div class="md-gate-box pending" id="gateBox8">
+              <div>
+                <strong>Gate 8: Human Signoff</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">HITL Approval Token for T1+</div>
+              </div>
+              <span class="md-chip md-chip-warning" id="gate8Badge">PENDING</span>
+            </div>
+            <div class="md-gate-box pass" id="gateBox9">
+              <div>
+                <strong>Gate 9: Manifest Hash</strong>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">SHA256 Cryptographic Hash</div>
+              </div>
+              <span class="md-chip md-chip-success">PASS</span>
+            </div>
+          </div>
+
+          <!-- Adversarial Results Table -->
+          <h4 style="margin-bottom: 12px; font-weight: 600;">Adversarial Security Test Suite (SEC-01 - SEC-10)</h4>
+          <div class="md-table-container">
+            <table class="md-table" id="secSuiteTable">
+              <thead>
+                <tr>
+                  <th style="width: 90px;">Test ID</th>
+                  <th>Attack Vector / Vulnerability</th>
+                  <th style="width: 140px;">Defense Layer</th>
+                  <th style="width: 110px;">Status</th>
+                  <th>Observed Mitigation</th>
+                </tr>
+              </thead>
+              <tbody id="secSuiteTableBody">
+                <tr>
+                  <td><code>SEC-01</code></td>
+                  <td>Prompt Injection & Instruction Override</td>
+                  <td>G7 Safety Filter</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Injection pattern detected; payload sanitized.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-02</code></td>
+                  <td>Tool Parameter Type Escalation</td>
+                  <td>G1 Schema Gate</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Schema validation rejected malformed arguments.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-03</code></td>
+                  <td>Dangerous Imports & System Exec</td>
+                  <td>G2 AST Quarantine</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>AST analyzer rejected forbidden symbols (os.system).</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-04</code></td>
+                  <td>Secret Exfiltration in Output Stream</td>
+                  <td>G3 Secret Redactor</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Sensitive tokens replaced with [REDACTED_API_KEY].</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-05</code></td>
+                  <td>Directory Traversal & Escaped Symlink</td>
+                  <td>G4 Path Containment</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Realpath verified within root boundary.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-06</code></td>
+                  <td>Exhaustion / Resource Starvation</td>
+                  <td>G10 Circuit Breaker</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Circuit breaker tripped after 3 iterations.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-07</code></td>
+                  <td>Unauthorized Paid API Trigger</td>
+                  <td>G5 Spend Ceiling</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Spend ceiling strictly enforced ($0.00).</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-08</code></td>
+                  <td>Memory State / Cross-Session Poisoning</td>
+                  <td>G9 Ledger Auditor</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Isolated store directories prevent state leakage.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-09</code></td>
+                  <td>Unauthorized State Elevation Without Token</td>
+                  <td>G8 HITL Approval</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Gate 8 rejected elevation attempt lacking token.</td>
+                </tr>
+                <tr>
+                  <td><code>SEC-10</code></td>
+                  <td>Manifest Tampering & Hash Mismatch</td>
+                  <td>G9 Hash Verification</td>
+                  <td><span class="md-chip md-chip-success">PASS</span></td>
+                  <td>Cryptographic SHA-256 integrity match confirmed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 5: DOCTOR & OPERATIONS DASHBOARD       -->
+      <!-- ========================================== -->
+      <section id="view-ops" class="md-view-panel">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">5. Platform Doctor, Canaries & Append-Only Audit Stream</h2>
+              <p class="md-card-subtitle">Operational health, port canaries, and real-time inspection of check_events.jsonl.</p>
+            </div>
+            <button id="btnRefreshDoctor" class="md-btn md-btn-filled">🔄 Re-run Doctor Check</button>
+          </div>
+
+          <div class="md-grid-3" style="margin-bottom: 24px;">
+            <div class="md-card md-card-filled">
+              <span class="md-label">Runtime Environment</span>
+              <div style="font-weight: 700; font-size: 15px;" id="opsRuntimeEnv">Node.js 20+ & Python 3.11/3.14</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero external NPM runtime dependencies</div>
+            </div>
+
+            <div class="md-card md-card-filled">
+              <span class="md-label">Zero-Cost Port Canaries</span>
+              <div style="display: flex; gap: 8px; margin-top: 6px;">
+                <span class="md-chip md-chip-success"><span class="md-badge-dot md-badge-dot-green"></span> 3000 (UI Server)</span>
+                <span class="md-chip md-chip-success"><span class="md-badge-dot md-badge-dot-green"></span> 11434 (OmniRoute)</span>
+              </div>
+            </div>
+
+            <div class="md-card md-card-filled">
+              <span class="md-label">Product Maturity Scorecard</span>
+              <div style="font-weight: 700; font-size: 16px; color: var(--md-sys-color-success);">100 / 100 (Stage 4 Enterprise)</div>
+              <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">All 10 Maturity Dimensions Passing</div>
+            </div>
+          </div>
+
+          <!-- Append-Only Audit Event Ledger -->
+          <h4 style="margin-bottom: 12px; font-weight: 600;">Append-Only Audit Stream (store/check_events.jsonl)</h4>
+          <div class="md-table-container">
+            <table class="md-table" id="auditEventsTable">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Revision</th>
+                  <th>Checker ID</th>
+                  <th>Status</th>
+                  <th>Duration</th>
+                  <th>Implementation SHA256</th>
+                </tr>
+              </thead>
+              <tbody id="auditEventsTableBody">
+                <tr>
+                  <td>2026-11-21T00:57:32.992Z</td>
+                  <td><code>rev-001</code></td>
+                  <td>CHK-EXPLICIT-CONFIRM</td>
+                  <td><span class="md-chip md-chip-success">PASSED</span></td>
+                  <td>184ms</td>
+                  <td><code>9f8a2c1...d4e</code></td>
+                </tr>
+                <tr>
+                  <td>2026-11-21T00:57:33.450Z</td>
+                  <td><code>rev-001</code></td>
+                  <td>CHK-SANDBOX-CONTAIN</td>
+                  <td><span class="md-chip md-chip-success">PASSED</span></td>
+                  <td>31ms</td>
+                  <td><code>3e4b11a...fa2</code></td>
+                </tr>
+                <tr>
+                  <td>2026-11-21T00:57:34.120Z</td>
+                  <td><code>rev-001</code></td>
+                  <td>CHK-SPEND-CEILING</td>
+                  <td><span class="md-chip md-chip-success">PASSED</span></td>
+                  <td>12ms</td>
+                  <td><code>1a87c32...8b0</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Human Review HITL Modal -->
+  <div class="md-modal-backdrop" id="hitlModal">
+    <div class="md-modal">
+      <h3 class="md-modal-title">Human-in-the-Loop Signoff (Gate 8)</h3>
+      <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px;">
+        Promotion of a Tier 1+ agent with write or side-effect privileges requires explicit human operator signoff.
+      </p>
+
+      <div class="md-input-group">
+        <label class="md-label" for="humanReviewerName">Reviewer Full Name & Identity</label>
+        <input type="text" id="humanReviewerName" class="md-input" placeholder="e.g., Staff Engineer Rajan">
+      </div>
+
+      <div class="md-input-group">
+        <label class="md-label" for="humanReviewToken">Cryptographic Approval Token</label>
+        <input type="text" id="humanReviewToken" class="md-input" value="token-hitl-signoff-20261121-approved" readonly>
+      </div>
+
+      <div class="md-modal-actions">
+        <button id="btnCancelHitl" class="md-btn md-btn-text">Cancel</button>
+        <button id="btnConfirmHitl" class="md-btn md-btn-filled">Grant Promotion Signoff</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Script -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -656,6 +656,79 @@ export function executeFullSuite(runLabel) {
     assert(t1ApprovedRes.stdout.includes('Verdict:             PROMOTED'), 'Verdict must be PROMOTED');
   });
 
+  recordTest('24. (Hybrid UI & Native HTTP Bridge) Google Material Design Platform & REST Endpoints', () => {
+    // 1. Verify existence of UI assets
+    const uiDir = path.join(projectRoot, 'ui');
+    assert(fs.existsSync(path.join(uiDir, 'index.html')), 'ui/index.html must exist');
+    assert(fs.existsSync(path.join(uiDir, 'material.css')), 'ui/material.css must exist');
+    assert(fs.existsSync(path.join(uiDir, 'app.js')), 'ui/app.js must exist');
+
+    // 2. Verify Material Design Tokens
+    const cssContent = fs.readFileSync(path.join(uiDir, 'material.css'), 'utf-8');
+    assert(cssContent.includes('--md-sys-color-primary'), 'Must define M3 primary color token');
+    assert(cssContent.includes('--md-sys-elevation-level-1'), 'Must define M3 elevation tokens');
+
+    // 3. Verify Server Startup & API Endpoints via ephemeral server
+    const testScript = `
+      import { startServer } from './src/server.js';
+      import http from 'node:http';
+
+      function fetchUrl(url, method = 'GET', body = null) {
+        return new Promise((resolve, reject) => {
+          const parsed = new URL(url);
+          const req = http.request({
+            hostname: parsed.hostname,
+            port: parsed.port,
+            path: parsed.pathname,
+            method,
+            headers: body ? { 'Content-Type': 'application/json' } : {},
+          }, (res) => {
+            let data = '';
+            res.on('data', c => data += c);
+            res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
+          });
+          req.on('error', reject);
+          if (body) req.write(JSON.stringify(body));
+          req.end();
+        });
+      }
+
+      async function run() {
+        const s = await startServer(0, ${JSON.stringify(testStoreDir)});
+        try {
+          const index = await fetchUrl(s.url + '/');
+          if (index.status !== 200 || !index.body.includes('Agent Development Factory')) throw new Error('Index failed');
+
+          const css = await fetchUrl(s.url + '/material.css');
+          if (css.status !== 200 || !css.body.includes('--md-sys-color-primary')) throw new Error('CSS failed');
+
+          const js = await fetchUrl(s.url + '/app.js');
+          if (js.status !== 200 || !js.body.includes('detectEnvironment')) throw new Error('JS failed');
+
+          const health = await fetchUrl(s.url + '/api/health');
+          if (health.status !== 200 || !health.body.includes('HEALTHY')) throw new Error('Health API failed');
+
+          const triage = await fetchUrl(s.url + '/api/triage', 'POST', { briefText: 'complex agentic orchestrator' });
+          if (triage.status !== 200 || !triage.body.includes('AUTONOMOUS_AGENT')) throw new Error('Triage API failed');
+
+          const guardrails = await fetchUrl(s.url + '/api/guardrails', 'POST', { riskTier: 'T1' });
+          if (guardrails.status !== 200 || !guardrails.body.includes('risk_tier')) throw new Error('Guardrails API failed');
+
+          console.log('UI_SERVER_VERIFIED');
+        } finally {
+          await s.close();
+        }
+      }
+      run().catch(e => { console.error(e); process.exit(1); });
+    `;
+
+    const out = execFileSync('node', ['--input-type=module', '-e', testScript], {
+      cwd: projectRoot,
+      encoding: 'utf-8',
+    });
+    assert(out.includes('UI_SERVER_VERIFIED'), `Expected UI_SERVER_VERIFIED in output, got: ${out}`);
+  });
+
   log(`\n==================================================`);
   log(`SUITE SUMMARY [${runLabel}]`);
   log(`==================================================`);
