@@ -1090,6 +1090,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#8-distributed-tracing-auto-scaling-concurrency-governance-for-system-administrators-architects-ai-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Distributed Tracing &amp; Auto-Scaling Concurrency Governance (For System Administrators, Architects &amp; AI Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Distributed Tracing &amp; Auto-Scaling Concurrency Governance (For System Administrators, Architects &amp; AI Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distributed-tracing-causal-reasoning-chain-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributed Tracing &amp; Causal Reasoning Chain Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-scaling-infrastructure-dynamic-concurrency-governor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Scaling Infrastructure &amp; Dynamic Concurrency Governor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability-scaling-key-safeguards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability &amp; Scaling Key Safeguards:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2165,6 +2215,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#8-distributed-tracing-auto-scaling-concurrency-governance-for-system-administrators-architects-ai-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Distributed Tracing &amp; Auto-Scaling Concurrency Governance (For System Administrators, Architects &amp; AI Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Distributed Tracing &amp; Auto-Scaling Concurrency Governance (For System Administrators, Architects &amp; AI Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distributed-tracing-causal-reasoning-chain-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributed Tracing &amp; Causal Reasoning Chain Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-scaling-infrastructure-dynamic-concurrency-governor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Scaling Infrastructure &amp; Dynamic Concurrency Governor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability-scaling-key-safeguards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability &amp; Scaling Key Safeguards:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2557,6 +2657,69 @@
 <li><strong>Obfuscated Jailbreak Variants (<code>RED-OBF-01..03</code>)</strong>: Detects base64-encoded instructions, illegal state machine jumps (<code>INIT</code> <span class="arithmatex">\(\to\)</span> <code>COMPLETE</code>), and prohibited destruction intents. Mapped to <strong>NIST GV-1.2 / MG-2.2</strong>.</li>
 <li><strong>Autonomous Tool Misuse (<code>RED-TLS-01..03</code>)</strong>: Blocks unlisted tool invocations, parameter path escapes (<code>../../../../system32</code>), and unapproved effect elevations. Mapped to <strong>NIST GV-1.2 / MG-2.2</strong>.</li>
 <li><strong>Secret Exfiltration Probes (<code>RED-EXF-01..02</code>)</strong>: Intercepts active credential leaks (<code>sk-</code>, <code>Bearer</code>, <code>AKIA</code>) and scrubs environment variables. Mapped to <strong>NIST MS-2.7</strong>.</li>
+</ol>
+<hr />
+<h2 id="8-distributed-tracing-auto-scaling-concurrency-governance-for-system-administrators-architects-ai-engineers">8. Distributed Tracing &amp; Auto-Scaling Concurrency Governance (For System Administrators, Architects &amp; AI Engineers)<a class="headerlink" href="#8-distributed-tracing-auto-scaling-concurrency-governance-for-system-administrators-architects-ai-engineers" title="Permanent link">&para;</a></h2>
+<h3 id="distributed-tracing-causal-reasoning-chain-architecture">Distributed Tracing &amp; Causal Reasoning Chain Architecture<a class="headerlink" href="#distributed-tracing-causal-reasoning-chain-architecture" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TD
+    subgraph ClientAndIngress ["1. Ingress &amp; Context Propagation"]
+        ClientReq["Agent Request / Workload"] --&gt; ContextGen["W3C TraceContext Generator"]
+        ContextGen --&gt; TPHeader["traceparent: 00-{trace_id}-{span_id}-01"]
+    end
+
+    subgraph ReasoningChainTracer ["2. Hierarchical Reasoning Chain (Root &amp; Child Spans)"]
+        TPHeader --&gt; RootSpan["Root Span: reasoning_chain:{agent_id}&lt;br/&gt;• Attributes: agent_id, spec_sha256, risk_tier"]
+
+        RootSpan --&gt; ChildSpan1["Child Span: input_rail_screening&lt;br/&gt;• Controls: NIST MP-1.1, MP-2.3&lt;br/&gt;• Attributes: injection_clean, pii_sanitized"]
+        ChildSpan1 --&gt; ChildSpan2["Child Span: dialog_rail_planning&lt;br/&gt;• Controls: NIST GV-1.2, MG-2.2&lt;br/&gt;• Attributes: proposed_goal, intent_drift=0"]
+        ChildSpan2 --&gt; ChildSpan3["Child Span: sandboxed_process_execution&lt;br/&gt;• Envs: TRACEPARENT=00-{trace_id}-{child_span_id}-01&lt;br/&gt;• Isolation: AST quarantine, offline network"]
+        ChildSpan3 --&gt; ChildSpan4["Child Span: output_rail_verification&lt;br/&gt;• Controls: NIST MS-2.2, MS-2.7&lt;br/&gt;• Attributes: secret_leaks=0, schema_valid=true"]
+    end
+
+    subgraph ObservabilityEcosystem ["3. Correlated Telemetry &amp; Export"]
+        ChildSpan1 -. Span Events &amp; Timestamps .-&gt; SpanStorage[("Spans Storage&lt;br/&gt;(spans.jsonl)")]
+        ChildSpan2 -. Span Events &amp; Timestamps .-&gt; SpanStorage
+        ChildSpan3 -. Span Events &amp; Timestamps .-&gt; SpanStorage
+        ChildSpan4 -. Span Events &amp; Timestamps .-&gt; SpanStorage
+
+        RootSpan -. Correlated TraceContext .-&gt; StructLogger["StructuredLogger (JSON Lines)&lt;br/&gt;• trace_id, span_id, level, agent_id"]
+        StructLogger --&gt; LogStorage[("JSONL Log Stream&lt;br/&gt;(logs/agent_runtimes.jsonl)")]
+
+        SpanStorage --&gt; JaegerExporter["Jaeger / OpenTelemetry Exporter&lt;br/&gt;(GET /api/traces/:id)"]
+        JaegerExporter --&gt; JaegerUI["Jaeger All-In-One UI&lt;br/&gt;(Port 16686)"]
+    end</code></pre>
+<h3 id="auto-scaling-infrastructure-dynamic-concurrency-governor">Auto-Scaling Infrastructure &amp; Dynamic Concurrency Governor<a class="headerlink" href="#auto-scaling-infrastructure-dynamic-concurrency-governor" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    subgraph TrafficFlow ["1. Traffic Ingestion &amp; Backpressure"]
+        InWorkload["Workload Spikes / Variable Demand"] --&gt; CBGuard{"Circuit Breaker&lt;br/&gt;(Failure Rate &lt; 25%)"}
+        CBGuard -- "Tripped (OPEN)" --&gt; RejectCascade["Reject with CircuitBreakerError&lt;br/&gt;(Prevent Cascading Degradation)"]
+        CBGuard -- "Healthy (CLOSED / HALF_OPEN)" --&gt; QCheck{"Queue Capacity&lt;br/&gt;(Depth &lt;= 100)"}
+        QCheck -- "Exceeded" --&gt; RejectBP["Reject with QueueBackpressureError"]
+        QCheck -- "Accepted" --&gt; TaskQueue[("Bounded Task Queue")]
+    end
+
+    subgraph DynamicScalingEngine ["2. Concurrency Scaling Governor"]
+        TaskQueue --&gt; ScalerLoop{"Queue Depth &gt;= 3?"}
+        ScalerLoop -- "Yes &amp; Workers &lt; 16" --&gt; ScaleUp["Scale Up Pool: +2 Workers&lt;br/&gt;(Peak: 16 Workers)"]
+        ScalerLoop -- "No / Idle" --&gt; CooldownCheck{"Queue Empty &amp; Idle &gt; 5s?"}
+        CooldownCheck -- "Yes" --&gt; ScaleDown["Scale Down to Baseline: 1 Worker"]
+
+        ScaleUp --&gt; WorkerPool["Active Worker Threads / Containers"]
+        ScaleDown --&gt; WorkerPool
+    end
+
+    subgraph CloudNativeTopology ["3. Cloud-Native &amp; Container Scaling"]
+        WorkerPool --&gt; K8sHPA["Kubernetes HPA v2 (hpa.yaml)&lt;br/&gt;• Min: 2 Pods, Max: 16 Pods&lt;br/&gt;• CPU Threshold: 75%&lt;br/&gt;• Custom Metric: agent_factory_queued_tasks"]
+        WorkerPool --&gt; DockerCompose["Docker Compose Scaling Topology&lt;br/&gt;• deploy/docker-compose.scaling.yml&lt;br/&gt;• Replicas: 4 Workers + Jaeger + Prometheus"]
+        WorkerPool -. Health &amp; Metrics .-&gt; PrometheusScrape["Prometheus /metrics &amp; /healthz"]
+    end</code></pre>
+<h3 id="observability-scaling-key-safeguards">Observability &amp; Scaling Key Safeguards:<a class="headerlink" href="#observability-scaling-key-safeguards" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>W3C TraceContext Standard Compliance</strong>: Strictly follows <code>00-{trace_id}-{span_id}-{trace_flags}</code> enabling seamless trace propagation across Node.js, Python, and external OpenTelemetry collectors without proprietary SDK lock-in.</li>
+<li><strong>Causal Reasoning Chain Observability</strong>: Every reasoning phase (Intake, Plan, Tool Execution, Output Verification) generates linked child spans, recording execution durations, evaluated NIST AI RMF controls, and error states.</li>
+<li><strong>Structured Log Correlation</strong>: Ingests active <code>trace_id</code> and <code>span_id</code> into every JSON Lines log event, enabling microsecond-precision log aggregation and correlation.</li>
+<li><strong>Autonomous Circuit Breaker Protection</strong>: Employs a sliding-window failure rate governor (25% threshold over 20 executions) with automatic <code>CLOSED</code> <span class="arithmatex">\(\to\)</span> <code>OPEN</code> <span class="arithmatex">\(\to\)</span> <code>HALF_OPEN</code> self-healing canary recovery.</li>
+<li><strong>Elastic Workload Burst Scaling</strong>: Dynamic worker scaling under queue pressure (min 1 to max 16 workers) with idle scale-down and hard backpressure limits, strictly upholding the constitutional <strong>$0.00 spend ceiling</strong>.</li>
 </ol>
 
 
