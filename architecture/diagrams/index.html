@@ -1062,6 +1062,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#7-sandboxed-execution-isolation-continuous-red-teaming-pipeline-for-devsecops-platform-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Sandboxed Execution Isolation &amp; Continuous Red Teaming Pipeline (For DevSecOps &amp; Platform Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Sandboxed Execution Isolation &amp; Continuous Red Teaming Pipeline (For DevSecOps &amp; Platform Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attack-vector-taxonomy-defense-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Vector Taxonomy &amp; Defense Controls:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2109,6 +2137,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#7-sandboxed-execution-isolation-continuous-red-teaming-pipeline-for-devsecops-platform-engineers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Sandboxed Execution Isolation &amp; Continuous Red Teaming Pipeline (For DevSecOps &amp; Platform Engineers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Sandboxed Execution Isolation &amp; Continuous Red Teaming Pipeline (For DevSecOps &amp; Platform Engineers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attack-vector-taxonomy-defense-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Vector Taxonomy &amp; Defense Controls:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2458,6 +2514,50 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="7-sandboxed-execution-isolation-continuous-red-teaming-pipeline-for-devsecops-platform-engineers">7. Sandboxed Execution Isolation &amp; Continuous Red Teaming Pipeline (For DevSecOps &amp; Platform Engineers)<a class="headerlink" href="#7-sandboxed-execution-isolation-continuous-red-teaming-pipeline-for-devsecops-platform-engineers" title="Permanent link">&para;</a></h2>
+<p>The Agent Development Factory strictly isolates all candidate agent code within hermetic sandboxes and continuously stresses guardrails via automated red teaming in CI/CD.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph SandboxBoundary ["Strict Sandboxed Execution Environment (SandboxedLocalProcessRuntime)"]
+        CandidateCode["Candidate Agent Source (src/agent.py)"]
+        ASTGate{"Pre-Execution AST Quarantine Gate"}
+        CandidateCode --&gt; ASTGate
+        ASTGate -- "eval(), exec(), ctypes, os.system()" --&gt; QuarantineBlock["HALT: Exit 126 AST_QUARANTINE_REJECTED"]
+        ASTGate -- Safe AST --&gt; EnvScrub["Environment Scrubbing (Purge API Keys &amp; Secrets)"]
+
+        EnvScrub --&gt; NetBarrier["Network Sandboxing ($0.00 Ceiling, Offline Proxy http://127.0.0.1:0)"]
+        NetBarrier --&gt; PathGuard["Real Filesystem Containment (Blocked: ../, symlinks, junctions)"]
+        PathGuard --&gt; EphemeralSandbox["Spawn Isolated Child Subprocess with Wall-Clock Timeout"]
+        EphemeralSandbox --&gt; ArtifactContainment["Artifact Containment: Strictly in workdir/artifacts"]
+    end
+
+    subgraph RedTeamCI ["Continuous Red Teaming &amp; Prompt Injection Testing (CI/CD Pipeline)"]
+        GitPush["git push origin main"] --&gt; CIWorkflow["GitHub Actions (pipeline.yml)"]
+        CIWorkflow --&gt; StepRedTeam["Step: Automated Red Teaming Suite (run_redteam.py)"]
+
+        subgraph ProbesMatrix ["16 Continuous Adversarial Probes"]
+            P1["Direct Prompt Injection (DIR-01..05)"]
+            P2["Indirect Data Ingestion (IND-01..03)"]
+            P3["Obfuscation &amp; Jailbreaks (OBF-01..03)"]
+            P4["Tool Misuse &amp; Agency Abuse (TLS-01..03)"]
+            P5["Secret Exfiltration Probes (EXF-01..02)"]
+        end
+
+        StepRedTeam --&gt; ProbesMatrix
+        ProbesMatrix --&gt; GuardrailStress{"Guardrails Stress Evaluation"}
+        GuardrailStress -- "Any Critical/High Bypass" --&gt; FailCI["Pipeline FAILED (Non-Zero Exit)"]
+        GuardrailStress -- "100% Probes Blocked" --&gt; PassCI["PASS / HARDENED -&gt; reports/redteam_report.json"]
+    end
+
+    EphemeralSandbox -. Verified Offline Execution .-&gt; GuardrailStress</code></pre>
+<h3 id="attack-vector-taxonomy-defense-controls">Attack Vector Taxonomy &amp; Defense Controls:<a class="headerlink" href="#attack-vector-taxonomy-defense-controls" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Direct Prompt Injection (<code>RED-DIR-01..05</code>)</strong>: Protects against role-hijacking, system directive erasures, ChatML <code>&lt;|im_start|&gt;</code> delimiters, and developer mode prompts. Mapped to <strong>NIST MP-2.3</strong>.</li>
+<li><strong>Indirect Ingestion Injection (<code>RED-IND-01..03</code>)</strong>: Neutralizes data-as-code attacks in CSV rows, hidden HTML comments, and markdown image data-exfiltration URLs. Mapped to <strong>NIST MP-1.1 / MP-2.3</strong>.</li>
+<li><strong>Obfuscated Jailbreak Variants (<code>RED-OBF-01..03</code>)</strong>: Detects base64-encoded instructions, illegal state machine jumps (<code>INIT</code> <span class="arithmatex">\(\to\)</span> <code>COMPLETE</code>), and prohibited destruction intents. Mapped to <strong>NIST GV-1.2 / MG-2.2</strong>.</li>
+<li><strong>Autonomous Tool Misuse (<code>RED-TLS-01..03</code>)</strong>: Blocks unlisted tool invocations, parameter path escapes (<code>../../../../system32</code>), and unapproved effect elevations. Mapped to <strong>NIST GV-1.2 / MG-2.2</strong>.</li>
+<li><strong>Secret Exfiltration Probes (<code>RED-EXF-01..02</code>)</strong>: Intercepts active credential leaks (<code>sk-</code>, <code>Bearer</code>, <code>AKIA</code>) and scrubs environment variables. Mapped to <strong>NIST MS-2.7</strong>.</li>
+</ol>
 
 
 
