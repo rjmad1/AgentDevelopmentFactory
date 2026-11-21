@@ -13,6 +13,7 @@ services:
       - ADF_SPEND_CEILING_USD=0.00
       - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
       - LOG_LEVEL=info
+      - ADF_ACCESS_TOKEN=${ADF_ACCESS_TOKEN:-}
     depends_on:
       jaeger:
         condition: service_healthy

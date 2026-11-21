@@ -34,7 +34,7 @@ echo "[SECURITY] Token authorization gate strictly active on all API endpoints."
 docker --version >/dev/null 2>&1 || { echo "[FAIL] Docker daemon is not running."; exit 1; }
 
 echo "[DEPLOY] Starting ADF cluster with Zero-Trust Cloudflare Tunnel sidecar..."
-docker compose -f "$COMPOSE_FILE" --profile remote up -d --remove-orphans
+docker compose -f "$COMPOSE_FILE" --profile remote up -d --build --remove-orphans
 
 echo ""
 echo "[TUNNEL] Establishing Cloudflare secure HTTPS edge tunnel..."

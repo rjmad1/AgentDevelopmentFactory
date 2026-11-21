@@ -46,7 +46,7 @@ try {
 
 # 3. Launch Cluster + Cloudflare Quick Tunnel Sidecar
 Write-Host "[DEPLOY] Starting ADF cluster with Zero-Trust Cloudflare Tunnel sidecar..." -ForegroundColor Cyan
-docker compose -f $ComposeFile --profile remote up -d --remove-orphans
+docker compose -f $ComposeFile --profile remote up -d --build --remove-orphans
 
 Write-Host "`n[TUNNEL] Establishing Cloudflare secure HTTPS edge tunnel..." -ForegroundColor Cyan
 $tunnelUrl = ""
@@ -56,8 +56,8 @@ $attempt = 0
 while ($attempt -lt $maxAttempts -and -not $tunnelUrl) {
     Start-Sleep -Seconds 2
     $attempt++
-    $logs = docker logs adf-remote-tunnel 2>&1
-    if ($logs -match "https://([a-zA-Z0-9-]+\.trycloudflare\.com)") {
+    $logs = (docker logs adf-remote-tunnel 2>&1 | Out-String)
+    if ($logs -match "https://[a-zA-Z0-9-]+\.trycloudflare\.com") {
         $tunnelUrl = $matches[0]
         break
     }
