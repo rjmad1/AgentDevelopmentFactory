@@ -1720,6 +1720,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-production-sre-operations-docker-deployment-prometheus-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Production SRE Operations, Docker Deployment &amp; Prometheus Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Production SRE Operations, Docker Deployment &amp; Prometheus Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-docker-container-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Docker Container Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-kubernetes-probes-sre-health-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Kubernetes Probes &amp; SRE Health Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-kubernetes-horizontal-pod-autoscaler-hpa-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Kubernetes Horizontal Pod Autoscaler (HPA v2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2007,6 +2057,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-production-sre-operations-docker-deployment-prometheus-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Production SRE Operations, Docker Deployment &amp; Prometheus Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Production SRE Operations, Docker Deployment &amp; Prometheus Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-docker-container-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Docker Container Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-kubernetes-probes-sre-health-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Kubernetes Probes &amp; SRE Health Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-kubernetes-horizontal-pod-autoscaler-hpa-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Kubernetes Horizontal Pod Autoscaler (HPA v2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2119,6 +2219,48 @@ or via npm:
 <blockquote>
 <p><strong>Dual-Phase Secret Redaction</strong>: The factory active security layer (G3) scans all prompts, logs, and outputs for high-entropy tokens and API keys. Any identified credential is automatically replaced with <code>[REDACTED_API_KEY]</code> before touching the screen or disk.</p>
 </blockquote>
+<hr />
+<h2 id="5-production-sre-operations-docker-deployment-prometheus-monitoring">5. Production SRE Operations, Docker Deployment &amp; Prometheus Monitoring<a class="headerlink" href="#5-production-sre-operations-docker-deployment-prometheus-monitoring" title="Permanent link">&para;</a></h2>
+<p>For DevOps, SREs, and Platform Engineers deploying the Agent Development Factory in production environments, the system provides standard enterprise observability and containerization assets.</p>
+<h3 id="51-docker-container-deployment">5.1 Docker Container Deployment<a class="headerlink" href="#51-docker-container-deployment" title="Permanent link">&para;</a></h3>
+<p>The factory includes a secure multi-runtime container image running Python 3.11 and Node.js 20 under an unprivileged user (<code>UID 10001</code>).</p>
+<p>To build and launch the complete stack (Control Plane API + UI, Auto-scaling Worker Daemons, Jaeger Distributed Tracing, and Prometheus Metric Scraper):
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>deploy/docker-compose.scaling.yml<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+</span></code></pre></div></p>
+<h3 id="52-kubernetes-probes-sre-health-endpoints">5.2 Kubernetes Probes &amp; SRE Health Endpoints<a class="headerlink" href="#52-kubernetes-probes-sre-health-endpoints" title="Permanent link">&para;</a></h3>
+<p>Both the Control Plane (<code>server.js</code>) and Background Worker Daemons (<code>agent_factory.scaling.worker_daemon</code>) expose standard Kubernetes-native endpoints:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Endpoint</th>
+<th style="text-align: left;">Standard</th>
+<th style="text-align: left;">Expected Response</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>GET /healthz</code></strong></td>
+<td style="text-align: left;">Liveness Probe</td>
+<td style="text-align: left;"><code>200 OK</code></td>
+<td style="text-align: left;">Confirms process is running and event loop is responsive.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>GET /readyz</code></strong></td>
+<td style="text-align: left;">Readiness Probe</td>
+<td style="text-align: left;"><code>200 OK</code> or <code>503 Service Unavailable</code></td>
+<td style="text-align: left;">Evaluates circuit breaker state. Returns <code>503</code> if tripped (<code>OPEN</code>) to remove node from service mesh routing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>GET /metrics</code></strong></td>
+<td style="text-align: left;">Prometheus Exposition</td>
+<td style="text-align: left;"><code>200 OK</code> (<code>text/plain; version=0.0.4</code>)</td>
+<td style="text-align: left;">Exposes operational counters and gauges (<code>agent_factory_http_requests_total</code>, <code>agent_factory_uptime_seconds</code>, <code>agent_factory_queued_tasks</code>, <code>agent_factory_current_workers</code>, <code>agent_factory_circuit_state</code>, <code>agent_factory_spend_ceiling_usd 0.00</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-kubernetes-horizontal-pod-autoscaler-hpa-v2">5.3 Kubernetes Horizontal Pod Autoscaler (HPA v2)<a class="headerlink" href="#53-kubernetes-horizontal-pod-autoscaler-hpa-v2" title="Permanent link">&para;</a></h3>
+<p>The factory includes declarative Kubernetes manifests in <code>deploy/k8s/hpa.yaml</code> configured to dynamically scale worker replicas from 2 to 16 pods based on queue depth (<code>agent_factory_queued_tasks &gt;= 3</code>) and CPU utilization (75%).</p>
 
 
 
