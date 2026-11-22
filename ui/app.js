@@ -15,6 +15,9 @@ const state = {
   currentStep: 'view-intake',
   currentTier: 'T1',
   selectedPattern: 'orchestrator-worker',
+  targetPlatform: 'antigravity',
+  attachedDocuments: [], // Array of { name, size, type, content }
+  lastProcessedGoal: '',
   humanApproved: false,
   doctorHealthy: true,
   stepsCompleted: {
@@ -657,6 +660,306 @@ function attachRequirementToggleHandlers() {
   });
 }
 
+// Document Attachment & Ground-Truth Context
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function renderAttachedDocsList() {
+  const container = document.getElementById('attachedDocsList');
+  const badge = document.getElementById('docCountBadge');
+  if (!container) return;
+
+  const docs = state.attachedDocuments || [];
+  if (docs.length === 0) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    if (badge) {
+      badge.textContent = '0 Documents Attached';
+      badge.className = 'md-chip';
+    }
+    return;
+  }
+
+  container.style.display = 'flex';
+  container.innerHTML = '';
+  if (badge) {
+    badge.textContent = `${docs.length} Document${docs.length > 1 ? 's' : ''} Attached`;
+    badge.className = 'md-chip md-chip-success';
+  }
+
+  docs.forEach((doc, idx) => {
+    const item = document.createElement('div');
+    item.className = 'md-doc-item';
+    item.innerHTML = `
+      <div class="md-doc-meta">
+        <span>📄</span>
+        <span class="md-doc-name" title="${doc.name}">${doc.name}</span>
+        <span class="md-doc-size">(${formatFileSize(doc.size)})</span>
+        <span class="md-chip" style="font-size: 10px; height: 22px; padding: 0 6px;">${doc.type || 'text'}</span>
+      </div>
+      <button class="md-doc-remove-btn" data-doc-idx="${idx}" aria-label="Remove document ${doc.name}" title="Remove document">✕</button>
+    `;
+    container.appendChild(item);
+  });
+
+  container.querySelectorAll('.md-doc-remove-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-doc-idx'), 10);
+      const removed = state.attachedDocuments.splice(idx, 1);
+      renderAttachedDocsList();
+      if (removed.length > 0) {
+        showSnackbar(`Removed document: ${removed[0].name}`, '🗑️');
+      }
+    });
+  });
+}
+
+function handleIncomingFiles(fileList) {
+  if (!fileList || fileList.length === 0) return;
+  const files = Array.from(fileList);
+  let addedCount = 0;
+
+  files.forEach((file) => {
+    const alreadyExists = state.attachedDocuments.some(
+      (d) => d.name === file.name && d.size === file.size
+    );
+    if (alreadyExists) return;
+
+    const docObj = {
+      name: file.name,
+      size: file.size,
+      type: file.type || file.name.split('.').pop().toUpperCase(),
+      content: '',
+    };
+
+    if (
+      file.type.startsWith('text/') ||
+      file.name.match(/\.(txt|md|markdown|csv|json|yaml|yml)$/i)
+    ) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        docObj.content = (e.target.result || '').slice(0, 32768);
+      };
+      reader.readAsText(file);
+    }
+
+    state.attachedDocuments.push(docObj);
+    addedCount++;
+  });
+
+  if (addedCount > 0) {
+    renderAttachedDocsList();
+    showSnackbar(`Attached ${addedCount} document${addedCount > 1 ? 's' : ''} as ground-truth context.`, '📎');
+    generateContextualRules(false);
+  }
+}
+
+// Rule Deduplication and Contextual Synthesis Engine
+function normalizeRuleSignature(text) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .split(/\s+/)
+    .filter((w) => !['the', 'a', 'an', 'and', 'or', 'to', 'for', 'with', 'of', 'in', 'on', 'all', 'any'].includes(w))
+    .slice(0, 6)
+    .join(' ');
+}
+
+function getExistingRuleSignatures() {
+  const tbody = document.getElementById('requirementsTableBody');
+  const signatures = new Set();
+  if (!tbody) return signatures;
+
+  tbody.querySelectorAll('tr').forEach((r) => {
+    const descEl = r.querySelector('td:nth-child(2)');
+    if (descEl) {
+      const fullText = descEl.textContent.trim();
+      signatures.add(normalizeRuleSignature(fullText));
+      signatures.add(fullText.toLowerCase().replace(/[^a-z0-9]/g, ''));
+    }
+  });
+  return signatures;
+}
+
+function getNextRequirementId() {
+  const tbody = document.getElementById('requirementsTableBody');
+  if (!tbody) return 'REQ-01';
+  const rows = tbody.querySelectorAll('tr');
+  let maxId = 0;
+  rows.forEach((r) => {
+    const idEl = r.querySelector('code');
+    if (idEl) {
+      const match = idEl.textContent.match(/REQ-(\d+)/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxId) maxId = num;
+      }
+    }
+  });
+  const nextNum = maxId + 1;
+  return `REQ-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+}
+
+const DOMAIN_RULE_POOLS = {
+  data: [
+    { text: 'Reject incoming data files containing missing mandatory primary schema keys or timestamp identifiers.', evidence: 'Tabular data validation guard' },
+    { text: 'Enforce deterministic repeatable aggregation hashing across raw tabular data inputs.', evidence: 'Mathematical determinism requirement' },
+    { text: 'Isolate generated anomaly visualizations and intermediate data files to local disk sandbox.', evidence: 'Sandboxed filesystem policy' },
+    { text: 'Verify numerical value distribution against 3-sigma bounds prior to emitting alert signals.', evidence: 'Statistical anomaly constraint' },
+  ],
+  financial: [
+    { text: 'Verify zero balance deviation invariant before approving any ledger transaction.', evidence: 'Financial balance invariant' },
+    { text: 'Require human operator cryptographic approval token for ledger updates above threshold.', evidence: 'HITL authorization contract' },
+    { text: 'Halt execution immediately and log critical alert upon encountering double-spend attempt.', evidence: 'Double-spend prevention' },
+    { text: 'Maintain cryptographically chained append-only audit trail for all balance modifications.', evidence: 'Immutable ledger auditability' },
+  ],
+  log: [
+    { text: 'Execute regex pattern evaluation deterministically without delegating to cloud LLMs.', evidence: 'Zero-token regex engine contract' },
+    { text: 'Cap input log stream buffer to 10MB per batch to guarantee bounded memory usage.', evidence: 'Bounded resource allocation' },
+    { text: 'Mask sensitive user IPs and credential tokens in output logs before writing to disk.', evidence: 'PII & credential redaction' },
+    { text: 'Enforce fail-safe parsing timeout to prevent catastrophic regex backtracking.', evidence: 'ReDoS defense pattern' },
+  ],
+  support: [
+    { text: 'Ground all agent responses strictly in verified local documentation repository.', evidence: 'Grounded retrieval contract' },
+    { text: 'Redact customer PII including credit card numbers, email addresses, and phone numbers.', evidence: 'Privacy by design invariant' },
+    { text: 'Explicitly decline user queries outside authorized product domain with helpful fallback guidance.', evidence: 'Scope demarcation boundary' },
+    { text: 'Log all user interaction turns with anonymized session identifiers for quality assurance.', evidence: 'Telemetry hygiene standard' },
+  ],
+};
+
+const PLATFORM_RULE_POOLS = {
+  antigravity: [
+    { text: 'Validate all tool call arguments strictly against MCP (Model Context Protocol) JSON schemas.', evidence: 'Google Antigravity MCP contract' },
+    { text: 'Enforce $0.00 spend hard ceiling and abort workflow if non-free API invocation requested.', evidence: 'Antigravity cost invariant' },
+    { text: 'Propagate W3C tracecontext distributed tracing headers across all subagent invocations.', evidence: 'Antigravity tracing standard' },
+  ],
+  langgraph: [
+    { text: 'Enforce state immutability in StateGraph reducers with explicit checkpointing at every transition.', evidence: 'LangGraph StateGraph contract' },
+    { text: 'Limit cyclical agent graph iterations to a maximum depth of 10 to prevent infinite recursion.', evidence: 'LangGraph recursion ceiling' },
+  ],
+  crewai: [
+    { text: 'Enforce strict role boundary isolation so individual crew agents never execute unauthorized duties.', evidence: 'CrewAI agent boundary' },
+    { text: 'Validate hierarchical task delegation contracts before passing intermediate results downstream.', evidence: 'CrewAI process orchestration' },
+  ],
+  'openai-swarm': [
+    { text: 'Enforce explicit stateless handoff contracts and sanitize conversation state between agent transfers.', evidence: 'OpenAI Swarm handoff invariant' },
+    { text: 'Validate OpenAI Function Calling schema strict mode compliance on all returned tool arguments.', evidence: 'Strict function calling contract' },
+  ],
+  'standalone-cli': [
+    { text: 'Ensure zero external daemon dependencies and validate zero-token runtime performance.', evidence: 'Standalone microservice autonomy' },
+    { text: 'Trap POSIX signals (SIGINT, SIGTERM) to guarantee clean shutdown and file handle release.', evidence: 'Process lifecycle management' },
+  ],
+};
+
+const GOVERNANCE_FALLBACK_RULES = [
+  { text: 'Reject requests attempting to execute unapproved system shell commands or modify system binaries.', evidence: 'SuperGravity defensive sandbox' },
+  { text: 'Wrap all external tool and file system interactions in try-catch blocks with graceful degradation.', evidence: 'Fault tolerance contract' },
+  { text: 'Sanitize and validate all agent-generated outputs before presenting them to end users.', evidence: 'Output safety standard' },
+];
+
+function generateContextualRules(isExplicitAction = false) {
+  const tbody = document.getElementById('requirementsTableBody');
+  const briefInput = document.getElementById('briefInput');
+  if (!tbody) return 0;
+
+  const text = (briefInput ? briefInput.value : '').toLowerCase();
+  const existingSignatures = getExistingRuleSignatures();
+  const platform = state.targetPlatform || 'antigravity';
+  const docs = state.attachedDocuments || [];
+
+  const candidatePool = [];
+
+  // 1. Domain Detection
+  if (text.includes('csv') || text.includes('data') || text.includes('anomaly') || text.includes('outlier') || text.includes('metric')) {
+    candidatePool.push(...DOMAIN_RULE_POOLS.data);
+  }
+  if (text.includes('financial') || text.includes('ledger') || text.includes('money') || text.includes('balance') || text.includes('payment') || text.includes('reconcil')) {
+    candidatePool.push(...DOMAIN_RULE_POOLS.financial);
+  }
+  if (text.includes('regex') || text.includes('log') || text.includes('parser') || text.includes('server') || text.includes('ip') || text.includes('access')) {
+    candidatePool.push(...DOMAIN_RULE_POOLS.log);
+  }
+  if (text.includes('support') || text.includes('customer') || text.includes('faq') || text.includes('help') || text.includes('chat') || text.includes('ticket')) {
+    candidatePool.push(...DOMAIN_RULE_POOLS.support);
+  }
+
+  // 2. Attached Documents Context
+  docs.forEach((doc) => {
+    const docName = doc.name.toLowerCase();
+    if (docName.endsWith('.csv')) {
+      candidatePool.push({
+        text: `Validate tabular schema and column datatypes against attached reference dataset (${doc.name}).`,
+        evidence: `Ground-truth document: ${doc.name}`,
+      });
+    } else if (docName.endsWith('.json') || docName.endsWith('.yaml') || docName.endsWith('.yml')) {
+      candidatePool.push({
+        text: `Enforce strict schema parameters defined in attached configuration specification (${doc.name}).`,
+        evidence: `Ground-truth document: ${doc.name}`,
+      });
+    } else {
+      candidatePool.push({
+        text: `Ground agent factual assertions strictly in contents of attached reference document (${doc.name}).`,
+        evidence: `Ground-truth document: ${doc.name}`,
+      });
+    }
+  });
+
+  // 3. Platform Invariants
+  if (PLATFORM_RULE_POOLS[platform]) {
+    candidatePool.push(...PLATFORM_RULE_POOLS[platform]);
+  }
+
+  // 4. Core Governance Fallbacks
+  candidatePool.push(...GOVERNANCE_FALLBACK_RULES);
+
+  // Filter out any candidates that are duplicates
+  const nonDuplicateCandidates = candidatePool.filter((cand) => {
+    const sig = normalizeRuleSignature(cand.text);
+    const compact = cand.text.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return !existingSignatures.has(sig) && !existingSignatures.has(compact);
+  });
+
+  if (nonDuplicateCandidates.length === 0) {
+    if (isExplicitAction) {
+      showSnackbar('All relevant behavioral contracts for this goal & platform are already confirmed!', 'ℹ️');
+    }
+    return 0;
+  }
+
+  const limit = isExplicitAction ? Math.min(3, nonDuplicateCandidates.length) : Math.min(2, nonDuplicateCandidates.length);
+  const toAdd = nonDuplicateCandidates.slice(0, limit);
+
+  toAdd.forEach((cand) => {
+    const nextId = getNextRequirementId();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><code>${nextId}</code></td>
+      <td>${cand.text}</td>
+      <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
+      <td><small>${cand.evidence}</small></td>
+      <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
+    `;
+    tbody.appendChild(tr);
+    existingSignatures.add(normalizeRuleSignature(cand.text));
+    existingSignatures.add(cand.text.toLowerCase().replace(/[^a-z0-9]/g, ''));
+  });
+
+  attachRequirementToggleHandlers();
+  updateRequirementCounters();
+
+  if (isExplicitAction) {
+    showSnackbar(`✨ Generated ${toAdd.length} verified behavioral contracts (Deduplicated).`, '📋');
+  } else {
+    showSnackbar(`✨ Goal updated: Auto-synced ${toAdd.length} contextual assistant rules.`, '💡');
+  }
+
+  return toAdd.length;
+}
+
 // Sample Templates
 const SAMPLE_TEMPLATES = {
   'data-anomaly': {
@@ -774,27 +1077,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Template Chips & Dropdown
+  // 6. Target Platform Selector
+  const platformSelect = document.getElementById('targetPlatformSelect');
+  const platformDesc = document.getElementById('platformDescriptionText');
+  const PLATFORM_DESCRIPTIONS = {
+    antigravity: 'Configures SDK runtime bindings, Model Context Protocol (MCP) schemas, $0.00 spend guards, and multi-agent coordination contracts.',
+    langgraph: 'Configures LangGraph StateGraph schema, checkpointing storage, and cyclical multi-agent graph nodes with recursion ceilings.',
+    crewai: 'Configures CrewAI Agent roles, backstories, process orchestration (hierarchical vs sequential), and delegation boundaries.',
+    'openai-swarm': 'Configures OpenAI Swarm agent instructions, stateless handoff routines, and OpenAI Function Calling schema contracts.',
+    'standalone-cli': 'Configures zero-dependency standalone Node/Python microservice container with POSIX signals and zero-token runtime performance.',
+  };
+
+  if (platformSelect) {
+    platformSelect.addEventListener('change', () => {
+      state.targetPlatform = platformSelect.value;
+      if (platformDesc && PLATFORM_DESCRIPTIONS[state.targetPlatform]) {
+        platformDesc.textContent = PLATFORM_DESCRIPTIONS[state.targetPlatform];
+      }
+      showSnackbar(`Target platform set to: ${platformSelect.options[platformSelect.selectedIndex].text.split('(')[0].trim()}`, '🛠️');
+      generateContextualRules(false);
+    });
+  }
+
+  // 6b. Document Upload Dropzone & Ground-Truth Ingestion
+  const docDropzone = document.getElementById('docDropzone');
+  const docFileInput = document.getElementById('docFileInput');
+  const btnBrowseDocs = document.getElementById('btnBrowseDocs');
+
+  if (btnBrowseDocs && docFileInput) {
+    btnBrowseDocs.addEventListener('click', (e) => {
+      e.stopPropagation();
+      docFileInput.click();
+    });
+  }
+
+  if (docDropzone && docFileInput) {
+    docDropzone.addEventListener('click', () => docFileInput.click());
+
+    docFileInput.addEventListener('change', () => {
+      handleIncomingFiles(docFileInput.files);
+      docFileInput.value = '';
+    });
+
+    docDropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      docDropzone.classList.add('drag-active');
+    });
+
+    docDropzone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      docDropzone.classList.remove('drag-active');
+    });
+
+    docDropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      docDropzone.classList.remove('drag-active');
+      if (e.dataTransfer && e.dataTransfer.files) {
+        handleIncomingFiles(e.dataTransfer.files);
+      }
+    });
+  }
+
+  // 6c. Goal Input & Dynamic Contextual Sync on Blur
   const briefInput = document.getElementById('briefInput');
   const sampleSelect = document.getElementById('sampleBriefSelect');
 
-  document.querySelectorAll('.md-template-chip').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const key = chip.getAttribute('data-template');
-      if (SAMPLE_TEMPLATES[key]) {
-        briefInput.value = SAMPLE_TEMPLATES[key].text;
-        if (sampleSelect) sampleSelect.value = key;
-        showSnackbar(`Loaded template: "${SAMPLE_TEMPLATES[key].title}"`, '📋');
+  if (briefInput) {
+    state.lastProcessedGoal = briefInput.value.trim();
+
+    briefInput.addEventListener('blur', () => {
+      const currentGoal = briefInput.value.trim();
+      if (currentGoal && currentGoal !== state.lastProcessedGoal) {
+        state.lastProcessedGoal = currentGoal;
+        generateContextualRules(false);
       }
     });
-  });
+  }
 
   if (sampleSelect) {
     sampleSelect.addEventListener('change', () => {
       const val = sampleSelect.value;
-      if (SAMPLE_TEMPLATES[val]) {
+      if (SAMPLE_TEMPLATES[val] && briefInput) {
         briefInput.value = SAMPLE_TEMPLATES[val].text;
         showSnackbar(`Loaded template: "${SAMPLE_TEMPLATES[val].title}"`, '📋');
+        if (briefInput.value.trim() !== state.lastProcessedGoal) {
+          state.lastProcessedGoal = briefInput.value.trim();
+          generateContextualRules(false);
+        }
       }
     });
   }
@@ -855,45 +1224,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 9. Step 1: Auto-Draft Requirements ("Auto-Draft Assistant Rules")
+  // 9. Step 1: Generate Rules & Behavioral Contracts (Explicit Actions)
+  const btnGenerateMoreRules = document.getElementById('btnGenerateMoreRules');
+  if (btnGenerateMoreRules) {
+    btnGenerateMoreRules.addEventListener('click', () => {
+      generateContextualRules(true);
+    });
+  }
+
   const btnScaffold = document.getElementById('btnScaffoldReqs');
   if (btnScaffold) {
     btnScaffold.addEventListener('click', () => {
-      const tbody = document.getElementById('requirementsTableBody');
-      const text = briefInput.value.trim().toLowerCase();
-      const currentCount = tbody.children.length;
-
-      let ruleText1 = 'Reject requests attempting to execute unapproved system shell commands.';
-      let ruleText2 = 'Isolate all temporary file operations to the designated sandbox workspace.';
-
-      if (text.includes('financial') || text.includes('ledger') || text.includes('money')) {
-        ruleText1 = 'Verify zero balance deviation invariant before approving any transaction.';
-        ruleText2 = 'Require human operator cryptographic approval token for ledger modifications.';
-      } else if (text.includes('support') || text.includes('customer') || text.includes('faq')) {
-        ruleText1 = 'Ground all answers strictly in authenticated help documentation.';
-        ruleText2 = 'Redact customer credit card numbers, phone numbers, and email addresses automatically.';
-      }
-
-      const rowsToAdd = [
-        { id: `REQ-0${currentCount + 1}`, text: ruleText1, status: 'CONFIRMED', evidence: 'Auto-synthesized from goal intent' },
-        { id: `REQ-0${currentCount + 2}`, text: ruleText2, status: 'CONFIRMED', evidence: 'Standard factory safety invariant' },
-      ];
-
-      rowsToAdd.forEach((r) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><code>${r.id}</code></td>
-          <td>${r.text}</td>
-          <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
-          <td><small>${r.evidence}</small></td>
-          <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      attachRequirementToggleHandlers();
-      updateRequirementCounters();
-      showSnackbar(`Auto-drafted ${rowsToAdd.length} verified rules for your assistant.`, '📋');
+      generateContextualRules(true);
     });
   }
 

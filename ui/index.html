@@ -103,23 +103,6 @@
       <!-- VIEW 1: DEFINE GOAL & SCINTILLATING INTAKE -->
       <!-- ========================================== -->
       <section id="view-intake" class="md-view-panel active">
-        
-        <!-- Friendly Step 1 Banner -->
-        <div class="md-friendly-callout">
-          <div class="md-friendly-callout-icon">💡</div>
-          <div class="md-friendly-callout-body">
-            <div class="md-friendly-callout-title">Step 1: What do you want your AI assistant to achieve?</div>
-            <div class="md-friendly-callout-text">
-              Describe your objective in plain English or select a ready-to-use template below. Our factory automatically verifies feasibility, guarantees zero cloud fees ($0.00 spend), and drafts verified rules.
-            </div>
-            <div class="md-template-chips">
-              <button class="md-template-chip" data-template="data-anomaly" type="button">📊 Data Anomaly Detector</button>
-              <button class="md-template-chip" data-template="financial-auditor" type="button">🧾 Financial Ledger Reconciler</button>
-              <button class="md-template-chip" data-template="regex-validator" type="button">⚡ Server Log Parser</button>
-              <button class="md-template-chip" data-template="support-assistant" type="button">💬 Customer Support Helper</button>
-            </div>
-          </div>
-        </div>
 
         <div class="md-card md-card-elevated">
           <div class="md-card-header">
@@ -144,12 +127,56 @@
             </div>
           </div>
 
+          <!-- Target Agent Development Platform -->
+          <div class="md-input-group" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="md-label" for="targetPlatformSelect" style="margin-bottom: 0;">
+                <span class="txt-friendly">Target Agent Development Platform</span>
+                <span class="txt-tech" style="display:none;">Target Runtime Framework & Tool Schema Specification</span>
+              </label>
+              <span class="md-chip md-chip-primary" style="font-size: 11px;">SDK & Architecture Binding</span>
+            </div>
+            <select id="targetPlatformSelect" class="md-select" style="width: 100%;">
+              <option value="antigravity" selected>Google Antigravity & Native Multi-Agent ($0.00 Bound, MCP Native, W3C Tracing)</option>
+              <option value="langgraph">LangGraph / LangChain (StateGraph, Checkpointing & Cyclical Feedback)</option>
+              <option value="crewai">CrewAI (Role-Playing Autonomous Crews & Hierarchical Delegation)</option>
+              <option value="openai-swarm">OpenAI Swarm & Assistants API (Stateless Agent Handoffs & Function Calling)</option>
+              <option value="standalone-cli">Standalone Microservice (Dockerized CLI / FastREST Zero-Dependency)</option>
+            </select>
+            <div id="platformDescriptionText" style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 5px;">
+              Configures SDK runtime bindings, Model Context Protocol (MCP) schemas, $0.00 spend guards, and multi-agent coordination contracts.
+            </div>
+          </div>
+
           <div class="md-input-group">
             <label class="md-label" for="briefInput">
               <span class="txt-friendly">Describe What Your Assistant Should Do</span>
               <span class="txt-tech" style="display:none;">Agent Workflow Specification Brief</span>
             </label>
             <textarea id="briefInput" class="md-textarea" placeholder="Example: I want an assistant that analyzes customer CSV reports, highlights any weird numbers or trends, and saves a summary report with zero API costs..."></textarea>
+          </div>
+
+          <!-- Document Upload & Ground Truth Knowledge Ingestion -->
+          <div class="md-input-group" style="margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="md-label" style="margin-bottom: 0;">
+                <span class="txt-friendly">Attach Ground-Truth Documents (Optional)</span>
+                <span class="txt-tech" style="display:none;">Ingest Knowledge Base Context & Domain Data</span>
+              </label>
+              <span id="docCountBadge" class="md-chip" style="font-size: 11px;">0 Documents Attached</span>
+            </div>
+            
+            <div id="docDropzone" class="md-dropzone">
+              <input type="file" id="docFileInput" multiple accept=".txt,.md,.markdown,.csv,.json,.yaml,.yml,.pdf" style="display: none;" />
+              <div class="md-dropzone-icon" aria-hidden="true">📁</div>
+              <div class="md-dropzone-title">Drag &amp; drop ground-truth files here, or</div>
+              <button type="button" id="btnBrowseDocs" class="md-btn md-btn-tonal" style="height: 32px; font-size: 12px; margin-top: 4px;">
+                Browse Documents
+              </button>
+              <div class="md-dropzone-hint">Supports Markdown, Text, CSV, JSON, YAML &amp; PDF for contextual rule generation</div>
+            </div>
+
+            <div id="attachedDocsList" class="md-attached-docs-container" style="display: none;"></div>
           </div>
 
           <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
@@ -197,7 +224,10 @@
                 <span class="txt-tech" style="display:none;">Enforces strict demarcation between human confirmed and agent inferred requirements.</span>
               </p>
             </div>
-            <button id="btnAddReqRow" class="md-btn md-btn-filled" style="height: 36px; font-size: 13px;" type="button">+ Add Custom Rule</button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button id="btnGenerateMoreRules" class="md-btn md-btn-tonal" style="height: 36px; font-size: 13px;" type="button">✨ Generate Rules & Contracts</button>
+              <button id="btnAddReqRow" class="md-btn md-btn-filled" style="height: 36px; font-size: 13px;" type="button">+ Add Custom Rule</button>
+            </div>
           </div>
 
           <!-- Inline Add Rule Box (Opens when user clicks + Add Custom Rule) -->
