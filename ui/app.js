@@ -26,6 +26,7 @@ const state = {
     'view-guardrails': false,
     'view-evals': false,
     'view-ops': false,
+    'view-docs': false,
   },
 };
 
@@ -1000,6 +1001,126 @@ const SAMPLE_TEMPLATES = {
   },
 };
 
+// Multi-Industry Agent Recipes Library (6 Verified Production Blueprints)
+const INDUSTRY_RECIPES = {
+  fin: {
+    title: 'AML Transaction & Fraud Reconciliation Agent',
+    industry: 'finance',
+    platform: 'langgraph',
+    brief: 'Build an enterprise AML (Anti-Money Laundering) transaction reconciliation agent to monitor high-volume SWIFT and Fedwire transfers, detect structuring/smurfing patterns, verify balance invariants across double-entry ledgers, and trigger HITL review before filing SAR reports.',
+    requirements: [
+      { text: 'Enforce SOX 404 & FINRA Rule 3310 compliance checks on all ledger delta operations.', evidence: 'Regulatory AML invariant' },
+      { text: 'Detect structuring patterns (multiple rapid transactions just below $10,000 threshold).', evidence: 'FinCEN structuring guard' },
+      { text: 'Require cryptographic Human-in-the-Loop sign-off before generating FinCEN SAR filings.', evidence: 'HITL escalation policy' },
+      { text: 'Verify balance conservation invariant: Total debits must strictly equal total credits.', evidence: 'Double-entry accounting invariant' },
+    ],
+  },
+  health: {
+    title: 'HIPAA Patient Intake & Protocol Screening Agent',
+    industry: 'healthcare',
+    platform: 'antigravity',
+    brief: 'Develop an automated clinical intake agent for ambulatory clinics that collects patient symptom descriptions, cross-references EHR records via FHIR API, performs red-flag triage for emergent symptoms (stroke/cardiac), and anonymizes all PHI before clinical routing.',
+    requirements: [
+      { text: 'Enforce HIPAA Safe Harbor de-identification (strip 18 PHI identifiers before processing).', evidence: 'HIPAA 45 CFR § 164.514' },
+      { text: 'Emergency red-flag detector triggers immediate 911/ER escalation on stroke/MI keywords.', evidence: 'Clinical triage safety contract' },
+      { text: 'Validate HL7 FHIR US Core Implementation Guide schema contracts on all patient payloads.', evidence: 'FHIR interoperability contract' },
+      { text: 'Never prescribe medications or alter diagnostic dosage parameters under any condition.', evidence: 'Medical liability boundary' },
+    ],
+  },
+  retail: {
+    title: 'Multichannel Inventory & Supplier SLA Agent',
+    industry: 'retail',
+    platform: 'crewai',
+    brief: 'Create an autonomous supply chain agent for omnichannel retail that continuously audits SKU stock levels across regional warehouses, forecasts stockout probabilities, tracks supplier lead times, and drafts automated PO reorders while enforcing gross margin ceilings.',
+    requirements: [
+      { text: 'Audit warehouse SKU inventories against dynamic reorder points every 15 minutes.', evidence: 'Inventory cadence contract' },
+      { text: 'Evaluate supplier delivery reliability against contractual SLA penalty thresholds.', evidence: 'Vendor SLA compliance' },
+      { text: 'Cap automated purchase orders at $15,000 max without senior procurement officer approval.', evidence: 'Financial expenditure ceiling' },
+      { text: 'Enforce minimum 22% gross margin constraint on all restock pricing models.', evidence: 'Margin conservation invariant' },
+    ],
+  },
+  sec: {
+    title: 'Zero-Trust Cloud Posture & Incident Triage Agent',
+    industry: 'security',
+    platform: 'antigravity',
+    brief: 'Build a Security Operations Center (SOC) agent that continuously monitors AWS/GCP audit logs, detects anomalous IAM privilege escalations, identifies unencrypted public S3 buckets, and automatically isolates compromised EC2 instances into a quarantine security group.',
+    requirements: [
+      { text: 'Audit IAM roles against CIS AWS Benchmark 1.4 and alert on wildcard AdministratorAccess.', evidence: 'CIS benchmark compliance' },
+      { text: 'Execute automated instance network quarantine upon detection of known C2 beaconing.', evidence: 'Incident response playbook' },
+      { text: 'Enforce strict read-only execution in production VPCs without explicit 2FA authorization token.', evidence: 'Zero-trust privilege isolation' },
+      { text: 'Index incident causal traces using W3C TraceContext standards for SIEM export.', evidence: 'Observability contract' },
+    ],
+  },
+  mfg: {
+    title: 'SCADA Telemetry Anomaly & Predictive Maintenance',
+    industry: 'manufacturing',
+    platform: 'antigravity',
+    brief: 'Deploy an industrial IoT agent that ingests high-frequency vibration, thermal, and acoustic sensor streams from CNC milling spindles, detects early bearing degradation via FFT frequency spectrum analysis, and schedules maintenance before catastrophic failure.',
+    requirements: [
+      { text: 'Process MQTT sensor payloads at 100 Hz within 20ms deterministic latency ceiling.', evidence: 'Real-time OT performance contract' },
+      { text: 'Trigger warning alert when vibration harmonics exceed ISO 10816-3 Class II limits.', evidence: 'ISO 10816 vibration standard' },
+      { text: 'Hard-block any automated PLC register writes that exceed safe emergency stop RPM bounds.', evidence: 'Fail-safe physical boundary' },
+      { text: 'Log all diagnostic sensor telemetry to append-only local CSV ledger without cloud dependency.', evidence: 'Air-gapped data retention' },
+    ],
+  },
+  legal: {
+    title: 'Contract Risk & Clause Compliance Auditing Agent',
+    industry: 'legal',
+    platform: 'antigravity',
+    brief: 'Build a legal document analysis agent that ingests enterprise SaaS MSAs and vendor agreements, extracts non-standard indemnification, liability caps, and governing law clauses, flags GDPR/CCPA data transfer deviations, and drafts conforming redline recommendations.',
+    requirements: [
+      { text: 'Identify mutual indemnification deviations and uncapped consequential damages clauses.', evidence: 'Contractual risk taxonomy' },
+      { text: 'Verify EU-US Data Privacy Framework (DPF) and Standard Contractual Clauses (SCC).', evidence: 'Cross-border data transfer rule' },
+      { text: 'Cross-reference contract terms against standard Corporate Legal Playbook v4.2.', evidence: 'Corporate legal compliance' },
+      { text: 'Provide verbatim line-number citations for every identified legal risk finding.', evidence: 'Hallucination defense standard' },
+    ],
+  },
+};
+
+function loadIndustryRecipe(recipeKey) {
+  const recipe = INDUSTRY_RECIPES[recipeKey];
+  if (!recipe) return;
+
+  const briefInput = document.getElementById('briefInput');
+  const targetPlatformSelect = document.getElementById('targetPlatformSelect');
+  const tbody = document.getElementById('requirementsTableBody');
+
+  if (briefInput) {
+    briefInput.value = recipe.brief;
+    state.lastProcessedGoal = recipe.brief;
+  }
+
+  if (targetPlatformSelect) {
+    targetPlatformSelect.value = recipe.platform;
+    state.targetPlatform = recipe.platform;
+  }
+
+  if (tbody && recipe.requirements) {
+    tbody.innerHTML = '';
+    recipe.requirements.forEach((req, idx) => {
+      const num = idx + 1;
+      const reqId = `REQ-${num < 10 ? '0' + num : num}`;
+      const tr = document.createElement('tr');
+      const safeId = escapeHtml(reqId);
+      const safeText = escapeHtml(req.text);
+      const safeEvidence = escapeHtml(req.evidence);
+      tr.innerHTML = `
+        <td><code>${safeId}</code></td>
+        <td>${safeText}</td>
+        <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
+        <td><small>${safeEvidence}</small></td>
+        <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    attachRequirementToggleHandlers();
+    updateRequirementCounters();
+  }
+
+  switchView('view-intake');
+  showSnackbar(`Loaded blueprint: "${recipe.title}" into Factory Intake!`, '🚀');
+}
+
 // ==========================================
 // DOM INITIALIZATION & EVENT BINDINGS
 // ==========================================
@@ -1057,6 +1178,54 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // 3c. View 6 Documentation Sub-Tabs Switching
+  document.querySelectorAll('[data-docs-tab]').forEach((tabBtn) => {
+    tabBtn.addEventListener('click', () => {
+      const targetPanelId = tabBtn.getAttribute('data-docs-tab');
+      document.querySelectorAll('#docsSubTabs .adf-tab-btn').forEach((btn) => {
+        const isActive = btn === tabBtn;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      document.querySelectorAll('#view-docs .adf-tab-content').forEach((panel) => {
+        const isTarget = panel.id === targetPanelId;
+        panel.classList.toggle('active', isTarget);
+        panel.style.display = isTarget ? 'block' : 'none';
+      });
+    });
+  });
+
+  // 3d. View 6 Multi-Industry Recipe Filtering
+  document.querySelectorAll('[data-industry-filter]').forEach((filterBtn) => {
+    filterBtn.addEventListener('click', () => {
+      const filter = filterBtn.getAttribute('data-industry-filter');
+      document.querySelectorAll('[data-industry-filter]').forEach((b) => {
+        b.classList.toggle('active', b === filterBtn);
+      });
+      document.querySelectorAll('.adf-recipe-card').forEach((card) => {
+        const cardIndustry = card.getAttribute('data-industry');
+        const matches = filter === 'all' || cardIndustry === filter;
+        card.style.display = matches ? 'block' : 'none';
+      });
+    });
+  });
+
+  // 3e. View 6 Recipe Load Buttons
+  document.querySelectorAll('.btn-load-recipe').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const recipeKey = btn.getAttribute('data-recipe');
+      loadIndustryRecipe(recipeKey);
+    });
+  });
+
+  // 3f. Header Docs Shortcut Button
+  const btnHeaderDocs = document.getElementById('btnHeaderDocs');
+  if (btnHeaderDocs) {
+    btnHeaderDocs.addEventListener('click', () => {
+      switchView('view-docs');
+    });
+  }
 
   // 4. Perspective Switcher Pill (Friendly Guide vs Tech Details)
   const modeFriendlyBtn = document.getElementById('modeFriendlyBtn');

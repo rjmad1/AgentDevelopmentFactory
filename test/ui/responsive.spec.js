@@ -10,7 +10,7 @@ const VIEWPORTS = [
   { name: 'desktop-xl', width: 1920, height: 1080 },
 ];
 
-const VIEWS = ['view-intake', 'view-patterns', 'view-guardrails', 'view-evals', 'view-ops'];
+const VIEWS = ['view-intake', 'view-patterns', 'view-guardrails', 'view-evals', 'view-ops', 'view-docs'];
 
 for (const vp of VIEWPORTS) {
   test(`no horizontal overflow at ${vp.name}`, async ({ page }) => {

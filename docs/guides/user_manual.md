@@ -1,139 +1,179 @@
-# Agent Development Factory — End-User Operating Manual
+# Agent Development Factory — Complete End-User Operating Manual
 
-Welcome to the **Agent Development Factory (ADF)**. This manual provides non-technical users, business stakeholders, operations leads, and product owners with everything needed to transform workflow ideas into reliable, zero-cost, sandboxed software agents.
-
----
-
-## 1. Executive Summary: What is the Agent Development Factory?
-
-The Agent Development Factory is an autonomous assembly line for software agents. Rather than writing manual code or dealing with fragile agent prompts, you supply a plain-language **Workflow Brief**. The factory then:
-1. **Triages the request** to determine if an AI agent is even needed (avoiding expensive AI when simple, deterministic scripts suffice).
-2. **Scaffolds verified requirements**, distinguishing between what you confirmed and what the system inferred.
-3. **Applies a 10-layer defense-in-depth safety shield** (preventing prompt injections, data leaks, path escapes, and runaway costs).
-4. **Runs rigorous evaluations across 9 Release Gates** before any agent can be promoted to production.
-5. **Enforces a strict $0.00 zero-cost spend ceiling**, ensuring 100% free-tier and local model compliance with zero unexpected cloud bills.
+Welcome to the **Agent Development Factory (ADF)**. This manual provides product managers, software architects, domain specialists, enterprise operators, and development teams with a step-by-step operating guide to designing, testing, vetting, and promoting production-grade AI agents with verifiable constraints and a constitutional **$0.00 zero-spend ceiling**.
 
 ---
 
-## 2. Launching the Material Design Web Platform
+## 1. Executive Summary & Core Principles
 
-The factory includes a modern, responsive web application built with **Google Material Design 3 (M3)**.
+The Agent Development Factory operates on a simple premise: **AI agents should be authored through rigorous specifications, verified through continuous automated gates, and deployed with deterministic guardrails rather than brittle prompt hacking.**
 
-### How to Start the Web Interface
-From your terminal, execute:
+### The 5 Foundational Principles
+1. **Constitutional Zero-Cost Spend Ceiling ($0.00 USD)**: Every component—from local AST sandboxing, sliding-window rate limiters, and static verification checks to local LLM-as-a-judge harnesses—runs completely free without surprise API bills.
+2. **Explicit Confirmation Over Assumption**: The system distinguishes between user-confirmed assertions and system-inferred proposals. Stale evidence is tracked across revision histories.
+3. **Defense-in-Depth Guardrails (NeMo & NIST AI RMF)**: Multi-layer input filtering, dialog rails, execution allowlists, and output sanitizers prevent prompt injection, privilege escalation, and secret leakage.
+4. **Autonomous Self-Healing & State Consensus**: Corrupted JSON structures and configuration drifts are automatically classified, repaired, and reconciled back to cryptographic consensus.
+5. **Universal Portability**: Agents are compiled to the vendor-neutral **Universal Agent Specification Standard (`agent.yaml`)** and can be deployed to Antigravity 2.0, AutoGen, CrewAI, or LangGraph.
+
+---
+
+## 2. Launching and Accessing the Platform
+
+The factory includes a Material Design 3 (M3) web interface and control-plane HTTP bridge.
+
+### Starting the Server
+From the project root:
 ```bash
+# Launch on default port 3000
 node src/cli.js ui --port 3000
 ```
-or via npm:
+Or via npm:
 ```bash
 npm run ui
 ```
 
-Then open your browser to:
+Then visit your local browser at:
 👉 **[http://127.0.0.1:3000](http://127.0.0.1:3000)**
 
-> **Hybrid Runtime Support**: The interface works in three distinct modes:
-> - **Live REST Mode**: Connected directly to the factory's native server for real-time compilation and checks.
-> - **Embedded Webview Mode**: Embedded inside IDE panes or desktop shells using secure `postMessage` protocol.
-> - **Offline Simulation Mode**: Runs standalone if you open `ui/index.html` directly via `file:///` without any backend running, executing simulated heuristics and mock evaluations in the browser.
+### Accessing via Remote Zero-Trust Tunnel
+When exposed remotely via Cloudflare Quick Tunnel:
+```bash
+# Windows PowerShell
+pwsh ./scripts/deploy-remote.ps1
+
+# Linux / macOS Bash
+bash ./scripts/deploy-remote.sh
+```
+Supply your access token in the query string or authorization header:
+`https://<your-tunnel-subdomain>.trycloudflare.com/?token=<your-access-token>`
 
 ---
 
 ## 3. Step-by-Step Operator Journey
 
 ```mermaid
-flowchart LR
-    A["1. Workflow Brief"] --> B["2. Complexity Triage"]
-    B --> C["3. Review Requirements"]
-    C --> D["4. Select Risk Tier"]
-    D --> E["5. Release Gates Audit"]
-    E -->|T1+ Signoff| F["6. Human Approval"]
-    F --> G["7. Promoted Agent Pack"]
+flowchart TD
+    Step1["Step 1: Define Goal & Intake\n(Brief, Docs, Target Platform, Behavioral Contracts)"] --> Step2["Step 2: Team & Tools\n(S1/S2 Triage, Architecture Topologies, MCP Tool Registry)"]
+    Step2 --> Step3["Step 3: Safety & Privacy\n(T0-T3 Risk Tiers, NeMo Guardrails, PII & Secret Redaction)"]
+    Step3 --> Step4["Step 4: Review & Launch\n(SEC-01..10 Suite, Red Teaming, 9 Release Gates, HITL Signoff)"]
+    Step4 --> Step5["Step 5: Live Console & Diagnostics\n(Distributed Tracing, SRE Probes, Self-Healing, Drift Reconciler)"]
 ```
-
-### Step 1: Submitting Your Workflow Brief
-In the **Intake & Triage** workspace:
-1. Enter your objective in the **Workflow Specification Brief** text box.
-2. Be explicit about:
-   - What data the agent consumes (e.g. CSV spreadsheets, log files, customer queries).
-   - What decisions or transformations it performs.
-   - What artifacts it produces (e.g. markdown reports, summarized metrics).
-   - Any external actions it must NOT take (e.g. never delete database records).
-3. Alternatively, click the **Load Sample Brief** dropdown to explore pre-configured patterns like the *Data Quality Anomaly Detector* or *Financial Ledger Reconciler*.
-
-### Step 2: Understanding Complexity Triage (S1 vs S2)
-Click **Run S1/S2 Triage**. The factory analyzes your brief using bounded algorithmic heuristics:
-- **`S1_PURE_DETERMINISTIC`**: If your workflow can be solved with deterministic logic, regular expressions, or simple sequential rules, the factory recommends a pure script. This eliminates AI hallucinations and runs with zero token cost.
-- **`S2_AGENTIC_COMPLEX`**: If your task requires dynamic tool exploration, adaptive reasoning, or multi-step analysis, the factory provisions an autonomous agent pattern (e.g. *Orchestrator-Worker*).
-
-### Step 3: Reviewing the Requirements Ledger
-Section 2.1 of our engineering constitution mandates that **all requirements must be traceable**:
-- <span style="color:#146c2e; font-weight:bold;">CONFIRMED</span>: Requirements directly provided and asserted by you.
-- <span style="color:#b36b00; font-weight:bold;">PROPOSED</span>: Requirements suggested by the factory's automated assistant. You can review and click **Confirm** or **Revoke**.
-- <span style="color:#ba1a1a; font-weight:bold;">UNRESOLVED</span>: Open ambiguities that require your clarification before the agent can be built.
-
-### Step 4: Selecting Safety & Risk Tiers
-Navigate to the **Guardrails** workspace. The factory classifies agents into four Risk Tiers:
-| Tier | Description | Allowed Privileges | Human Approval |
-| :--- | :--- | :--- | :--- |
-| **`T0`** | **Read-Only / Analysis** | Reading public data, mathematical calculation | Automatic (Sampled) |
-| **`T1`** | **Contained Local Write** | Writing markdown reports inside `./artifacts` | **Required** (Gate 8 Token) |
-| **`T2`** | **External Side-Effects** | Calling external webhook, writing to database | **Required** (Gate 8 Token) |
-| **`T3`** | **Autonomous Financial/Identity**| High-privilege state modification | **Strict Dual-Key HITL** |
-
-### Step 5: Release Gates & Human-in-the-Loop (HITL) Sign-Off
-Navigate to **Evals & Gates** and click **Evaluate Release Gates**. The factory checks all 9 release gates:
-1. **Gate 1 (Spec Compliance)**: Universal Agent Spec YAML passes strict schema validation.
-2. **Gate 2 (Unit Tests)**: 100% of deterministic unit and integration tests pass.
-3. **Gate 3 (Behavioral Evals)**: $\text{pass@3} \ge 0.90$ across realistic input distributions.
-4. **Gate 4 (Consistency)**: $\text{pass}^3 \ge 0.85$ repeatable execution across runs.
-5. **Gate 5 (Adversarial Security)**: 10 / 10 attacks defended in SEC-01..10 suite.
-6. **Gate 6 (Token Budget)**: Token usage strictly within allocated budget window.
-7. **Gate 7 (Zero-Cost Spend)**: Total monetary API spend is exactly **$0.00**.
-8. **Gate 8 (Human Review)**: Explicit cryptographic signoff token for T1+ agents.
-9. **Gate 9 (Manifest Integrity)**: Cryptographic SHA-256 hash match on all build artifacts.
-
-If an agent is Tier 1 or higher, Gate 8 will pause and request **Human Signoff**. A modal dialog will appear:
-- Enter your reviewer name.
-- Review the auto-generated cryptographic token `token-hitl-signoff-...`.
-- Click **Grant Promotion Signoff**.
 
 ---
 
-## 4. Troubleshooting and FAQs
+### Step 1: Define Goal & Intake
 
-### Q: Why was my agent rejected with `REJECTED_RETRY`?
-> **Self-Healing Loop**: If any release gate fails (for example, token budget exceeded or a security check flagged an unescaped output), the factory enters an automated self-healing loop. It will adjust prompt parameters or guardrail thresholds and retry up to **3 times** before stopping to avoid runaway cycles.
+In **View 1 (Define Goal)**, you establish the baseline intent and ingest reference context:
 
-### Q: How do I verify the system is healthy?
-> Navigate to the **Doctor & Ops** workspace in the web interface, or run `adf doctor` from the terminal. The doctor inspects Node versions, Python environments, port canaries (port 3000, port 11434), and store directory integrity.
-
-### Q: Are my API keys safe?
-> **Dual-Phase Secret Redaction**: The factory active security layer (G3) scans all prompts, logs, and outputs for high-entropy tokens and API keys. Any identified credential is automatically replaced with `[REDACTED_API_KEY]` before touching the screen or disk.
+1. **AI Assistant Goal Specification**:
+   - Provide a concise statement of what the agent must accomplish.
+   - Example: *"Analyze incoming multi-hospital patient admission records for anomalous vitals and flag emergency escalations."*
+2. **Context Document Ingestion**:
+   - Attach reference documents (PDF, CSV, TXT, JSON schemas, policy guidelines) directly via the drag-and-drop dropzone or the **Browse Documents** button.
+   - Attached files are tracked in the document ledger with size, mime-type, and removal controls.
+3. **Target Development Platform**:
+   - Select your target deployment environment:
+     - **Google Antigravity 2.0** (Recommended — Built-in autonomous subagents & tools)
+     - **Microsoft AutoGen** (Multi-agent conversational group chat)
+     - **CrewAI** (Role-playing crew processes & sequential/hierarchical flows)
+     - **LangGraph** (Stateful cyclically graphed actor networks)
+4. **Dynamic Rule & Contract Generation**:
+   - Whenever you finish editing the Goal field and click away, the factory dynamically extracts contextual assistant rules and behavioral contracts.
+   - Click **✨ Generate Assistant Rules & Behavioral Contracts** to generate additional deduplicated rules.
+   - Each rule is tracked in the Requirements Ledger as **CONFIRMED** or **PROPOSED** with interactive toggle controls.
 
 ---
 
-## 5. Production SRE Operations, Docker Deployment & Prometheus Monitoring
+### Step 2: Team & Capabilities (Architecture & Tools)
 
-For DevOps, SREs, and Platform Engineers deploying the Agent Development Factory in production environments, the system provides standard enterprise observability and containerization assets.
+In **View 2 (Team & Tools)**, the factory guides the structural architecture of the agent:
 
-### 5.1 Docker Container Deployment
-The factory includes a secure multi-runtime container image running Python 3.11 and Node.js 20 under an unprivileged user (`UID 10001`).
+1. **Solution Complexity Triage (S1 vs S2)**:
+   - Click **Run S1/S2 Triage** to evaluate algorithmic complexity:
+     - **`S1_DETERMINISTIC`**: If your workflow can be solved with deterministic logic, regular expressions, or simple sequential rules, the factory recommends a pure script. This eliminates AI hallucinations and runs with zero token cost.
+     - **`S2_AGENTIC_COMPLEX`**: If your task requires dynamic tool exploration, adaptive reasoning, or multi-step analysis, an autonomous agent pattern is provisioned.
+2. **Architecture Topology Selection**:
+   - Select from 4 validated patterns:
+     - **Single Focused Agent**: Bounded tool caller with step governor.
+     - **Orchestrator-Worker**: Lead planning agent coordinating specialized worker agents.
+     - **Hierarchical Supervisor**: Multi-level team leads reporting to a chief executive router.
+     - **Dynamic Swarm**: Peer-to-peer emergent agents collaborating on a shared message board.
+3. **Model Context Protocol (MCP) Capabilities**:
+   - Filter and assign capabilities across `READ_PUBLIC`, `WORKSPACE_WRITE`, and `EXTERNAL_NETWORK` effect tiers.
+   - Verify tool schema hashes and ensure prohibited capabilities are locked out.
 
-To build and launch the complete stack (Control Plane API + UI, Auto-scaling Worker Daemons, Jaeger Distributed Tracing, and Prometheus Metric Scraper):
-```bash
-docker compose -f deploy/docker-compose.scaling.yml up --build -d
-```
+---
 
-### 5.2 Kubernetes Probes & SRE Health Endpoints
-Both the Control Plane (`server.js`) and Background Worker Daemons (`agent_factory.scaling.worker_daemon`) expose standard Kubernetes-native endpoints:
+### Step 3: Safety & Privacy Guardrails
 
-| Endpoint | Standard | Expected Response | Description |
-| :--- | :--- | :--- | :--- |
-| **`GET /healthz`** | Liveness Probe | `200 OK` | Confirms process is running and event loop is responsive. |
-| **`GET /readyz`** | Readiness Probe | `200 OK` or `503 Service Unavailable` | Evaluates circuit breaker state. Returns `503` if tripped (`OPEN`) to remove node from service mesh routing. |
-| **`GET /metrics`** | Prometheus Exposition | `200 OK` (`text/plain; version=0.0.4`) | Exposes operational counters and gauges (`agent_factory_http_requests_total`, `agent_factory_uptime_seconds`, `agent_factory_queued_tasks`, `agent_factory_current_workers`, `agent_factory_circuit_state`, `agent_factory_spend_ceiling_usd 0.00`). |
+In **View 3 (Safety & Privacy)**, defensive boundaries are enforced:
 
-### 5.3 Kubernetes Horizontal Pod Autoscaler (HPA v2)
-The factory includes declarative Kubernetes manifests in `deploy/k8s/hpa.yaml` configured to dynamically scale worker replicas from 2 to 16 pods based on queue depth (`agent_factory_queued_tasks >= 3`) and CPU utilization (75%).
+1. **Risk Classification (T0 through T3)**:
+   - **`T0 (Read-Only / Analysis)`**: Reading public data, computing statistical metrics. Maximum 8,000 tokens, 20 steps, zero write permissions.
+   - **`T1 (Contained Local Write)`**: Writing markdown reports inside `./artifacts`. Max 50,000 tokens, requires Human-in-the-Loop approval for elevation.
+   - **`T2 (External Side-Effects)`**: Calling external webhooks or database writes. Requires explicit approval token.
+   - **`T3 (High-Privilege Operations)`**: High-risk financial, identity, or state mutations. Enforces strict dual-key human signoff.
+2. **NeMo & NIST AI RMF Guardrails**:
+   - **Input Rails**: Blocks jailbreaks, DAN prompts, and prompt injection attacks.
+   - **Dialog Rails**: Detects intent drift and prevents unauthorized goal deviation.
+   - **Execution Rails**: Restricts tools to explicit allowlists; validates path containment via real filesystem symlink checking.
+   - **Output Rails**: Redacts PII (SSN, credit cards, emails) and wipes API keys and cloud credentials before responses are emitted.
 
+---
+
+### Step 4: Review, Quality & Launch
+
+In **View 4 (Review & Launch)**, the agent undergoes comprehensive automated quality evaluation across three sub-tabs:
+
+1. **Release Gates**:
+   - Verifies the **9 Hard Release Gates**:
+     1. Spec Completeness (100% schema conformity)
+     2. Unit & Integration Test Suite (100% pass)
+     3. Behavioral Reliability ($\text{pass@3} \ge 0.90$)
+     4. Execution Consistency ($\text{pass}^3 \ge 0.85$)
+     5. Adversarial Security (10/10 attacks blocked)
+     6. Token Consumption Budget Compliance
+     7. Zero-Spend Financial Invariant ($0.00 USD)
+     8. Human-in-the-Loop Approval Signoff (T1+)
+     9. Artifact Manifest Integrity (SHA-256 verification)
+2. **Adversarial Security & Red Teaming**:
+   - Run the automated 16-probe red teaming suite against injection payloads, prompt leaks, and role bypasses.
+   - Inspect individual probe verdicts and NIST control mappings.
+3. **Laya RLCD LLM-as-a-Judge**:
+   - Executes multi-rubric evaluation:
+     - **Hallucination & Grounding Rubric** (Threshold $\ge 0.90$)
+     - **Instruction Adherence Rubric** (Threshold $\ge 0.90$)
+     - **Security Boundary Rubric** (Threshold $1.00$ — Zero Tolerance)
+   - Evaluates composite calibrated score ($\ge 0.92$) and issues **PROMOTED** or **REJECTED_RETRY** verdict.
+4. **Contextual HITL Approval**:
+   - For T1+ agents, the cryptographic approval modal generates an anti-forgery HMAC token signed by the owner.
+
+---
+
+### Step 5: Live Console & Diagnostics
+
+In **View 5 (Live Console)**, operators monitor and govern running agents:
+
+1. **Distributed Tracing (W3C TraceContext & OpenTelemetry)**:
+   - View execution hierarchies, span durations, and error states.
+   - Export Jaeger JSON traces for observability pipelines.
+2. **Autoscaling Infrastructure & Dynamic Concurrency Governor**:
+   - Simulates spike workloads; automatically scales worker pool from baseline to peak and returns to idle.
+   - Inspects Circuit Breaker state (`CLOSED`, `HALF-OPEN`, `OPEN`).
+3. **Autonomous Fault Resolution & Self-Healing Engine**:
+   - Tests automatic recovery of malformed payloads (markdown stripping, trailing comma elimination, delimiter stack balancing).
+4. **State Synchronization & Drift Reconciler**:
+   - Detects configuration mutations and evidence ledger discrepancies.
+   - Automatically rematerializes `evidence.json` directly from append-only `check_events.jsonl` audit trails.
+
+---
+
+## 4. Troubleshooting & Best Practices
+
+| Symptom | Probable Cause | Recommended Operator Action |
+| :--- | :--- | :--- |
+| **HTTP 401 Unauthorized** | Remote access token missing or mismatched | Include `?token=<ADF_ACCESS_TOKEN>` in your browser URL or set `Authorization: Bearer <token>` in API requests. |
+| **HTTP 429 Rate Limited** | External client sent > 120 requests/min | Wait 60 seconds for sliding-window cooldown; rate limit exemption applies only to loopback peer connections. |
+| **Gate 8 Failed (HITL)** | T1+ agent requires human approval signoff | Open View 4, click **Review Signoff Required**, enter reviewer credentials, and click **Grant Promotion Signoff**. |
+| **Path Traversal Blocked (403)** | Manifest or target path attempted directory escape | Ensure all file paths resolve strictly within authorized workspace and store roots. Real filesystem symlink containment is enforced. |
+| **State Drift Detected** | Manual file mutation or corrupt ledger | Navigate to View 5 (Live Console), scroll to State Drift Reconciler, and click **Reconcile State Drift Now**. |

@@ -100,14 +100,20 @@ class DataAnomalyAnalyzer:
         anomalies = []
 
         for col in fieldnames:
-            values = [r[col] for r in rows if r.get(col) is not None]
-            null_count = sum(1 for v in values if v.strip() == "")
             numeric_vals = []
-            for v in values:
-                try:
-                    numeric_vals.append(float(v))
-                except ValueError:
-                    pass
+            null_count = 0
+            for r in rows:
+                val = r.get(col)
+                if val is None:
+                    continue
+                v_str = str(val).strip()
+                if not v_str:
+                    null_count += 1
+                else:
+                    try:
+                        numeric_vals.append(float(v_str))
+                    except ValueError:
+                        pass
 
             is_numeric = len(numeric_vals) > (total_rows * 0.5) if total_rows > 0 else False
             summary = {{

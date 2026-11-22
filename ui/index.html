@@ -26,6 +26,7 @@
         <button id="modeTechBtn" class="md-mode-switch-btn" type="button">⚙️ Technical Details</button>
       </div>
 
+      <button id="btnHeaderDocs" class="md-btn md-btn-outlined" style="margin-right: 4px; font-size: 13px; height: 36px; padding: 0 12px;" type="button" title="Open User Guide and Multi-Industry Agent Blueprints">📚 Docs & Recipes</button>
       <div id="doctorHealthBadge" class="md-chip" role="status">
         <span class="md-badge-dot" aria-hidden="true"></span>
         <span id="doctorHealthText">Health: not checked</span>
@@ -66,6 +67,10 @@
         <div class="md-nav-indicator" aria-hidden="true">🩺</div>
         <span class="md-nav-label">5. Live Console</span>
       </button>
+      <button class="md-nav-item" data-view="view-docs" title="Documentation & Multi-Industry Agent Library">
+        <div class="md-nav-indicator" aria-hidden="true">📚</div>
+        <span class="md-nav-label">6. User Guide & Docs</span>
+      </button>
     </nav>
 
     <!-- Main Workspace Viewport -->
@@ -96,6 +101,11 @@
         <button class="md-step-item" data-step="view-ops" type="button">
           <div class="md-step-circle" aria-hidden="true">5</div>
           <span class="md-step-label">5. Live Console</span>
+        </button>
+        <div class="md-step-divider"></div>
+        <button class="md-step-item" data-step="view-docs" type="button">
+          <div class="md-step-circle" aria-hidden="true">6</div>
+          <span class="md-step-label">6. Guide & Docs</span>
         </button>
       </div>
 
@@ -1132,6 +1142,325 @@
             </button>
             <button class="md-btn md-btn-tonal" id="btnRestartWizard" type="button">
               🔄 Create Another Assistant
+            </button>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-docs" type="button">
+              User Guide & Recipes →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== -->
+      <!-- VIEW 6: END-USER DOCUMENTATION & MULTI-INDUSTRY RECIPES -->
+      <!-- ==================================================== -->
+      <section id="view-docs" class="md-view-panel">
+        <div class="md-card md-card-elevated">
+          <div class="md-card-header">
+            <div>
+              <h2 class="md-card-title">
+                <span class="txt-friendly">6. User Guide & Multi-Industry Agent Library</span>
+                <span class="txt-tech" style="display:none;">6. Knowledge Base, Platform Runbook & Multi-Industry Blueprints</span>
+              </h2>
+              <p class="md-card-subtitle">
+                <span class="txt-friendly">Master the Agent Development Factory: learn how to build, safeguard, and monitor agents, or load ready-to-use blueprints across 6 industries.</span>
+                <span class="txt-tech" style="display:none;">Comprehensive operational manual covering the 5-layer spec architecture, defense-in-depth safety rails, release gates, and verified enterprise recipes.</span>
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="md-chip md-chip-success" title="Zero spend ceiling guarantee">$0.00 Invariant Active</span>
+              <span class="md-chip md-chip-primary" title="Local execution mode">Pure Local SLM / Air-Gapped</span>
+            </div>
+          </div>
+
+          <!-- Sub-Tab Navigation Bar -->
+          <div class="adf-tab-bar" id="docsSubTabs" role="tablist" aria-label="Documentation Sections">
+            <button class="adf-tab-btn active" id="tabBtnDocsManual" data-docs-tab="tab-docs-manual" role="tab" aria-selected="true" type="button">📖 Platform Operating Guide</button>
+            <button class="adf-tab-btn" id="tabBtnDocsRecipes" data-docs-tab="tab-docs-recipes" role="tab" aria-selected="false" type="button">🏭 Multi-Industry Agent Recipes (6 Blueprints)</button>
+          </div>
+
+          <!-- SUB-TAB 1: PLATFORM OPERATING GUIDE -->
+          <div id="tab-docs-manual" class="adf-tab-content active" role="tabpanel" aria-labelledby="tabBtnDocsManual">
+            <div class="md-grid-2" style="margin-bottom: 24px;">
+              <!-- Architecture Overview Card -->
+              <div class="md-card md-card-filled">
+                <h3 class="md-card-title" style="font-size: 16px;">🏛️ Architecture & Zero-Cost Philosophy</h3>
+                <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-top: 6px; line-height: 1.6;">
+                  Agent Development Factory (ADF) is a spec-driven multi-agent assembly platform. Every agent begins as a verified contract with deterministic behavioral constraints before any code runs.
+                </p>
+                <ul style="font-size: 13px; margin: 10px 0 0 16px; line-height: 1.7; color: var(--md-sys-color-on-surface);">
+                  <li><strong>Zero-Dollar Spending Ceiling:</strong> The platform operates with a strict $0.00 USD invariant—zero proprietary API tokens or cloud subscriptions required.</li>
+                  <li><strong>Local SLM Orchestration:</strong> Powered by local models (Ollama Qwen 2.5, Llama 3.2) or deterministic rule-based engines.</li>
+                  <li><strong>Pure Node.js Runtime:</strong> Zero external npm runtime dependencies (<code style="font-size: 12px;">dependencies: {}</code>) for maximum auditability and zero supply-chain risk.</li>
+                  <li><strong>Air-Gapped Ready:</strong> Complete offline operation with zero data exfiltration or external telemetry calls.</li>
+                </ul>
+              </div>
+
+              <!-- Defense-in-Depth Rails Card -->
+              <div class="md-card md-card-filled">
+                <h3 class="md-card-title" style="font-size: 16px;">🛡️ 4 Defense-in-Depth Guardrails</h3>
+                <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-top: 6px; line-height: 1.6;">
+                  Multi-layered security boundaries filter threats before, during, and after agent tool execution:
+                </p>
+                <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">
+                  <div style="margin-bottom: 6px;">
+                    <strong style="color: var(--md-sys-color-primary);">1. Input Rail:</strong> Sanitizes prompts, strips jailbreak attempts, blocks prompt injection, and scrubs PII/PHI.
+                  </div>
+                  <div style="margin-bottom: 6px;">
+                    <strong style="color: var(--md-sys-color-primary);">2. Dialog Rail:</strong> Enforces domain-specific scope, detects topic drift, and restricts prohibited actions.
+                  </div>
+                  <div style="margin-bottom: 6px;">
+                    <strong style="color: var(--md-sys-color-primary);">3. Execution Sandbox:</strong> Strict real filesystem path containment; prevents directory traversal and unauthorized shell commands.
+                  </div>
+                  <div>
+                    <strong style="color: var(--md-sys-color-primary);">4. Output Rail:</strong> Validates structured schema contracts, prevents credential leaks, and checks for hallucinated citations.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5-Step Operator Journey Guide -->
+            <div class="md-card md-card-filled" style="margin-bottom: 24px;">
+              <h3 class="md-card-title" style="font-size: 16px;">🚶 The 5-Step Operator Journey</h3>
+              <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px; margin-bottom: 16px;">
+                Follow this sequential lifecycle to design, build, test, and monitor enterprise agents:
+              </p>
+
+              <div class="md-grid-3">
+                <div style="background: var(--md-sys-color-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Step 1: Goal Intake & Rules</div>
+                  <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5;">
+                    Enter your natural-language objective or attach requirements files. The triage engine classifies complexity (T1 High-Risk vs T2 Standard) and dynamically generates behavioral contracts.
+                  </div>
+                </div>
+
+                <div style="background: var(--md-sys-color-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Step 2: Team & Capabilities</div>
+                  <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5;">
+                    Select the optimal multi-agent topology (Team Lead & Specialists, Creator & Reviewer, or Direct Chain). Choose your target runtime framework (Antigravity, LangGraph, CrewAI, AutoGen).
+                  </div>
+                </div>
+
+                <div style="background: var(--md-sys-color-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Step 3: Safety & Privacy</div>
+                  <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5;">
+                    Configure granular safety switches: file modification boundaries, shell tool locks, PII obfuscation, and dollar spending ceilings. Every permission is explicitly auditable.
+                  </div>
+                </div>
+              </div>
+
+              <div class="md-grid-2" style="margin-top: 16px;">
+                <div style="background: var(--md-sys-color-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Step 4: Quality & Launch Approval</div>
+                  <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5;">
+                    Run automated pre-flight checks across all 9 Release Gates. Execute the 10-vector Anti-Hacking Red Team suite, verify with the Laya RLCD LLM Judge, and perform Human-in-the-Loop cryptographic sign-off.
+                  </div>
+                </div>
+
+                <div style="background: var(--md-sys-color-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Step 5: Live Console & Diagnostics</div>
+                  <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5;">
+                    Execute missions in real time! Observe tool invocations, distributed W3C tracing spans, self-healing watchdog events, and an append-only JSONL audit ledger.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Troubleshooting Runbook Card -->
+            <div class="md-card md-card-filled">
+              <h3 class="md-card-title" style="font-size: 16px;">🔧 Troubleshooting & Verification Runbook</h3>
+              <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px; margin-bottom: 12px;">
+                Validate factory health and resolve common operational questions via deterministic commands:
+              </p>
+              <div class="md-table-container">
+                <table class="md-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Command / Action</th>
+                      <th scope="col">Purpose & Invariant Checked</th>
+                      <th scope="col">Expected Result</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code style="font-size: 12px;">npm test</code></td>
+                      <td>Runs the full Node.js dual-run unit & regression test suite (32 tests)</td>
+                      <td><span class="md-chip md-chip-success">32/32 Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td><code style="font-size: 12px;">pytest</code></td>
+                      <td>Executes Python agent factory unit, redteam, and security suites (109 tests)</td>
+                      <td><span class="md-chip md-chip-success">109/109 Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td><code style="font-size: 12px;">npx playwright test</code></td>
+                      <td>Validates 7 viewport responsive layouts and zero axe WCAG 2.1 AA violations</td>
+                      <td><span class="md-chip md-chip-success">All Passing, Zero A11y Violations</span></td>
+                    </tr>
+                    <tr>
+                      <td><code style="font-size: 12px;">node src/cli.js doctor</code></td>
+                      <td>Performs local environment, Ollama SLM connectivity, and sandbox directory checks</td>
+                      <td><span class="md-chip md-chip-success">Healthy / Simulation Mode Ready</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-TAB 2: MULTI-INDUSTRY AGENT RECIPES -->
+          <div id="tab-docs-recipes" class="adf-tab-content" role="tabpanel" aria-labelledby="tabBtnDocsRecipes" style="display: none;">
+            <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px;">
+              Select an industry filter or click <strong>🚀 Load Blueprint into Factory</strong> on any recipe to automatically ingest its mission brief, platform binding, and confirmed requirements into View 1.
+            </p>
+
+            <!-- Industry Filter Pills -->
+            <div class="md-template-chips" role="group" aria-label="Filter Recipes by Industry" style="margin-bottom: 24px;">
+              <button class="md-template-chip active" data-industry-filter="all" type="button">🌐 All Industries (6)</button>
+              <button class="md-template-chip" data-industry-filter="finance" type="button">💳 Financial Services</button>
+              <button class="md-template-chip" data-industry-filter="healthcare" type="button">🏥 Healthcare & Life Sciences</button>
+              <button class="md-template-chip" data-industry-filter="retail" type="button">🛒 Retail & E-Commerce</button>
+              <button class="md-template-chip" data-industry-filter="security" type="button">🔒 Cybersecurity & Cloud Ops</button>
+              <button class="md-template-chip" data-industry-filter="manufacturing" type="button">🏭 Manufacturing & Industrial IoT</button>
+              <button class="md-template-chip" data-industry-filter="legal" type="button">⚖️ Legal & Governance</button>
+            </div>
+
+            <!-- Recipes Grid -->
+            <div class="md-grid-2">
+              <!-- Recipe 1: Financial Services -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="finance">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Financial Services</span>
+                    <span class="md-chip md-chip-error" style="font-size: 11px; margin-left: 4px;">Tier 1 High-Risk</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">LangGraph</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">AML Transaction & Fraud Reconciliation Agent</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Monitors SWIFT/Fedwire transfer batches, identifies structuring/smurfing patterns, validates double-entry ledger balance invariants, and requires human approval before filing FinCEN SAR reports.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> Double-Entry Balance Invariant, FinCEN SAR Threshold Guard, PII Tokenizer.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="fin" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+
+              <!-- Recipe 2: Healthcare -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="healthcare">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Healthcare & Life Sciences</span>
+                    <span class="md-chip md-chip-error" style="font-size: 11px; margin-left: 4px;">Tier 1 PHI Safe</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">Antigravity / Ollama</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">HIPAA Patient Intake & Protocol Screening Agent</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Gathers patient symptoms, cross-checks EHR via FHIR, performs emergency red-flag triage (stroke/cardiac), and anonymizes 18 HIPAA PHI identifiers before routing to clinical queues.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> HIPAA Safe Harbor PHI Scrubber, Clinical Acuity Escalator, Medical Prescription Prohibitor.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="health" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+
+              <!-- Recipe 3: Retail & E-Commerce -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="retail">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Retail & E-Commerce</span>
+                    <span class="md-chip md-chip-warning" style="font-size: 11px; margin-left: 4px;">Tier 2 Standard</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">CrewAI</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Multichannel Inventory & Supplier SLA Agent</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Audits warehouse SKU inventories every 15 minutes, forecasts stockout probabilities, tracks supplier lead time reliability, and drafts purchase orders under strict gross margin ceilings.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> $15k Purchase Order Dollar Ceiling, 22% Gross Margin Invariant, ERP Schema Validator.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="retail" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+
+              <!-- Recipe 4: Cybersecurity & Cloud Ops -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="security">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Cybersecurity & Cloud</span>
+                    <span class="md-chip md-chip-error" style="font-size: 11px; margin-left: 4px;">Tier 1 SOC Guard</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">Antigravity ReAct</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Zero-Trust Cloud Posture & Incident Triage Agent</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Continuously scans cloud audit logs against CIS benchmarks, detects rogue IAM privilege escalations, and auto-quarantines compromised hosts into isolated network security groups.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> Privilege Escalation Interceptor, Automated Isolation Sandbox, Secret Leakage Filter.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="sec" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+
+              <!-- Recipe 5: Manufacturing & Industrial IoT -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="manufacturing">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Manufacturing & IoT</span>
+                    <span class="md-chip md-chip-error" style="font-size: 11px; margin-left: 4px;">Tier 1 Industrial</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">AutoGen</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">SCADA Telemetry Anomaly & Predictive Maintenance</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Ingests 100 Hz MQTT vibration, temperature, and current streams, identifies early bearing degradation via ISO 10816-3 limits, and schedules downtime before mechanical failure.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> Fail-Safe PLC RPM Bound, ISO 10816 Vibration Limit Rail, Sensor Anomaly Detector.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="mfg" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+
+              <!-- Recipe 6: Legal & Governance -->
+              <div class="md-card md-card-filled adf-recipe-card" data-industry="legal">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <span class="md-chip md-chip-primary" style="font-size: 11px;">Legal & Compliance</span>
+                    <span class="md-chip md-chip-warning" style="font-size: 11px; margin-left: 4px;">Tier 2 Contractual</span>
+                  </div>
+                  <span class="md-chip md-chip-success" style="font-size: 11px;">Antigravity Pipeline</span>
+                </div>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Contract Risk & Clause Compliance Auditing Agent</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); line-height: 1.5; margin-bottom: 10px;">
+                  Scans enterprise SaaS vendor agreements, flags non-standard indemnification, uncapped liability, and cross-border GDPR/CCPA data transfer risks with verbatim line citations.
+                </p>
+                <div style="background: var(--md-sys-color-surface); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; border: 1px solid var(--md-sys-color-outline-variant);">
+                  <strong>Key Guardrails:</strong> Hallucination Citation Verifier, Playbook Policy Guard, Legal Redline Diff Rail.
+                </div>
+                <button class="md-btn md-btn-filled btn-load-recipe" data-recipe="legal" type="button" style="width: 100%;">
+                  🚀 Load Blueprint into Factory
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6 Navigation Bar -->
+          <div class="md-step-navigation-bar" style="margin-top: 24px;">
+            <button class="md-btn md-btn-outlined btn-prev-step" data-prev="view-ops" type="button">
+              ← Back to Live Console
+            </button>
+            <button class="md-btn md-btn-filled btn-next-step" data-next="view-intake" type="button">
+              Go to Goal Intake & Build →
             </button>
           </div>
         </div>

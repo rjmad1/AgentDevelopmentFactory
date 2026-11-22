@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const VIEWS = ['view-intake', 'view-patterns', 'view-guardrails', 'view-evals', 'view-ops'];
+const VIEWS = ['view-intake', 'view-patterns', 'view-guardrails', 'view-evals', 'view-ops', 'view-docs'];
 
 async function scan(page) {
   return new AxeBuilder({ page })
