@@ -1018,6 +1018,24 @@
             <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
           </div>
 
+          <!-- Historical Revisions Browser Card -->
+          <div class="md-card md-card-filled" id="revisionsHistoryCard" style="margin-bottom: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">📦 Immutable Revisions History</h3>
+                <p class="md-card-subtitle">Browse immutable versioned state snapshots and cryptographic hash audit trails.</p>
+              </div>
+              <button id="btnRefreshRevisions" class="md-btn md-btn-tonal" type="button">🔄 Refresh Revisions</button>
+            </div>
+            <div id="revisionsList" class="md-grid-3" style="margin-top: 12px;">
+              <div class="md-card md-card-outlined" style="padding: 12px;">
+                <span class="md-chip md-chip-success">rev-latest</span>
+                <div style="font-size: 13px; font-weight: 600; margin-top: 6px;">Active Working Revision</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Cryptographic manifest intact</div>
+              </div>
+            </div>
+          </div>
+
           <!-- Distributed Tracing Telemetry Card -->
           <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">

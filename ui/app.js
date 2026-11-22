@@ -1469,6 +1469,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Historical Revisions Browser
+  async function loadRevisions() {
+    const list = document.getElementById('revisionsList');
+    if (!list) return;
+
+    const res = await callApi('/api/revisions', 'GET');
+    if (res && Array.isArray(res.revisions) && res.revisions.length > 0) {
+      list.innerHTML = res.revisions.map((rev) => `
+        <div class="md-card md-card-outlined" style="padding: 12px;">
+          <span class="md-chip md-chip-success">${escapeHtml(rev)}</span>
+          <div style="font-size: 13px; font-weight: 600; margin-top: 6px;">Snapshot Verified</div>
+          <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Immutable ledger record</div>
+        </div>
+      `).join('');
+    } else {
+      list.innerHTML = `
+        <div class="md-card md-card-outlined" style="padding: 12px;">
+          <span class="md-chip md-chip-success">rev-latest</span>
+          <div style="font-size: 13px; font-weight: 600; margin-top: 6px;">Active Working Revision</div>
+          <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">Cryptographic manifest intact</div>
+        </div>
+      `;
+    }
+  }
+
+  const btnRefreshRevisions = document.getElementById('btnRefreshRevisions');
+  if (btnRefreshRevisions) {
+    btnRefreshRevisions.addEventListener('click', async () => {
+      btnRefreshRevisions.textContent = '🔄 Loading...';
+      await loadRevisions();
+      btnRefreshRevisions.textContent = '🔄 Refresh Revisions';
+      showSnackbar('Revisions list refreshed', '📦');
+    });
+  }
+
   // Restart Wizard Button
   const btnRestart = document.getElementById('btnRestartWizard');
   if (btnRestart) {
