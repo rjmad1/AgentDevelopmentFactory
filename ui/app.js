@@ -1229,6 +1229,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const gateBox8 = document.getElementById('gateBox8');
   if (gateBox8) {
     gateBox8.addEventListener('click', () => {
+      const nameEl = document.getElementById('hitlAgentName');
+      const tierEl = document.getElementById('hitlAgentTierBadge');
+      if (nameEl && state.brief) {
+        const preview = state.brief.slice(0, 40).trim();
+        nameEl.textContent = preview.length > 0 ? preview : 'Autonomous Production Agent';
+      }
+      if (tierEl && state.currentTier) {
+        tierEl.textContent = `Risk Tier ${String(state.currentTier).toUpperCase()}`;
+      }
       if (hitlModal) hitlModal.classList.add('open');
     });
   }

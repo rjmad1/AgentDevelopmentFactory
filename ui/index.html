@@ -1118,6 +1118,17 @@
         To ensure human safety, launching an assistant with file modification or external action privileges requires your personal sign-off.
       </p>
 
+      <!-- Contextual Assistant Summary -->
+      <div id="hitlAgentSummary" style="background: var(--adf-color-surface-subtle, #f7f6f3); border: 1px solid var(--adf-color-border, #eaeaea); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <strong id="hitlAgentName" style="font-size: 14px;">Autonomous Production Agent</strong>
+          <span id="hitlAgentTierBadge" class="md-chip md-chip-warning">Risk Tier 1</span>
+        </div>
+        <div style="font-size: 12px; color: var(--adf-color-text-secondary, #444746);">
+          <span>Verified Pre-Flight Gates: <strong>7 of 9 Passed</strong></span> • <span>$0.00 Invariant Active</span>
+        </div>
+      </div>
+
       <div class="md-input-group">
         <label class="md-label" for="humanReviewerName">Your Name & Role</label>
         <input type="text" id="humanReviewerName" class="md-input" placeholder="e.g., Lead Engineer Rajan" value="System Operator">
