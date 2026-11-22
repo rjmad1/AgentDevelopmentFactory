@@ -1321,6 +1321,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#materializeevidenceledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        materializeEvidenceLedger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#validaterequirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2095,6 +2106,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#materializeevidenceledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        materializeEvidenceLedger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#validaterequirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2340,8 +2362,13 @@
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#verifyevidenceconsistency"><code>verifyEvidenceConsistency</code></a></td>
-<td style="text-align: left;"><code>function verifyEvidenceConsistency(revDir)</code></td>
+<td style="text-align: left;"><code>function verifyEvidenceConsistency(revDirOrRevisionId, storeDir = null)</code></td>
 <td style="text-align: left;">Domain function: <code>verifyEvidenceConsistency</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#materializeevidenceledger"><code>materializeEvidenceLedger</code></a></td>
+<td style="text-align: left;"><code>function materializeEvidenceLedger(revDirOrRevisionId, storeDir = null)</code></td>
+<td style="text-align: left;">Rematerializes evidence.json directly from the authoritative check_events.jsonl ...</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#validaterequirements"><code>validateRequirements</code></a></td>
@@ -2458,62 +2485,73 @@
 <p>Domain function: <code>evaluateEvidenceApplicability</code>.</p>
 <hr />
 <h3 id="verifyevidenceconsistency"><code>verifyEvidenceConsistency</code><a class="headerlink" href="#verifyevidenceconsistency" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">verifyEvidenceConsistency</span><span class="p">(</span><span class="nx">revDir</span><span class="p">)</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">verifyEvidenceConsistency</span><span class="p">(</span><span class="nx">revDirOrRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">storeDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span>
 </span></code></pre></div>
 <p>Domain function: <code>verifyEvidenceConsistency</code>.</p>
 <hr />
+<h3 id="materializeevidenceledger"><code>materializeEvidenceLedger</code><a class="headerlink" href="#materializeevidenceledger" title="Permanent link">&para;</a></h3>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">materializeEvidenceLedger</span><span class="p">(</span><span class="nx">revDirOrRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">storeDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Rematerializes evidence.json directly from the authoritative check_events.jsonl event stream. Resolves FINDING-DEF-01: restores 100% cryptographic ledger consistency.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>{string} revDirOrRevisionId</code></li>
+<li><code>{string} [storeDir]</code></li>
+</ul>
+<p><strong>Returns:</strong> <code>{Object} Rematerialized evidence ledger object</code></p>
+<hr />
 <h3 id="validaterequirements"><code>validateRequirements</code><a class="headerlink" href="#validaterequirements" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">validateRequirements</span><span class="p">(</span><span class="nx">requirements</span><span class="p">)</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">validateRequirements</span><span class="p">(</span><span class="nx">requirements</span><span class="p">)</span>
 </span></code></pre></div>
 <p>Domain function: <code>validateRequirements</code>.</p>
 <hr />
 <h3 id="generatespecmarkdown"><code>generateSpecMarkdown</code><a class="headerlink" href="#generatespecmarkdown" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateSpecMarkdown</span><span class="p">({</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">requirements</span><span class="p">,</span><span class="w"> </span><span class="nx">hashes</span><span class="p">,</span><span class="w"> </span><span class="nx">createdAt</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateSpecMarkdown</span><span class="p">({</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">requirements</span><span class="p">,</span><span class="w"> </span><span class="nx">hashes</span><span class="p">,</span><span class="w"> </span><span class="nx">createdAt</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>generateSpecMarkdown</code>.</p>
 <hr />
 <h3 id="generatemanifest"><code>generateManifest</code><a class="headerlink" href="#generatemanifest" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateManifest</span><span class="p">({</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">requirements</span><span class="p">,</span><span class="w"> </span><span class="nx">hashes</span><span class="p">,</span><span class="w"> </span><span class="nx">createdAt</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateManifest</span><span class="p">({</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">requirements</span><span class="p">,</span><span class="w"> </span><span class="nx">hashes</span><span class="p">,</span><span class="w"> </span><span class="nx">createdAt</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>generateManifest</code>.</p>
 <hr />
 <h3 id="initrevision"><code>initRevision</code><a class="headerlink" href="#initrevision" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">initRevision</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nx">briefPath</span><span class="p">,</span><span class="w"> </span><span class="nx">requirementsPath</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">initRevision</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">parentRevisionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nx">briefPath</span><span class="p">,</span><span class="w"> </span><span class="nx">requirementsPath</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>initRevision</code>.</p>
 <hr />
 <h3 id="runcheck"><code>runCheck</code><a class="headerlink" href="#runcheck" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runCheck</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">checkId</span><span class="p">,</span><span class="w"> </span><span class="nx">failIntentionally</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">customCheckerImplementationHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runCheck</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">checkId</span><span class="p">,</span><span class="w"> </span><span class="nx">failIntentionally</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">customCheckerImplementationHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>runCheck</code>.</p>
 <hr />
 <h3 id="inspectrevision"><code>inspectRevision</code><a class="headerlink" href="#inspectrevision" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">inspectRevision</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">inspectRevision</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>inspectRevision</code>.</p>
 <hr />
 <h3 id="exportagentyamlspec"><code>exportAgentYamlSpec</code><a class="headerlink" href="#exportagentyamlspec" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">exportAgentYamlSpec</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">outputPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">exportAgentYamlSpec</span><span class="p">({</span><span class="w"> </span><span class="nx">storeDir</span><span class="p">,</span><span class="w"> </span><span class="nx">revisionId</span><span class="p">,</span><span class="w"> </span><span class="nx">outputPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>exportAgentYamlSpec</code>.</p>
 <hr />
 <h3 id="scaffoldrequirementstemplate"><code>scaffoldRequirementsTemplate</code><a class="headerlink" href="#scaffoldrequirementstemplate" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">scaffoldRequirementsTemplate</span><span class="p">({</span><span class="w"> </span><span class="nx">outputPath</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Autonomous Analytical Processing Agent'</span><span class="p">,</span><span class="w"> </span><span class="nx">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Admin'</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">scaffoldRequirementsTemplate</span><span class="p">({</span><span class="w"> </span><span class="nx">outputPath</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Autonomous Analytical Processing Agent'</span><span class="p">,</span><span class="w"> </span><span class="nx">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Admin'</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>scaffoldRequirementsTemplate</code>.</p>
 <hr />
 <h3 id="importmcptooldefinition"><code>importMcpToolDefinition</code><a class="headerlink" href="#importmcptooldefinition" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">importMcpToolDefinition</span><span class="p">({</span><span class="w"> </span><span class="nx">mcpSchemaPath</span><span class="p">,</span><span class="w"> </span><span class="nx">registryPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nx">effectLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'READ_PUBLIC'</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">importMcpToolDefinition</span><span class="p">({</span><span class="w"> </span><span class="nx">mcpSchemaPath</span><span class="p">,</span><span class="w"> </span><span class="nx">registryPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nx">effectLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'READ_PUBLIC'</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Domain function: <code>importMcpToolDefinition</code>.</p>
 <hr />
 <h3 id="rundoctorcheck"><code>runDoctorCheck</code><a class="headerlink" href="#rundoctorcheck" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runDoctorCheck</span><span class="p">({</span><span class="w"> </span><span class="nx">projectRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runDoctorCheck</span><span class="p">({</span><span class="w"> </span><span class="nx">projectRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span>
 </span></code></pre></div>
 <p>Domain function: <code>runDoctorCheck</code>.</p>
 <hr />
 <h3 id="triagesolutioncomplexity"><code>triageSolutionComplexity</code><a class="headerlink" href="#triagesolutioncomplexity" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">triageSolutionComplexity</span><span class="p">({</span><span class="w"> </span><span class="nx">briefText</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">triageSolutionComplexity</span><span class="p">({</span><span class="w"> </span><span class="nx">briefText</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>S1/S2 Principle: Triage task into No-Agent, Deterministic Workflow, Single Agent, or Multi-Agent.</p>
 <p><strong>Parameters:</strong></p>
@@ -2524,7 +2562,7 @@
 <p><strong>Returns:</strong> <code>{Object} Triage recommendation</code></p>
 <hr />
 <h3 id="estimatetokenandcostfeasibility"><code>estimateTokenAndCostFeasibility</code><a class="headerlink" href="#estimatetokenandcostfeasibility" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">estimateTokenAndCostFeasibility</span><span class="p">({</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">baseTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1500</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">estimateTokenAndCostFeasibility</span><span class="p">({</span><span class="w"> </span><span class="nx">briefText</span><span class="p">,</span><span class="w"> </span><span class="nx">baseTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1500</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>S5 Principle: Estimate token consumption and cost feasibility.</p>
 <p><strong>Parameters:</strong></p>
@@ -2536,7 +2574,7 @@
 <p><strong>Returns:</strong> <code>{Object} Feasibility and cost estimate</code></p>
 <hr />
 <h3 id="evaluateagentthreatmodel"><code>evaluateAgentThreatModel</code><a class="headerlink" href="#evaluateagentthreatmodel" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">evaluateAgentThreatModel</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">evaluateAgentThreatModel</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>S18 (OWASP Agentic Top 10): Threat modeling evaluator for agent manifests.</p>
 <p><strong>Parameters:</strong></p>
@@ -2547,7 +2585,7 @@
 <p><strong>Returns:</strong> <code>{Object} Threat evaluation report</code></p>
 <hr />
 <h3 id="generateguardrailpolicy"><code>generateGuardrailPolicy</code><a class="headerlink" href="#generateguardrailpolicy" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateGuardrailPolicy</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">generateGuardrailPolicy</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Section 4.3: Generate Section 4.3 canonical YAML Guardrail Policy from manifest.</p>
 <p><strong>Parameters:</strong></p>
@@ -2559,7 +2597,7 @@
 <p><strong>Returns:</strong> <code>{Object} Guardrail policy definition and YAML string</code></p>
 <hr />
 <h3 id="runadversarialsecuritysuite"><code>runAdversarialSecuritySuite</code><a class="headerlink" href="#runadversarialsecuritysuite" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runAdversarialSecuritySuite</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">runAdversarialSecuritySuite</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Section 5: Run SEC-01 through SEC-10 Adversarial Security Suite.</p>
 <p><strong>Parameters:</strong></p>
@@ -2571,7 +2609,7 @@
 <p><strong>Returns:</strong> <code>{Object} Adversarial security evaluation report</code></p>
 <hr />
 <h3 id="evaluatereleasegates"><code>evaluateReleaseGates</code><a class="headerlink" href="#evaluatereleasegates" title="Permanent link">&para;</a></h3>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">evaluateReleaseGates</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="p">,</span><span class="w"> </span><span class="nx">humanReviewConfirmed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">retryAttempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">evaluateReleaseGates</span><span class="p">({</span><span class="w"> </span><span class="nx">manifestPath</span><span class="p">,</span><span class="w"> </span><span class="nx">riskTier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'T0'</span><span class="p">,</span><span class="w"> </span><span class="nx">humanReviewConfirmed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">retryAttempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="p">})</span>
 </span></code></pre></div>
 <p>Section 6: Evaluate the 9 Release Gates before promoting an agent to production.</p>
 <p><strong>Parameters:</strong></p>
