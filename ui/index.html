@@ -1003,6 +1003,21 @@
             </div>
           </div>
 
+          <!-- Multi-Model State Consensus & Drift Reconciler Card -->
+          <div class="md-card md-card-filled" id="syncDriftCard" style="margin-bottom: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🔄 Multi-Model State Consensus & Drift Reconciler</h3>
+                <p class="md-card-subtitle">Audits local store against specifications and automatically reconciles divergent state drift ($0.00 spend).</p>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <span id="syncStatusBadge" class="md-chip md-chip-success">In Sync (0 Drift)</span>
+                <button id="btnReconcileState" class="md-btn md-btn-filled" type="button">⚡ Reconcile State Now</button>
+              </div>
+            </div>
+            <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+          </div>
+
           <!-- Distributed Tracing Telemetry Card -->
           <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">
