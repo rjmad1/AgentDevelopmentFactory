@@ -189,10 +189,14 @@
             <div id="attachedDocsList" class="md-attached-docs-container" style="display: none;"></div>
           </div>
 
-          <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button id="btnRunTriage" class="md-btn md-btn-filled" type="button">✨ Analyze My Idea</button>
-            <button id="btnEstimateFeasibility" class="md-btn md-btn-tonal" type="button">💰 Check Budget ($0.00 Free)</button>
-            <button id="btnScaffoldReqs" class="md-btn md-btn-outlined" type="button">📋 Auto-Draft Assistant Rules</button>
+          <div style="margin-bottom: 20px;">
+            <button id="btnRunTriage" class="md-btn md-btn-filled md-btn-primary-action" type="button" style="width: 100%; height: 46px; font-size: 15px;">
+              ⚡ Analyze &amp; Prepare Assistant
+            </button>
+            <div class="txt-tech" style="display: none; margin-top: 8px; gap: 8px;">
+              <button id="btnEstimateFeasibility" class="md-btn md-btn-tonal" type="button" style="font-size: 12px; height: 32px;">💰 Check Budget ($0.00 Free)</button>
+              <button id="btnScaffoldReqs" class="md-btn md-btn-outlined" type="button" style="font-size: 12px; height: 32px;">📋 Auto-Draft Assistant Rules</button>
+            </div>
           </div>
 
           <!-- Triage & Estimation Output Card -->
@@ -672,9 +676,14 @@
                 <span class="txt-tech" style="display:none;">EV-01..15 benchmark catalogue, SEC-01..10 adversarial attacks, and release gates.</span>
               </p>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <button id="btnRunAdversarial" class="md-btn md-btn-filled" type="button">🛡️ Run Anti-Hacking Test</button>
-              <button id="btnEvaluateGates" class="md-btn md-btn-tonal" type="button">🚦 Check All 9 Gates</button>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <button id="btnRunFullVerification" class="md-btn md-btn-filled md-btn-primary-action" type="button" style="height: 42px; font-weight: 600;">
+                🚀 Run Complete Pre-Flight Verification
+              </button>
+              <div class="txt-tech" style="display: none; gap: 8px;">
+                <button id="btnRunAdversarial" class="md-btn md-btn-outlined" type="button" style="font-size: 12px; height: 32px;">🛡️ Anti-Hacking Only</button>
+                <button id="btnEvaluateGates" class="md-btn md-btn-outlined" type="button" style="font-size: 12px; height: 32px;">🚦 Gates Only</button>
+              </div>
             </div>
           </div>
 
@@ -957,7 +966,12 @@
                 <span class="txt-tech" style="display:none;">Operational health, port canaries, and real-time inspection of check_events.jsonl.</span>
               </p>
             </div>
-            <button id="btnRefreshDoctor" class="md-btn md-btn-filled" type="button">🔄 Re-run Health Check</button>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <button id="btnRefreshAllDiagnostics" class="md-btn md-btn-filled md-btn-primary-action" type="button">
+                🔄 Refresh All Diagnostics
+              </button>
+              <button id="btnRefreshDoctor" style="display: none;" type="button">Doctor</button>
+            </div>
           </div>
 
           <div class="md-grid-3" style="margin-bottom: 24px;">
@@ -1034,44 +1048,53 @@
             </div>
           </div>
 
-          <!-- Self-Healing & Format Auto-Repair Card -->
-          <div class="md-card md-card-filled" style="margin-bottom: 24px;">
-            <div class="md-card-header">
-              <div>
-                <h3 class="md-card-title">🩹 Autonomous Self-Healing & Syntax Auto-Repair</h3>
-                <p class="md-card-subtitle">Automatically fixes broken JSON, unclosed quotes, or markdown wrappers without failing.</p>
-              </div>
-              <button id="btnTestSelfHealing" class="md-btn md-btn-filled" type="button">⚡ Test Auto-Repair</button>
-            </div>
+          <!-- Advanced SRE Simulators & Chaos Engineering Drawer (Progressive Disclosure) -->
+          <details class="md-advanced-sre-drawer" open>
+            <summary>
+              <span>🧪 Advanced SRE Diagnostic Simulators &amp; Chaos Engineering (Optional)</span>
+              <span style="font-size: 12px; color: var(--md-sys-color-primary);">Expand Tools ▼</span>
+            </summary>
+            <div class="md-drawer-content">
+              <!-- Self-Healing & Format Auto-Repair Card -->
+              <div class="md-card md-card-filled" style="margin-bottom: 24px;">
+                <div class="md-card-header">
+                  <div>
+                    <h3 class="md-card-title">🩹 Autonomous Self-Healing &amp; Syntax Auto-Repair</h3>
+                    <p class="md-card-subtitle">Automatically fixes broken JSON, unclosed quotes, or markdown wrappers without failing.</p>
+                  </div>
+                  <button id="btnTestSelfHealing" class="md-btn md-btn-filled" type="button">⚡ Test Auto-Repair</button>
+                </div>
 
-            <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
-              <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 0 0 8px 0;">
-                Enter malformed text (e.g. enclosed in markdown fences, unclosed braces, or trailing commas) to observe autonomous repair:
-              </p>
-              <textarea id="healInputText" aria-label="Input text to recover" class="md-input" style="width: 100%; height: 75px; font-family: monospace; font-size: 11px; margin-bottom: 8px;">```json
+                <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+                  <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin: 0 0 8px 0;">
+                    Enter malformed text (e.g. enclosed in markdown fences, unclosed braces, or trailing commas) to observe autonomous repair:
+                  </p>
+                  <textarea id="healInputText" aria-label="Input text to recover" class="md-input" style="width: 100%; height: 75px; font-family: monospace; font-size: 11px; margin-bottom: 8px;">```json
 {
   "action": "RUN_ANALYSIS",
   "anomaly_threshold": 3.5,
 }
 ```</textarea>
-              <div id="healResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
-            </div>
-          </div>
+                  <div id="healResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
+                </div>
+              </div>
 
-          <!-- Multi-Model State Consensus & Drift Reconciler Card -->
-          <div class="md-card md-card-filled" id="syncDriftCard" style="margin-bottom: 24px;">
-            <div class="md-card-header">
-              <div>
-                <h3 class="md-card-title">🔄 Multi-Model State Consensus & Drift Reconciler</h3>
-                <p class="md-card-subtitle">Audits local store against specifications and automatically reconciles divergent state drift ($0.00 spend).</p>
-              </div>
-              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <span id="syncStatusBadge" class="md-chip md-chip-success">In Sync (0 Drift)</span>
-                <button id="btnReconcileState" class="md-btn md-btn-filled" type="button">⚡ Reconcile State Now</button>
+              <!-- Multi-Model State Consensus & Drift Reconciler Card -->
+              <div class="md-card md-card-filled" id="syncDriftCard" style="margin-bottom: 0;">
+                <div class="md-card-header">
+                  <div>
+                    <h3 class="md-card-title">🔄 Multi-Model State Consensus &amp; Drift Reconciler</h3>
+                    <p class="md-card-subtitle">Audits local store against specifications and automatically reconciles divergent state drift ($0.00 spend).</p>
+                  </div>
+                  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <span id="syncStatusBadge" class="md-chip md-chip-success">In Sync (0 Drift)</span>
+                    <button id="btnReconcileState" class="md-btn md-btn-filled" type="button">⚡ Reconcile State Now</button>
+                  </div>
+                </div>
+                <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
               </div>
             </div>
-            <div id="syncResultBanner" style="display: none; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; background: var(--md-sys-color-surface);"></div>
-          </div>
+          </details>
 
           <!-- Historical Revisions Browser Card -->
           <div class="md-card md-card-filled" id="revisionsHistoryCard" style="margin-bottom: 24px;">

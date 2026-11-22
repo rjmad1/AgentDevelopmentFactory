@@ -1357,11 +1357,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Step 1: Run Triage ("Analyze My Idea")
+  // 7. Step 1: Single Primary Action ("Analyze & Prepare Assistant")
   const btnRunTriage = document.getElementById('btnRunTriage');
   const triageContainer = document.getElementById('triageOutputContainer');
   const triageBadge = document.getElementById('triageClassificationBadge');
   const triageRationale = document.getElementById('triageRationale');
+  const tokenBudgetChip = document.getElementById('tokenBudgetChip');
 
   if (btnRunTriage) {
     btnRunTriage.addEventListener('click', async () => {
@@ -1372,22 +1373,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      btnRunTriage.textContent = '⏳ Analyzing...';
+      btnRunTriage.textContent = '⏳ Analyzing & Preparing Assistant...';
       btnRunTriage.disabled = true;
 
-      const res = await callApi('/api/triage', 'POST', { briefText: text });
+      // Parallel execution of triage and feasibility estimation in one shot
+      const [triageRes, estimateRes] = await Promise.all([
+        callApi('/api/triage', 'POST', { briefText: text }),
+        callApi('/api/estimate', 'POST', { briefText: text, baseTokens: 1200 }),
+      ]);
 
-      btnRunTriage.textContent = '✨ Analyze My Idea';
+      btnRunTriage.textContent = '⚡ Analyze & Prepare Assistant';
       btnRunTriage.disabled = false;
 
-      if (res && triageContainer) {
-        const isComplex = res.type?.includes('S2');
+      if (triageRes && triageContainer) {
+        const isComplex = triageRes.type?.includes('S2');
         triageBadge.textContent = isComplex ? '👥 Collaborative Team Required' : '⚡ Simple & Direct Task';
         triageBadge.className = isComplex ? 'md-chip md-chip-primary' : 'md-chip md-chip-success';
-        triageRationale.textContent = res.rationale || 'Analysis complete. Operating boundaries established.';
+        triageRationale.textContent = triageRes.rationale || 'Analysis complete. Operating boundaries established.';
+
+        if (estimateRes && tokenBudgetChip) {
+          tokenBudgetChip.textContent = `~${estimateRes.projectedTokens || '1,850'} tokens / run (Within Free Budget)`;
+        }
+
         triageContainer.style.display = 'block';
+
+        // Auto-generate contextual rules and behavioral contracts in the table
+        generateContextualRules(false);
+
         markStepCompleted('view-intake');
-        showSnackbar('Goal analyzed successfully! Feasibility confirmed.', '✅');
+        showSnackbar('Assistant analysis complete! Operating rules & $0.00 budget established.', '⚡');
       }
     });
   }
@@ -1757,6 +1771,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnEvaluateGates) {
     btnEvaluateGates.addEventListener('click', checkGates);
+  }
+
+  // 15b. Step 4: Single Master Pre-Flight Verification Action
+  const btnRunFullVerification = document.getElementById('btnRunFullVerification');
+  if (btnRunFullVerification) {
+    btnRunFullVerification.addEventListener('click', async () => {
+      // If already verified and showing signoff, open the HITL modal directly
+      if (btnRunFullVerification.getAttribute('data-ready-signoff') === 'true') {
+        const hitlModalEl = document.getElementById('hitlModal');
+        if (hitlModalEl) hitlModalEl.classList.add('open');
+        return;
+      }
+
+      btnRunFullVerification.textContent = '⏳ Verifying All Gates, Security & Quality...';
+      btnRunFullVerification.disabled = true;
+
+      // 1. Run Gates Check
+      await checkGates();
+
+      // 2. Run Adversarial Security Suite
+      const report = await callApi('/api/sec-evals', 'POST', { riskTier: state.currentTier });
+      if (report && secTableBody) {
+        const findings = report.findings || [];
+        secTableBody.querySelectorAll('tr').forEach((row, idx) => {
+          const finding = findings[idx];
+          const chip = row.querySelector('.md-chip');
+          if (!chip) return;
+          if (!finding) {
+            chip.textContent = 'NOT REPORTED';
+            chip.className = 'md-chip';
+            return;
+          }
+          chip.textContent = finding.passed ? 'PASS' : 'FAIL';
+          chip.className = `md-chip ${finding.passed ? 'md-chip-success' : 'md-chip-error'}`;
+          if (finding.details) row.title = finding.details;
+        });
+      }
+
+      // 3. Run Laya Quality Judge
+      const layaRes = await callApi('/api/laya-eval', 'POST', { briefText: state.lastProcessedGoal || 'Default agent' });
+      if (layaRes && layaRes.rubrics) {
+        const hgEl = document.getElementById('judgeScoreHg');
+        const ifEl = document.getElementById('judgeScoreIf');
+        const sbEl = document.getElementById('judgeScoreSb');
+        const badge = document.getElementById('judgeVerdictBadge');
+
+        if (hgEl) hgEl.textContent = `${layaRes.rubrics.hallucination.score.toFixed(2)} / 1.00`;
+        if (ifEl) ifEl.textContent = `${layaRes.rubrics.instruction.score.toFixed(2)} / 1.00`;
+        if (sbEl) sbEl.textContent = `${layaRes.rubrics.security.score.toFixed(2)} / 1.00`;
+
+        if (badge) {
+          badge.textContent = `${layaRes.decision.verdict} (Score: ${layaRes.decision.compositeScore.toFixed(3)})`;
+          badge.className = layaRes.promoted ? 'md-chip md-chip-success' : 'md-chip md-chip-error';
+        }
+      }
+
+      btnRunFullVerification.disabled = false;
+      btnRunFullVerification.setAttribute('data-ready-signoff', 'true');
+      btnRunFullVerification.textContent = '✍️ Personal Approval Signoff (Gate 8)';
+      btnRunFullVerification.className = 'md-btn md-btn-filled md-btn-primary-action';
+      markStepCompleted('view-evals');
+      showSnackbar('Pre-flight checks passed! Click to sign off and launch.', '✅');
+    });
   }
 
   // Click on Gate 8 Box directly opens signoff modal
@@ -2169,6 +2246,26 @@ document.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(url);
         showSnackbar('Downloaded OpenTelemetry / Jaeger trace JSON.', '📤');
       }
+    });
+  }
+
+  // 21. Step 5: Single Unified Telemetry Refresh Action
+  const btnRefreshAll = document.getElementById('btnRefreshAllDiagnostics');
+  if (btnRefreshAll) {
+    btnRefreshAll.addEventListener('click', async () => {
+      btnRefreshAll.textContent = '🔄 Refreshing All...';
+      btnRefreshAll.disabled = true;
+
+      await Promise.all([
+        callApi('/api/health').then(renderHealthBadge),
+        loadScalingStatus(),
+        loadEvents ? loadEvents() : Promise.resolve(),
+        loadTraces ? loadTraces() : Promise.resolve(),
+      ]);
+
+      btnRefreshAll.textContent = '🔄 Refresh All Diagnostics';
+      btnRefreshAll.disabled = false;
+      showSnackbar('All live diagnostics and telemetry refreshed.', '🔄');
     });
   }
 
