@@ -1,33 +1,33 @@
 {
-  "compiled_at_iso": "2026-11-22T14:40:18.001Z",
+  "compiled_at_iso": "2026-11-22T14:59:24.915Z",
   "total_schemas": 4,
   "schemas": {
     "UniversalAgentSpec": {
       "schema_name": "UniversalAgentSpec",
       "source_file": "agent_factory/specs/schema.py",
       "sha256": "17327ddc94dc91491ac2bb9fa13e47363808a550a18d8d94dbd2f28ac742366b",
-      "last_compiled_iso": "2026-11-22T14:40:18.001Z",
+      "last_compiled_iso": "2026-11-22T14:59:24.915Z",
       "fields_count": 13
     },
     "NistGuardrailsCatalog": {
       "schema_name": "NistGuardrailsCatalog",
       "source_file": "agent_factory/guardrails/nemo_nist.py",
       "sha256": "eadee80cc1a5b6e7be19e42a9a1ea34377299f3156552b5f110904f939d9656c",
-      "last_compiled_iso": "2026-11-22T14:40:18.001Z",
+      "last_compiled_iso": "2026-11-22T14:59:24.915Z",
       "fields_count": 11
     },
     "CapabilityRegistry": {
       "schema_name": "CapabilityRegistry",
       "source_file": "data/capability_registry.json",
       "sha256": "2d816efbcb8c47d9411618776cc793cc1d11b3971f166dabf694e9c603d18a62",
-      "last_compiled_iso": "2026-11-22T14:40:18.001Z",
+      "last_compiled_iso": "2026-11-22T14:59:24.915Z",
       "fields_count": 2
     },
     "ScoringRubrics": {
       "schema_name": "ScoringRubrics",
       "source_file": "schemas/evals/scoring_rubrics.json",
       "sha256": "378d2e4fb0831e61f5cea5ab70830ae41681010e606fc4d0694f1d6abadd4cb7",
-      "last_compiled_iso": "2026-11-22T14:40:18.001Z",
+      "last_compiled_iso": "2026-11-22T14:59:24.915Z",
       "fields_count": 3
     }
   }
