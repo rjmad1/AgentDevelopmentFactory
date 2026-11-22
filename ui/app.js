@@ -718,6 +718,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // 3b. View 4 Evaluation Sub-Tabs Switching
+  document.querySelectorAll('[data-eval-tab]').forEach((tabBtn) => {
+    tabBtn.addEventListener('click', () => {
+      const targetPanelId = tabBtn.getAttribute('data-eval-tab');
+      document.querySelectorAll('#evalSubTabs .adf-tab-btn').forEach((btn) => {
+        const isActive = btn === tabBtn;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      document.querySelectorAll('#view-evals .adf-tab-content').forEach((panel) => {
+        const isTarget = panel.id === targetPanelId;
+        panel.classList.toggle('active', isTarget);
+        panel.style.display = isTarget ? 'block' : 'none';
+      });
+    });
+  });
+
   // 4. Perspective Switcher Pill (Friendly Guide vs Tech Details)
   const modeFriendlyBtn = document.getElementById('modeFriendlyBtn');
   const modeTechBtn = document.getElementById('modeTechBtn');

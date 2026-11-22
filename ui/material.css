@@ -4,6 +4,44 @@
  * Agent Development Factory Hybrid Client
  */
 
+/* Tabbed Evaluation Bento Utilities */
+.adf-tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--adf-color-border, #eaeaea);
+  padding-bottom: 8px;
+  overflow-x: auto;
+}
+.adf-tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--adf-font-sans, inherit);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--adf-color-text-secondary, #444746);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.adf-tab-btn:hover {
+  background: var(--adf-color-surface-subtle, #f7f6f3);
+  color: var(--adf-color-text-primary, #111111);
+}
+.adf-tab-btn.active {
+  background: var(--adf-color-surface-subtle, #f7f6f3);
+  color: var(--adf-color-text-primary, #111111);
+  font-weight: 600;
+  border: 1px solid var(--adf-color-border, #eaeaea);
+}
+.adf-tab-content {
+  display: none;
+}
+.adf-tab-content.active {
+  display: block;
+}
+
 :root {
   /* Warm Monochrome & Editorial Minimalist Tokens */
   --adf-color-canvas: #fbfbfa;
@@ -11,7 +49,7 @@
   --adf-color-surface-subtle: #f7f6f3;
   --adf-color-border: #eaeaea;
   --adf-color-text-primary: #111111;
-  --adf-color-text-secondary: #787774;
+  --adf-color-text-secondary: #444746;
   --adf-color-text-tertiary: #9b9a97;
 
   /* Editorial Spot Pastels (Tags, Chips & Status Badges) */

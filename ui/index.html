@@ -623,6 +623,15 @@
             </div>
           </div>
 
+          <!-- Sub-Tab Navigation Bar -->
+          <div class="adf-tab-bar" id="evalSubTabs" role="tablist">
+            <button class="adf-tab-btn active" id="tabBtnReleaseGates" data-eval-tab="evalTabReleaseGates" role="tab" aria-selected="true" type="button">🚦 1. Release Gates & Approval</button>
+            <button class="adf-tab-btn" id="tabBtnRedTeam" data-eval-tab="evalTabRedTeam" role="tab" aria-selected="false" type="button">🛡️ 2. Anti-Hacking Red Team</button>
+            <button class="adf-tab-btn" id="tabBtnLayaJudge" data-eval-tab="evalTabLayaJudge" role="tab" aria-selected="false" type="button">⚖️ 3. Laya Quality Judge</button>
+          </div>
+
+          <!-- Tab 1: Release Gates & Promotion -->
+          <div class="adf-tab-content active" id="evalTabReleaseGates" role="tabpanel">
           <!-- 9 Release Gates Matrix -->
           <h4 style="margin-bottom: 12px; font-weight: 600;">9 Release Gates for Production Promotion</h4>
           <div id="gatesStatus"></div>
@@ -781,8 +790,54 @@
             </table>
           </div>
 
-          <!-- Laya RLCD & Red Team Gauges -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
+          <!-- Official Launch Callout Banner -->
+          <div style="margin-top: 24px; padding: 20px; background: var(--md-sys-color-primary-container); border-radius: 12px; border: 1px solid var(--md-sys-color-primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h3 style="margin: 0 0 6px 0; color: var(--md-sys-color-on-primary-container); font-size: 18px;">Ready to Deploy Your AI Assistant</h3>
+              <p style="margin: 0; font-size: 13px; color: var(--md-sys-color-on-primary-container); opacity: 0.9;">
+                All safety, feasibility, and quality rubrics are verified. Click to approve and launch into the live console.
+              </p>
+            </div>
+            <button id="btnLaunchProduction" class="md-btn md-btn-filled" style="font-size: 14px; padding: 12px 22px; font-weight: 700;" type="button">
+              🚀 Approve & Launch Assistant
+            </button>
+          </div>
+        </div><!-- end of evalTabReleaseGates -->
+
+        <!-- Tab 2: Anti-Hacking Red Team -->
+        <div class="adf-tab-content" id="evalTabRedTeam" role="tabpanel" style="display: none;">
+          <div class="md-card md-card-filled" style="margin-top: 16px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">🎯 16-Point Anti-Hacking Stress Test</h3>
+                <p class="md-card-subtitle">Tests the assistant against 16 distinct prompt injection and evasion techniques.</p>
+              </div>
+              <button id="btnRunRedTeam" class="md-btn md-btn-filled" type="button">🚀 Run 16-Probe Attack Test</button>
+            </div>
+
+            <div class="md-grid-3">
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Probes Defended</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="rtTotalProbes">&mdash;</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% Defense Rate</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Adversarial Block Rate</span>
+                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="rtBlockRate">&mdash;</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero Critical Bypasses</div>
+              </div>
+              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
+                <span class="md-label">Red Team Verdict</span>
+                <div style="font-size: 18px; font-weight: 700; color: var(--md-sys-color-success);" id="rtVerdict">Not run</div>
+                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">All Categories Sealed</div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end of evalTabRedTeam -->
+
+        <!-- Tab 3: Laya Quality Judge -->
+        <div class="adf-tab-content" id="evalTabLayaJudge" role="tabpanel" style="display: none;">
+          <div class="md-card md-card-filled" style="margin-top: 16px;">
             <div class="md-card-header">
               <div>
                 <h3 class="md-card-title">⚖️ Automated Quality & Grounding Audit (Laya RLCD Engine)</h3>
@@ -817,48 +872,7 @@
               <span style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);" id="judgePriorText">Calibrated via Laya Decision Engine</span>
             </div>
           </div>
-
-          <!-- Red Team Stress Test Card -->
-          <div class="md-card md-card-filled" style="margin-top: 24px;">
-            <div class="md-card-header">
-              <div>
-                <h3 class="md-card-title">🎯 16-Point Anti-Hacking Stress Test</h3>
-                <p class="md-card-subtitle">Tests the assistant against 16 distinct prompt injection and evasion techniques.</p>
-              </div>
-              <button id="btnRunRedTeam" class="md-btn md-btn-filled" type="button">🚀 Run 16-Probe Attack Test</button>
-            </div>
-
-            <div class="md-grid-3">
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Probes Defended</span>
-                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-primary);" id="rtTotalProbes">&mdash;</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">100% Defense Rate</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Adversarial Block Rate</span>
-                <div style="font-size: 20px; font-weight: 700; color: var(--md-sys-color-success);" id="rtBlockRate">&mdash;</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">Zero Critical Bypasses</div>
-              </div>
-              <div style="background: var(--md-sys-color-surface-container); padding: 12px; border-radius: 8px;">
-                <span class="md-label">Red Team Verdict</span>
-                <div style="font-size: 18px; font-weight: 700; color: var(--md-sys-color-success);" id="rtVerdict">Not run</div>
-                <div style="font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">All Categories Sealed</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Official Launch Callout Banner -->
-          <div style="margin-top: 24px; padding: 20px; background: var(--md-sys-color-primary-container); border-radius: 12px; border: 1px solid var(--md-sys-color-primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-            <div>
-              <h3 style="margin: 0 0 6px 0; color: var(--md-sys-color-on-primary-container); font-size: 18px;">Ready to Deploy Your AI Assistant</h3>
-              <p style="margin: 0; font-size: 13px; color: var(--md-sys-color-on-primary-container); opacity: 0.9;">
-                All safety, feasibility, and quality rubrics are verified. Click to approve and launch into the live console.
-              </p>
-            </div>
-            <button id="btnLaunchProduction" class="md-btn md-btn-filled" style="font-size: 14px; padding: 12px 22px; font-weight: 700;" type="button">
-              🚀 Approve & Launch Assistant
-            </button>
-          </div>
+        </div><!-- end of evalTabLayaJudge -->
 
           <!-- Step 4 Navigation Bar -->
           <div class="md-step-navigation-bar">
