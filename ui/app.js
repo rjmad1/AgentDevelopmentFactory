@@ -1636,6 +1636,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial Data Loads
   loadTraces();
-  loadScalingStatus();
   callApi('/api/health').then(renderHealthBadge);
 });

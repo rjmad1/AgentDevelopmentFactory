@@ -90,12 +90,21 @@ function sendText(res, statusCode, text) {
 let serverRequestCounter = 0;
 const serverBootTimestamp = Date.now();
 
-// In-Memory IP Sliding Window Rate Limiter (Max 120 requests/minute)
+// In-Memory IP Sliding Window Rate Limiter (Max 120 requests/minute for external clients)
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 120;
+const RATE_LIMIT_MAX_REQUESTS = Number(process.env.ADF_RATE_LIMIT_MAX || 120);
 const clientRequestMap = new Map();
 
 function isRateLimited(clientIp) {
+  // Loopback and internal testing requests are exempt
+  if (
+    process.env.NODE_ENV === 'test' ||
+    clientIp === '127.0.0.1' ||
+    clientIp === '::1' ||
+    clientIp === '::ffff:127.0.0.1'
+  ) {
+    return false;
+  }
   const now = Date.now();
   let clientRecord = clientRequestMap.get(clientIp);
   if (!clientRecord || (now - clientRecord.windowStart) > RATE_LIMIT_WINDOW_MS) {
