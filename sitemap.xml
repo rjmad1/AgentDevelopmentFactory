@@ -2,150 +2,154 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/ADF_Capability_Map_Roadmap/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/AUTONOMOUS_LOOP/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/DEVELOPMENT_PIPELINE/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/ROADMAP/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/adf-evals-and-guardrails/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/factory_capability_and_acceptance_map/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/factory_paper_interaction_walkthrough/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/factory_persona_opportunity_map/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/factory_product_contract/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/adapters/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/cli/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/control_plane/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/core/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/evals/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/registry/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/runtime/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/security/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/specs/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/api/workbench/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/components/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/diagrams/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/evaluations/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/master/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/security/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/architecture/three_plane/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/authoring/acceptance_map/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/authoring/contract/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/authoring/persona_map/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/deployment/free_utilities/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/guides/getting_started/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/guides/operations/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/guides/recovery/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/guides/user_manual/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
+    </url>
+    <url>
+         <loc>https://rjmad1.github.io/AgentDevelopmentFactory/plans/2026-11-22-frontend-revamp/</loc>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/verification/deep_evaluator/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/verification/langsmith/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
     <url>
          <loc>https://rjmad1.github.io/AgentDevelopmentFactory/verification/pipeline/</loc>
-         <lastmod>2026-11-21</lastmod>
+         <lastmod>2026-11-22</lastmod>
     </url>
 </urlset>
