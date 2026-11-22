@@ -1,0 +1,2484 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Meta-product transforming workflow briefs into inspectable, portable, safe, and verifiable Agent Build Packs.">
+      
+      
+        <meta name="author" content="Raja Jeevan Kumar Maduri">
+      
+      
+        <link rel="canonical" href="https://rjmad1.github.io/AgentDevelopmentFactory/guides/industry_sample_agents/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Multi-Industry Sample Agent Blueprints & Reference Recipes - Agent Development Factory</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#multi-industry-sample-agent-blueprints-reference-recipes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Agent Development Factory" class="md-header__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Agent Development Factory
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Multi-Industry Sample Agent Blueprints &amp; Reference Recipes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../ROADMAP/" class="md-tabs__link">
+          
+  
+  
+  Product Contracts & SDD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecture/diagrams/" class="md-tabs__link">
+          
+  
+  
+  Platform Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../verification/pipeline/" class="md-tabs__link">
+          
+  
+  
+  Verification & CI/CD
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/core/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../deployment/free_utilities/" class="md-tabs__link">
+          
+  
+  
+  Guides & Operations
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Agent Development Factory" class="md-nav__button md-logo" aria-label="Agent Development Factory" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Agent Development Factory
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rjmad1/AgentDevelopmentFactory" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rjmad1/AgentDevelopmentFactory
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contracts & SDD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Product Contracts & SDD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ADF_Capability_Map_Roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability Map (Reading List)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adf-evals-and-guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals & Guardrails Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_product_contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_capability_and_acceptance_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability & Acceptance Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_persona_opportunity_map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persona Opportunity Map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../factory_paper_interaction_walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper Interaction Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DEVELOPMENT_PIPELINE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Pipeline Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AUTONOMOUS_LOOP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Engineering Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Platform Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Platform Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Role-Based Architecture & Diagrams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/master/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/three_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-Plane Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/evaluations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Policies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification & CI/CD
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification & CI/CD
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zero-Cost CI/CD Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/deep_evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Evaluator & Gates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../verification/langsmith/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Free Tier Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authoring Core Engine (JS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/control_plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Plane (Python)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specifications & Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/workbench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workbench
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluations & Graders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime & Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Redaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registry & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provider Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides & Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides & Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/free_utilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production on Free Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    End-User Operating Manual
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recovery Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#blueprint-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-financial-services-autonomous-aml-transaction-fraud-reconciliation-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Financial Services: Autonomous AML Transaction &amp; Fraud Reconciliation Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Financial Services: Autonomous AML Transaction &amp; Fraud Reconciliation Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-healthcare-life-sciences-hipaa-compliant-clinical-trial-patient-intake-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Healthcare &amp; Life Sciences: HIPAA-Compliant Clinical Trial Patient Intake Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Healthcare &amp; Life Sciences: HIPAA-Compliant Clinical Trial Patient Intake Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-retail-e-commerce-dynamic-multichannel-inventory-supplier-sla-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Retail &amp; E-Commerce: Dynamic Multichannel Inventory &amp; Supplier SLA Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Retail &amp; E-Commerce: Dynamic Multichannel Inventory &amp; Supplier SLA Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-cybersecurity-cloud-ops-zero-trust-cloud-security-posture-incident-triage-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Cybersecurity &amp; Cloud Ops: Zero-Trust Cloud Security Posture &amp; Incident Triage Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Cybersecurity &amp; Cloud Ops: Zero-Trust Cloud Security Posture &amp; Incident Triage Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-manufacturing-industrial-iot-scada-telemetry-anomaly-predictive-maintenance-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Manufacturing &amp; Industrial IoT: SCADA Telemetry Anomaly &amp; Predictive Maintenance Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Manufacturing &amp; Industrial IoT: SCADA Telemetry Anomaly &amp; Predictive Maintenance Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-legal-corporate-governance-multi-jurisdiction-contract-risk-clause-compliance-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Legal &amp; Corporate Governance: Multi-Jurisdiction Contract Risk &amp; Clause Compliance Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Legal &amp; Corporate Governance: Multi-Jurisdiction Contract Risk &amp; Clause Compliance Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-context_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blueprint-specifications_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blueprint Specifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-allowlist-capabilities_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Allowlist &amp; Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-brief-text-copy-into-factory-intake_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Brief Text (Copy into Factory Intake)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirmed-requirements-behavioral-contracts_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmed Requirements &amp; Behavioral Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="multi-industry-sample-agent-blueprints-reference-recipes">Multi-Industry Sample Agent Blueprints &amp; Reference Recipes<a class="headerlink" href="#multi-industry-sample-agent-blueprints-reference-recipes" title="Permanent link">&para;</a></h1>
+<p>This guide provides production-ready specifications, workflow briefs, architectural patterns, tool definitions, and guardrail policies to create robust software agents across 6 major enterprise industries using the <strong>Agent Development Factory (ADF)</strong>.</p>
+<p>Every blueprint adheres strictly to the <strong>Universal Agent Specification Standard (<code>agent.yaml</code>)</strong> and the <strong>$0.00 spend ceiling invariant</strong>.</p>
+<hr />
+<h2 id="blueprint-index">Blueprint Index<a class="headerlink" href="#blueprint-index" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-financial-services-autonomous-aml-transaction--fraud-reconciliation-agent">Financial Services: Autonomous AML Transaction &amp; Fraud Reconciliation Agent</a></li>
+<li><a href="#2-healthcare--life-sciences-hipaa-compliant-clinical-trial-patient-intake-agent">Healthcare &amp; Life Sciences: HIPAA-Compliant Clinical Trial Patient Intake Agent</a></li>
+<li><a href="#3-retail--e-commerce-dynamic-multichannel-inventory--supplier-sla-agent">Retail &amp; E-Commerce: Dynamic Multichannel Inventory &amp; Supplier SLA Agent</a></li>
+<li><a href="#4-cybersecurity--cloud-ops-zero-trust-cloud-security-posture--incident-triage-agent">Cybersecurity &amp; Cloud Ops: Zero-Trust Cloud Security Posture &amp; Incident Triage Agent</a></li>
+<li><a href="#5-manufacturing--industrial-iot-scada-telemetry-anomaly--predictive-maintenance-agent">Manufacturing &amp; Industrial IoT: SCADA Telemetry Anomaly &amp; Predictive Maintenance Agent</a></li>
+<li><a href="#6-legal--corporate-governance-multi-jurisdiction-contract-risk--clause-compliance-agent">Legal &amp; Corporate Governance: Multi-Jurisdiction Contract Risk &amp; Clause Compliance Agent</a></li>
+</ol>
+<hr />
+<h2 id="1-financial-services-autonomous-aml-transaction-fraud-reconciliation-agent">1. Financial Services: Autonomous AML Transaction &amp; Fraud Reconciliation Agent<a class="headerlink" href="#1-financial-services-autonomous-aml-transaction-fraud-reconciliation-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context">Executive Context<a class="headerlink" href="#executive-context" title="Permanent link">&para;</a></h3>
+<p>Financial institutions process millions of daily transaction records across automated clearing houses (ACH), SWIFT networks, and retail payment gateways. Regulatory frameworks (such as FinCEN SAR reporting and EU AMLD6) mandate real-time detection of structuring, sudden velocity spikes, and discrepancies between settlement ledgers.</p>
+<h3 id="blueprint-specifications">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Financial Services &amp; FinTech</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Orchestrator-Worker</strong> (Lead investigator coordinating anomaly analyzers)</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Contained local write to audit artifacts; Gate 8 Human-in-the-Loop review mandatory)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or LangGraph</li>
+</ul>
+<h3 id="tool-allowlist-capabilities">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_transaction_ledger</code>: Read localized daily transaction CSV/JSON exports (<code>READ_PUBLIC</code>).</li>
+<li><code>compute_statistical_velocity</code>: Calculate transaction velocity, z-scores, and Benford's law compliance (<code>READ_PUBLIC</code>).</li>
+<li><code>write_compliance_sar_docket</code>: Generate Markdown Suspicious Activity Report (SAR) in <code>./artifacts/sar_dockets/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>initiate_wire_transfer</code>, <code>freeze_customer_account</code> (strictly denied without dual-key T3 signoff).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Autonomous Financial Crime &amp; AML Transaction Anomaly Detection Agent.
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>The agent ingests daily transaction records from localized CSV exports, parses transaction timestamps, amounts, origin accounts, and destination country codes.
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>It computes velocity metrics, identifies structuring patterns (multiple transactions just under $10,000 threshold), and detects international wire hops to unverified foreign banking entities.
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Upon detecting anomalous transaction clusters, the agent must generate a standardized, timestamped Markdown SAR docket into ./artifacts/sar_dockets/ detailing suspicious account IDs, confidence scores, and rule violation justifications.
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>The agent must never execute fund freezes, balance adjustments, or external network calls. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-FIN-01</code>: Parse daily transaction ledger files without modifying raw source records.</li>
+<li><code>REQ-FIN-02</code>: Calculate transaction frequency and flag accounts exceeding 5 transactions within a 15-minute rolling window.</li>
+<li><code>REQ-FIN-03</code>: Flag structuring transactions within 5% of the $10,000 regulatory reporting threshold.</li>
+<li><code>REQ-FIN-04</code>: Generate Markdown SAR compliance report into <code>./artifacts/</code> containing cryptographic SHA-256 evidence hashes.</li>
+<li><code>REQ-FIN-05</code>: Strictly prohibit external financial API calls or automated account modifications.</li>
+</ul>
+<hr />
+<h2 id="2-healthcare-life-sciences-hipaa-compliant-clinical-trial-patient-intake-agent">2. Healthcare &amp; Life Sciences: HIPAA-Compliant Clinical Trial Patient Intake Agent<a class="headerlink" href="#2-healthcare-life-sciences-hipaa-compliant-clinical-trial-patient-intake-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context_1">Executive Context<a class="headerlink" href="#executive-context_1" title="Permanent link">&para;</a></h3>
+<p>Clinical trial operations require screening thousands of electronic health record (EHR) summaries against complex inclusion and exclusion criteria (biomarkers, prior therapies, renal function limits) while maintaining zero-tolerance compliance with HIPAA privacy standards and cryptographic data isolation.</p>
+<h3 id="blueprint-specifications_1">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Healthcare &amp; Life Sciences</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Hierarchical Supervisor</strong> (Triager agent routing to Inclusion Specialist and Privacy Guard)</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Strict PII redaction; write confined to de-identified screening dossiers)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or CrewAI</li>
+</ul>
+<h3 id="tool-allowlist-capabilities_1">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_trial_protocol</code>: Ingest clinical trial protocol specification and inclusion/exclusion matrices (<code>READ_PUBLIC</code>).</li>
+<li><code>read_patient_summary</code>: Ingest de-identified clinical notes and laboratory panels (<code>READ_PUBLIC</code>).</li>
+<li><code>redact_protected_health_info</code>: High-entropy regex scrubber for Safe Harbor 18 PII identifiers (<code>READ_PUBLIC</code>).</li>
+<li><code>write_trial_eligibility_report</code>: Write de-identified screening docket to <code>./artifacts/screenings/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>export_unmasked_ehr</code>, <code>send_patient_notification</code> (prohibited by Execution Rails).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake_1">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake_1" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>HIPAA-Compliant Clinical Trial Patient Eligibility &amp; Protocol Screening Agent.
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>The agent ingests de-identified clinical lab summaries (platelet counts, EGFR, ECOG performance status) and cross-references them against trial inclusion/exclusion criteria.
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Before processing any narrative clinical notes, the agent executes mandatory Safe Harbor PII sanitization, masking patient names, medical record numbers, dates, and geographic identifiers.
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>For patients satisfying protocol parameters, the agent compiles an eligibility score and writes a de-identified Markdown screening dossier into ./artifacts/screenings/ outlining met criteria, unmet criteria, and required confirmatory tests.
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>The agent must never store or expose unmasked patient identifiers. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts_1">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-HEALTH-01</code>: Enforce NeMo Output Rails to detect and mask all 18 HIPAA Safe Harbor identifiers.</li>
+<li><code>REQ-HEALTH-02</code>: Parse laboratory panels and evaluate numerical thresholds against protocol inclusion criteria.</li>
+<li><code>REQ-HEALTH-03</code>: Grade patient performance status (ECOG 0-2) based on verified physician encounter notes.</li>
+<li><code>REQ-HEALTH-04</code>: Write structured screening recommendation dossier into <code>./artifacts/</code> with deterministic timestamps.</li>
+<li><code>REQ-HEALTH-05</code>: Refuse processing of raw data feeds containing unencrypted social security numbers or cleartext names.</li>
+</ul>
+<hr />
+<h2 id="3-retail-e-commerce-dynamic-multichannel-inventory-supplier-sla-agent">3. Retail &amp; E-Commerce: Dynamic Multichannel Inventory &amp; Supplier SLA Agent<a class="headerlink" href="#3-retail-e-commerce-dynamic-multichannel-inventory-supplier-sla-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context_2">Executive Context<a class="headerlink" href="#executive-context_2" title="Permanent link">&para;</a></h3>
+<p>Modern omnichannel retailers balance distribution center inventory against regional sales velocities, holiday demand spikes, and supplier delivery lead times. Stockouts cause severe revenue leakage, while over-allocation inflates carrying costs.</p>
+<h3 id="blueprint-specifications_2">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Retail, E-Commerce &amp; Supply Chain</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Orchestrator-Worker</strong> (Inventory Triager delegating to Lead-Time &amp; Sales Velocity workers)</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Local analysis and reorder recommendation reports; no automated fund transfers)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or AutoGen</li>
+</ul>
+<h3 id="tool-allowlist-capabilities_2">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_inventory_snapshot</code>: Read warehouse SKU stock levels and backorder logs (<code>READ_PUBLIC</code>).</li>
+<li><code>read_historical_velocity</code>: Parse 30-day regional sell-through velocity rates (<code>READ_PUBLIC</code>).</li>
+<li><code>calculate_reorder_point</code>: Calculate safety stock, economic order quantity (EOQ), and stockout risk date (<code>READ_PUBLIC</code>).</li>
+<li><code>write_procurement_manifest</code>: Write proposed purchase orders to <code>./artifacts/purchase_orders/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>submit_live_purchase_order</code>, <code>charge_company_credit_line</code> (denied without T2/T3 elevation).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake_2">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake_2" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Multichannel Retail Inventory Optimization &amp; Supplier SLA Performance Monitor.
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>The agent ingests daily inventory CSV snapshots across regional fulfillment centers alongside 30-day sales velocity data.
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>It calculates days of supply (DoS), compares available stock against vendor delivery lead times, and flags SKUs at risk of stockout within the next 14 days.
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Additionally, it audits supplier fulfillment history to compute vendor SLA adherence percentages (on-time delivery vs late arrivals).
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>The agent outputs a prioritized Procurement Action Plan into ./artifacts/procurement/ with recommended reorder quantities and emergency redistribution transfers.
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>The agent operates with read-only supply chain data and bounded file output. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts_2">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-RETAIL-01</code>: Ingest regional warehouse stock tables and identify SKUs with days of supply &lt; 10 days.</li>
+<li><code>REQ-RETAIL-02</code>: Evaluate vendor lead-time variance and calculate dynamic safety stock margins.</li>
+<li><code>REQ-RETAIL-03</code>: Generate proposed purchase order recommendations in Markdown format inside <code>./artifacts/</code>.</li>
+<li><code>REQ-RETAIL-04</code>: Track supplier delivery SLA metrics and flag vendors falling below 92% on-time performance.</li>
+<li><code>REQ-RETAIL-05</code>: Enforce zero-spend ceiling ($0.00 USD) by utilizing local deterministic forecasting calculations.</li>
+</ul>
+<hr />
+<h2 id="4-cybersecurity-cloud-ops-zero-trust-cloud-security-posture-incident-triage-agent">4. Cybersecurity &amp; Cloud Ops: Zero-Trust Cloud Security Posture &amp; Incident Triage Agent<a class="headerlink" href="#4-cybersecurity-cloud-ops-zero-trust-cloud-security-posture-incident-triage-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context_3">Executive Context<a class="headerlink" href="#executive-context_3" title="Permanent link">&para;</a></h3>
+<p>Cloud engineering teams face alert fatigue from hundreds of daily security alarms across AWS, GCP, and Azure environments. Triage requires analyzing IAM permissions, public bucket exposures, network security group rules, and suspicious login vectors.</p>
+<h3 id="blueprint-specifications_3">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Cybersecurity &amp; Cloud Infrastructure</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Hierarchical Supervisor</strong> (Incident Commander delegating to IAM, Network, and Compliance Auditors)</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Audit &amp; triage reporting; no automated destruction of cloud assets)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or LangGraph</li>
+</ul>
+<h3 id="tool-allowlist-capabilities_3">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_cloud_trail_events</code>: Ingest localized JSON CloudTrail / Audit logs (<code>READ_PUBLIC</code>).</li>
+<li><code>audit_iam_permissions</code>: Evaluate IAM policies for wildcard (<code>"Action": "*"</code>) permissions (<code>READ_PUBLIC</code>).</li>
+<li><code>verify_network_ingress</code>: Inspect security group rules for unauthenticated <code>0.0.0.0/0</code> exposure on sensitive ports (<code>READ_PUBLIC</code>).</li>
+<li><code>write_incident_triage_docket</code>: Generate Markdown incident report into <code>./artifacts/security_incidents/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>terminate_cloud_instance</code>, <code>revoke_iam_role</code> (destructive effects gated behind approval tokens).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake_3">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake_3" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Automated Cloud Infrastructure Security Posture (CSPM) &amp; Security Incident Triage Agent.
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>The agent audits local cloud configuration snapshots and event logs for critical security misconfigurations based on CIS Benchmarks and OWASP Cloud Top 10.
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>It inspects IAM roles for excessive privilege escalation vectors, flags S3 buckets or storage blobs exposed to public read/write without authentication, and identifies open security group ports (22 SSH, 3389 RDP, 5432 Postgres) bound to 0.0.0.0/0.
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>The agent compiles a Severity-Ranked Security Incident Dossier into ./artifacts/security_incidents/ outlining CVSS scores, affected resource ARNs, and exact remediation CLI commands.
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>The agent operates in read-only audit mode and will not mutate infrastructure resources. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts_3">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-SEC-01</code>: Detect and flag IAM policies containing wildcard permissions (<code>*</code>) on critical services.</li>
+<li><code>REQ-SEC-02</code>: Detect storage buckets configured with public ACLs or missing server-side encryption.</li>
+<li><code>REQ-SEC-03</code>: Map detected exposures to MITRE ATT&amp;CK techniques and CIS Cloud Benchmark controls.</li>
+<li><code>REQ-SEC-04</code>: Write remediation plan to <code>./artifacts/</code> with copyable CLI remediation commands.</li>
+<li><code>REQ-SEC-05</code>: Strictly prohibit automated resource termination or credential mutation.</li>
+</ul>
+<hr />
+<h2 id="5-manufacturing-industrial-iot-scada-telemetry-anomaly-predictive-maintenance-agent">5. Manufacturing &amp; Industrial IoT: SCADA Telemetry Anomaly &amp; Predictive Maintenance Agent<a class="headerlink" href="#5-manufacturing-industrial-iot-scada-telemetry-anomaly-predictive-maintenance-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context_4">Executive Context<a class="headerlink" href="#executive-context_4" title="Permanent link">&para;</a></h3>
+<p>Manufacturing plants, chemical refineries, and energy grids rely on SCADA systems monitoring thousands of IoT sensors (vibration, temperature, oil pressure, motor RPM). Detecting early stage mechanical wear prevents catastrophic equipment failure and multimillion-dollar downtime.</p>
+<h3 id="blueprint-specifications_4">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Manufacturing, Energy &amp; Industrial IoT</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Single Focused Agent</strong> with high-throughput batch processing loop</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Telemetry analysis and maintenance advisory dockets)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or AutoGen</li>
+</ul>
+<h3 id="tool-allowlist-capabilities_4">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_sensor_stream</code>: Parse time-series CSV sensor feeds (vibration mm/s, bearing temperature Celsius, RPM) (<code>READ_PUBLIC</code>).</li>
+<li><code>compute_moving_average_drift</code>: Statistical standard deviation and exponential moving average (EMA) calculation (<code>READ_PUBLIC</code>).</li>
+<li><code>write_maintenance_work_order</code>: Generate Markdown work order ticket into <code>./artifacts/maintenance_orders/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>shutdown_generator</code>, <code>override_scada_plc</code> (critical safety boundary).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake_4">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake_4" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Industrial SCADA Sensor Telemetry Anomaly Detector &amp; Predictive Maintenance Advisory Agent.
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>The agent consumes high-frequency industrial IoT telemetry logs tracking motor vibration (mm/s), bearing operating temperatures (°C), and rotational frequency (RPM).
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>It computes rolling standard deviations, identifies thermal creep exceeding manufacturer baseline thresholds by &gt; 2.5 sigma, and detects harmonic vibration signatures indicative of bearing fatigue or rotor misalignment.
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Upon anomaly confirmation, the agent outputs a Predictive Maintenance Work Order into ./artifacts/maintenance_orders/ detailing machine asset IDs, hours until projected failure, and required spare parts.
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>The agent is an advisory observer and cannot send command packets to PLC or SCADA controllers. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts_4">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-MFG-01</code>: Process time-series sensor logs with robust handling of missing readings or sensor dropouts.</li>
+<li><code>REQ-MFG-02</code>: Calculate thermal and vibration drift relative to 30-day operating baselines.</li>
+<li><code>REQ-MFG-03</code>: Classify equipment risk into Normal, Watchlist, or Critical Emergency Escalation.</li>
+<li><code>REQ-MFG-04</code>: Generate Markdown maintenance advisory ticket into <code>./artifacts/</code> with component part numbers.</li>
+<li><code>REQ-MFG-05</code>: Enforce safety isolation: the agent has zero write access to industrial control networks or PLCs.</li>
+</ul>
+<hr />
+<h2 id="6-legal-corporate-governance-multi-jurisdiction-contract-risk-clause-compliance-agent">6. Legal &amp; Corporate Governance: Multi-Jurisdiction Contract Risk &amp; Clause Compliance Agent<a class="headerlink" href="#6-legal-corporate-governance-multi-jurisdiction-contract-risk-clause-compliance-agent" title="Permanent link">&para;</a></h2>
+<h3 id="executive-context_5">Executive Context<a class="headerlink" href="#executive-context_5" title="Permanent link">&para;</a></h3>
+<p>Corporate legal teams manage hundreds of inbound vendor agreements, non-disclosure agreements (NDAs), and Master Services Agreements (MSAs). Reviewing governing law clauses, indemnification caps, intellectual property assignments, and data protection addenda across multiple jurisdictions is time-intensive and error-prone.</p>
+<h3 id="blueprint-specifications_5">Blueprint Specifications<a class="headerlink" href="#blueprint-specifications_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Industry</strong>: Legal, Risk &amp; Corporate Governance</li>
+<li><strong>Solution Complexity</strong>: <code>S2_AGENTIC_COMPLEX</code></li>
+<li><strong>Architectural Pattern</strong>: <strong>Orchestrator-Worker</strong> (Chief Legal Reviewer delegating to Liability, IP, and Privacy specialists)</li>
+<li><strong>Risk Tier</strong>: <code>T1</code> (Legal review memos written to <code>./artifacts/legal_reviews/</code>)</li>
+<li><strong>Target Platform</strong>: Google Antigravity 2.0 or CrewAI</li>
+</ul>
+<h3 id="tool-allowlist-capabilities_5">Tool Allowlist &amp; Capabilities<a class="headerlink" href="#tool-allowlist-capabilities_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>read_contract_text</code>: Parse structured Markdown or plain-text contract agreements (<code>READ_PUBLIC</code>).</li>
+<li><code>audit_liability_clauses</code>: Search and evaluate limitation of liability, consequential damages waivers, and indemnity caps (<code>READ_PUBLIC</code>).</li>
+<li><code>audit_privacy_clauses</code>: Evaluate GDPR Article 28 and CCPA processor obligations (<code>READ_PUBLIC</code>).</li>
+<li><code>write_redline_summary</code>: Write redline advisory memorandum to <code>./artifacts/legal_reviews/</code> (<code>WORKSPACE_WRITE</code>).</li>
+<li>⛔ <strong>Prohibited Tools</strong>: <code>electronically_sign_agreement</code>, <code>accept_vendor_terms</code> (strictly prohibited).</li>
+</ul>
+<h3 id="workflow-brief-text-copy-into-factory-intake_5">Workflow Brief Text (Copy into Factory Intake)<a class="headerlink" href="#workflow-brief-text-copy-into-factory-intake_5" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Corporate Legal Risk Audit &amp; Vendor Contract Compliance Analysis Agent.
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>The agent reviews commercial vendor contracts (Master Service Agreements, Software Licensing Agreements) in plain text or Markdown format.
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>It evaluates critical legal risk categories: unlimited liability clauses, missing reciprocal indemnification, unilateral termination rights, non-standard governing law jurisdictions, and GDPR/CCPA data transfer terms.
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>For every identified legal risk, the agent scores the risk severity (Low, Medium, High, Dealbreaker) and outputs a Redline Advisory Memorandum into ./artifacts/legal_reviews/ citing the problematic clause text, the corporate policy violation, and alternative compromise language.
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>The agent operates purely as an analytical assistant and cannot execute or approve contracts. Spend ceiling is strictly $0.00.
+</span></code></pre></div>
+<h3 id="confirmed-requirements-behavioral-contracts_5">Confirmed Requirements &amp; Behavioral Contracts<a class="headerlink" href="#confirmed-requirements-behavioral-contracts_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>REQ-LEGAL-01</code>: Ingest contract agreements and extract structured sections (Liability, Term, IP, Data Privacy).</li>
+<li><code>REQ-LEGAL-02</code>: Identify uncapped liability clauses or asymmetric indemnification requirements.</li>
+<li><code>REQ-LEGAL-03</code>: Verify data processing agreements against statutory GDPR Article 28 checklist items.</li>
+<li><code>REQ-LEGAL-04</code>: Generate structured Redline Advisory Memorandum into <code>./artifacts/</code> with proposed compromise clause wording.</li>
+<li><code>REQ-LEGAL-05</code>: Strictly prohibit automated electronic signature or binding agreement acceptance.</li>
+</ul>
+<hr />
+<h2 id="summary-matrix">Summary Matrix<a class="headerlink" href="#summary-matrix" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Blueprint</th>
+<th style="text-align: left;">Industry</th>
+<th style="text-align: left;">Architecture</th>
+<th style="text-align: left;">Risk Tier</th>
+<th style="text-align: left;">Primary Output Artifact</th>
+<th style="text-align: left;">Prohibited Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>AML Transaction Monitor</strong></td>
+<td style="text-align: left;">Financial Services</td>
+<td style="text-align: left;">Orchestrator-Worker</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">Markdown SAR Dockets</td>
+<td style="text-align: left;">External Wire Transfers</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Clinical Trial Intake</strong></td>
+<td style="text-align: left;">Healthcare</td>
+<td style="text-align: left;">Hierarchical Supervisor</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">De-Identified Screening Dossier</td>
+<td style="text-align: left;">Unmasked Patient PII Exposure</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Inventory Optimizer</strong></td>
+<td style="text-align: left;">Retail &amp; E-Commerce</td>
+<td style="text-align: left;">Orchestrator-Worker</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">Purchase Order Plan</td>
+<td style="text-align: left;">Automated PO Submission</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CSPM Incident Triage</strong></td>
+<td style="text-align: left;">Cybersecurity</td>
+<td style="text-align: left;">Hierarchical Supervisor</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">Incident Triage Dossier</td>
+<td style="text-align: left;">Resource Termination / Deletion</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SCADA Telemetry Monitor</strong></td>
+<td style="text-align: left;">Manufacturing</td>
+<td style="text-align: left;">Single Focused Agent</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">Maintenance Work Order</td>
+<td style="text-align: left;">SCADA PLC Overrides</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Contract Risk Auditor</strong></td>
+<td style="text-align: left;">Legal &amp; Governance</td>
+<td style="text-align: left;">Orchestrator-Worker</td>
+<td style="text-align: left;"><code>T1</code></td>
+<td style="text-align: left;">Redline Advisory Memorandum</td>
+<td style="text-align: left;">Electronic Signature Execution</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
