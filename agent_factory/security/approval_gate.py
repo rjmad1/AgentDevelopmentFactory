@@ -2,6 +2,8 @@
 Risk-Based Approval Gate and Anti-Forgery Token Verifier.
 """
 
+import os
+import secrets
 import hmac
 import hashlib
 from typing import Optional
@@ -22,14 +24,27 @@ class ApprovalRecord(BaseModel):
 class ApprovalGate:
     """Enforces human-in-the-loop gates for medium/high-risk releases and elevated permissions."""
 
-    # Internal master secret used for local token verification (in memory or host-scoped)
-    _SECRET_SALT = b"Antigravity2.0_Hermes_Factory_Salt_20261103"
+    _ephemeral_key: Optional[bytes] = None
+
+    @classmethod
+    def _get_master_key(cls) -> bytes:
+        """
+        Retrieves the cryptographic master key from environment variables (ADF_HMAC_MASTER_KEY).
+        If unset, lazily initializes an ephemeral, cryptographically secure 256-bit process key.
+        Completely eliminates hardcoded static cryptographic salts (CWE-321).
+        """
+        env_key = os.environ.get("ADF_HMAC_MASTER_KEY") or os.environ.get("ADF_HMAC_SECRET")
+        if env_key:
+            return env_key.encode("utf-8")
+        if cls._ephemeral_key is None:
+            cls._ephemeral_key = secrets.token_bytes(32)
+        return cls._ephemeral_key
 
     @classmethod
     def generate_owner_token(cls, project_id: str, action_scope: str) -> str:
-        """Generates an HMAC-signed owner approval token."""
+        """Generates an HMAC-signed owner approval token with full 256-bit cryptographic entropy."""
         message = f"{project_id}:{action_scope}".encode("utf-8")
-        sig = hmac.new(cls._SECRET_SALT, message, hashlib.sha256).hexdigest()[:16]
+        sig = hmac.new(cls._get_master_key(), message, hashlib.sha256).hexdigest()
         return f"OWNER_APPROVED_{sig}"
 
     @classmethod

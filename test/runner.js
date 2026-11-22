@@ -364,6 +364,9 @@ export function executeFullSuite(runLabel) {
       '--store', testStoreDir,
     ]);
     assert(inspectRes.failed && inspectRes.exitCode === 1, 'verify-consistency must exit 1 on discrepancy');
+
+    // Clean up temporary simulated divergence artifact so testStore remains consistent
+    fs.rmSync(simDir, { recursive: true, force: true });
   });
 
   // TEST 13: Focused Case 3 — Checker Implementation Dependencies & Staleness Invalidation
@@ -935,6 +938,30 @@ export function executeFullSuite(runLabel) {
 
     const reconcile = syncMgr.reconcileState({ storeDir: testStoreDir });
     assert(reconcile.reconciled === true, 'Reconcile must maintain consensus');
+
+    // 5. Active Rematerialization of Evidence Ledger Drift (FINDING-DEF-01)
+    const rev1Dir = path.join(testStoreDir, 'rev-001');
+    const evJsonPath = path.join(rev1Dir, 'evidence.json');
+    if (fs.existsSync(evJsonPath)) {
+      const origEv = JSON.parse(fs.readFileSync(evJsonPath, 'utf-8'));
+      // Intentionally corrupt evidence.json by dropping events to trigger EVIDENCE_LEDGER_MISMATCH
+      const corruptEv = { ...origEv, events: [] };
+      fs.writeFileSync(evJsonPath, JSON.stringify(corruptEv), 'utf-8');
+
+      // Audit must now catch the drift
+      const driftAudit = syncMgr.auditState({ storeDir: testStoreDir });
+      assert(driftAudit.isSynchronized === false, 'Audit must detect corrupted evidence ledger');
+      assert(driftAudit.findings.some(f => f.type === DriftType.EVIDENCE_LEDGER_MISMATCH), 'Must identify EVIDENCE_LEDGER_MISMATCH');
+
+      // Reconcile must actively rematerialize the ledger from check_events.jsonl
+      const driftReconcile = syncMgr.reconcileState({ storeDir: testStoreDir });
+      assert(driftReconcile.reconciled === true, 'Reconcile must successfully rematerialize and restore consistency');
+      assert(driftReconcile.actionsTaken.some(a => a.includes('Rematerialized evidence ledger')), 'Must record rematerialization action');
+
+      // Audit after reconcile must be 100% synchronized
+      const restoredAudit = syncMgr.auditState({ storeDir: testStoreDir });
+      assert(restoredAudit.isSynchronized === true, 'Test store must be fully synchronized post-reconcile');
+    }
   });
 
   // TEST 30: Production Infrastructure & SRE Probes (Prometheus Metrics Exposition, Kubernetes Probes & Worker Daemon)
@@ -1082,7 +1109,7 @@ export function executeFullSuite(runLabel) {
       import { startServer } from './src/server.js';
       import http from 'node:http';
 
-      function fetchUrl(url, method = 'GET', headers = {}) {
+      function fetchUrl(url, method = 'GET', headers = {}, body = null) {
         return new Promise((resolve, reject) => {
           const parsed = new URL(url);
           const req = http.request({
@@ -1097,6 +1124,7 @@ export function executeFullSuite(runLabel) {
             res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
           });
           req.on('error', reject);
+          if (body) req.write(body);
           req.end();
         });
       }
@@ -1143,6 +1171,26 @@ export function executeFullSuite(runLabel) {
           }
           if (validBearer.headers['x-frame-options'] !== 'SAMEORIGIN') {
             throw new Error('Missing X-Frame-Options: SAMEORIGIN header');
+          }
+
+          // I. Path Traversal Guard (FINDING-SEC-03)
+          const traversalAttempt = await fetchUrl(s.url + '/api/guardrails', 'POST', {
+            'Authorization': 'Bearer ' + expectedToken,
+            'Content-Type': 'application/json',
+          }, JSON.stringify({ manifestPath: '../../../../package.json' }));
+          if (traversalAttempt.status !== 403 && traversalAttempt.status !== 400) {
+            throw new Error('Expected 403/400 on path traversal payload, got: ' + traversalAttempt.status);
+          }
+
+          // J. Auto-Generated Ephemeral Token & Fail-Closed on Non-Loopback (FINDING-SEC-01)
+          const sRemote = await startServer(0, ${JSON.stringify(testStoreDir)}, '0.0.0.0');
+          try {
+            const remoteProbe = await fetchUrl(sRemote.url + '/api/health');
+            if (remoteProbe.status !== 401) {
+              throw new Error('Expected 401 on non-loopback host when unauthenticated, got: ' + remoteProbe.status);
+            }
+          } finally {
+            await sRemote.close();
           }
 
           process.stdout.write(JSON.stringify({ success: true }));

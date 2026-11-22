@@ -1,17 +1,17 @@
 {
   "revision_id": "rev-001",
   "promoted": true,
-  "summary": "LLM-as-a-Judge [PROMOTED]: Composite Score 1.000 (H=1.00, I=1.00, S=1.00) via Laya RLCD (laya_db_historical(169_events))",
-  "timestamp": "2026-11-21T01:25:45.652614+00:00",
+  "summary": "LLM-as-a-Judge [PROMOTED]: Composite Score 1.000 (H=1.00, I=1.00, S=1.00) via Laya RLCD (laya_db_historical(196_events))",
+  "timestamp": "2026-11-22T14:38:34.151937+00:00",
   "decision": {
     "verdict": "PROMOTED",
     "composite_score": 1.0,
     "threshold": 0.92,
     "weights": {
-      "hallucination": 0.337,
-      "instruction": 0.337,
-      "security": 0.326,
-      "source": "laya_db_historical(169_events)"
+      "hallucination": 0.336,
+      "instruction": 0.336,
+      "security": 0.329,
+      "source": "laya_db_historical(196_events)"
     },
     "rationale": "Candidate passes all 3 quality rubrics with RLCD composite score 1.000 >= threshold 0.92."
   },

@@ -22,7 +22,7 @@ def test_secret_redaction():
     assert "Bearer [REDACTED_TOKEN]" in clean
 
 
-def test_approval_gate_validation():
+def test_approval_gate_validation(monkeypatch):
     project_id = "proj_test_123"
     action = "RELEASE_PROMOTION"
 
@@ -38,6 +38,18 @@ def test_approval_gate_validation():
     # High risk succeeds with authentic cryptographic token
     valid_token = ApprovalGate.generate_owner_token(project_id, action)
     assert ApprovalGate.verify_token(valid_token, project_id, action, RiskClassification.HIGH) is True
+
+    # Cryptographic entropy check: signature must be full 64-char SHA256 hex digest (256 bits)
+    sig_hex = valid_token.replace("OWNER_APPROVED_", "")
+    assert len(sig_hex) == 64, f"Expected 64-char hex digest, got {len(sig_hex)}"
+
+    # Cryptographic key isolation test: token generated with key_A must be rejected under key_B
+    monkeypatch.setenv("ADF_HMAC_MASTER_KEY", "master_key_alpha_9999")
+    token_a = ApprovalGate.generate_owner_token(project_id, action)
+    assert ApprovalGate.verify_token(token_a, project_id, action, RiskClassification.HIGH) is True
+
+    monkeypatch.setenv("ADF_HMAC_MASTER_KEY", "master_key_beta_8888")
+    assert ApprovalGate.verify_token(token_a, project_id, action, RiskClassification.HIGH) is False
 
 
 def test_skill_quarantine_ast_audit():

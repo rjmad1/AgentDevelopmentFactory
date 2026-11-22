@@ -14,7 +14,8 @@ The `core.js` module provides the foundational deterministic engine for the Agen
 | [`assertRealFsContainment`](#assertrealfscontainment) | `function assertRealFsContainment(allowedParentDir, targetPath)` | Domain function: `assertRealFsContainment`. |
 | [`getCheckerImplementationHash`](#getcheckerimplementationhash) | `function getCheckerImplementationHash()` | Domain function: `getCheckerImplementationHash`. |
 | [`evaluateEvidenceApplicability`](#evaluateevidenceapplicability) | `function evaluateEvidenceApplicability(check, currentArtifactHashes, currentCheckerHash)` | Domain function: `evaluateEvidenceApplicability`. |
-| [`verifyEvidenceConsistency`](#verifyevidenceconsistency) | `function verifyEvidenceConsistency(revDir)` | Domain function: `verifyEvidenceConsistency`. |
+| [`verifyEvidenceConsistency`](#verifyevidenceconsistency) | `function verifyEvidenceConsistency(revDirOrRevisionId, storeDir = null)` | Domain function: `verifyEvidenceConsistency`. |
+| [`materializeEvidenceLedger`](#materializeevidenceledger) | `function materializeEvidenceLedger(revDirOrRevisionId, storeDir = null)` | Rematerializes evidence.json directly from the authoritative check_events.jsonl ... |
 | [`validateRequirements`](#validaterequirements) | `function validateRequirements(requirements)` | Domain function: `validateRequirements`. |
 | [`generateSpecMarkdown`](#generatespecmarkdown) | `function generateSpecMarkdown({ revisionId, parentRevisionId, briefText, requirements, hashes, createdAt, })` | Domain function: `generateSpecMarkdown`. |
 | [`generateManifest`](#generatemanifest) | `function generateManifest({ revisionId, parentRevisionId, briefText, requirements, hashes, createdAt, })` | Domain function: `generateManifest`. |
@@ -99,10 +100,27 @@ Domain function: `evaluateEvidenceApplicability`.
 ### `verifyEvidenceConsistency`
 
 ```javascript
-function verifyEvidenceConsistency(revDir)
+function verifyEvidenceConsistency(revDirOrRevisionId, storeDir = null)
 ```
 
 Domain function: `verifyEvidenceConsistency`.
+
+---
+
+### `materializeEvidenceLedger`
+
+```javascript
+function materializeEvidenceLedger(revDirOrRevisionId, storeDir = null)
+```
+
+Rematerializes evidence.json directly from the authoritative check_events.jsonl event stream. Resolves FINDING-DEF-01: restores 100% cryptographic ledger consistency.
+
+**Parameters:**
+
+* `{string} revDirOrRevisionId`
+* `{string} [storeDir]`
+
+**Returns:** `{Object} Rematerialized evidence ledger object`
 
 ---
 

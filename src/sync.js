@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { verifyEvidenceConsistency } from './core.js';
+import { verifyEvidenceConsistency, materializeEvidenceLedger } from './core.js';
 
 export const DriftType = {
   NONE: 'NONE',
@@ -60,13 +60,17 @@ export class StateSyncManager {
 
       for (const rev of revs) {
         try {
+          const revDir = path.join(targetStore, rev);
           const audit = verifyEvidenceConsistency(rev, targetStore);
-          if (!audit.consistent) {
+          const isConsistent = audit.isConsistent !== undefined ? audit.isConsistent : audit.consistent;
+          if (!isConsistent) {
             findings.push({
               type: DriftType.EVIDENCE_LEDGER_MISMATCH,
               severity: 'HIGH',
-              details: `Revision ${rev} evidence mismatch: ${audit.mismatches.length} discrepancy found.`,
+              details: `Revision ${rev} evidence mismatch: ${audit.reason || 'Cryptographic ledger desynchronization'}`,
               action: 'REMATERIALIZE_EVIDENCE_LEDGER',
+              revisionId: rev,
+              revDir,
             });
           }
         } catch {
@@ -112,6 +116,7 @@ export class StateSyncManager {
    * @returns {Object}
    */
   reconcileState({ storeDir = null } = {}) {
+    const targetStore = storeDir || path.join(this.projectRoot, 'store');
     const auditBefore = this.auditState({ storeDir });
     const actionsTaken = [];
 
@@ -121,7 +126,9 @@ export class StateSyncManager {
           process.env.ADF_SPEND_CEILING_USD = '0.00';
           actionsTaken.push('RESET: Restored process.env.ADF_SPEND_CEILING_USD to 0.00');
         } else if (f.type === DriftType.EVIDENCE_LEDGER_MISMATCH) {
-          actionsTaken.push('RECONCILE: Rematerialized evidence ledger from append-only events');
+          const revDir = f.revDir || path.join(targetStore, f.revisionId);
+          materializeEvidenceLedger(revDir);
+          actionsTaken.push(`RECONCILE: Rematerialized evidence ledger for ${f.revisionId} from append-only events`);
         }
       }
     }

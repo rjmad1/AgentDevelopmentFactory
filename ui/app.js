@@ -29,6 +29,21 @@ const state = {
   },
 };
 
+// SEC-05: HTML entity sanitizer to prevent DOM XSS vulnerabilities (CWE-79)
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, (m) => {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#39;';
+      default: return m;
+    }
+  });
+}
+
 // Initialize Theme
 document.documentElement.setAttribute('data-theme', state.theme);
 
@@ -693,14 +708,16 @@ function renderAttachedDocsList() {
   docs.forEach((doc, idx) => {
     const item = document.createElement('div');
     item.className = 'md-doc-item';
+    const safeName = escapeHtml(doc.name);
+    const safeType = escapeHtml(doc.type || 'text');
     item.innerHTML = `
       <div class="md-doc-meta">
         <span>📄</span>
-        <span class="md-doc-name" title="${doc.name}">${doc.name}</span>
+        <span class="md-doc-name" title="${safeName}">${safeName}</span>
         <span class="md-doc-size">(${formatFileSize(doc.size)})</span>
-        <span class="md-chip" style="font-size: 10px; height: 22px; padding: 0 6px;">${doc.type || 'text'}</span>
+        <span class="md-chip" style="font-size: 10px; height: 22px; padding: 0 6px;">${safeType}</span>
       </div>
-      <button class="md-doc-remove-btn" data-doc-idx="${idx}" aria-label="Remove document ${doc.name}" title="Remove document">✕</button>
+      <button class="md-doc-remove-btn" data-doc-idx="${idx}" aria-label="Remove document ${safeName}" title="Remove document">✕</button>
     `;
     container.appendChild(item);
   });
@@ -936,11 +953,14 @@ function generateContextualRules(isExplicitAction = false) {
   toAdd.forEach((cand) => {
     const nextId = getNextRequirementId();
     const tr = document.createElement('tr');
+    const safeId = escapeHtml(nextId);
+    const safeText = escapeHtml(cand.text);
+    const safeEvidence = escapeHtml(cand.evidence);
     tr.innerHTML = `
-      <td><code>${nextId}</code></td>
-      <td>${cand.text}</td>
+      <td><code>${safeId}</code></td>
+      <td>${safeText}</td>
       <td><span class="md-chip md-chip-success">CONFIRMED</span></td>
-      <td><small>${cand.evidence}</small></td>
+      <td><small>${safeEvidence}</small></td>
       <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">Toggle</button></td>
     `;
     tbody.appendChild(tr);
@@ -1278,10 +1298,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const tr = document.createElement('tr');
       const isConfirmed = status === 'CONFIRMED';
+      const safeReqId = escapeHtml(reqId);
+      const safeText = escapeHtml(text);
+      const safeStatus = escapeHtml(status);
       tr.innerHTML = `
-        <td><code>${reqId}</code></td>
-        <td>${text}</td>
-        <td><span class="md-chip md-chip-${isConfirmed ? 'success' : 'warning'}">${status}</span></td>
+        <td><code>${safeReqId}</code></td>
+        <td>${safeText}</td>
+        <td><span class="md-chip md-chip-${isConfirmed ? 'success' : 'warning'}">${safeStatus}</span></td>
         <td><small>Custom operator rule (manually entered)</small></td>
         <td><button class="md-btn md-btn-text btn-toggle-req" type="button" style="padding: 0;">${isConfirmed ? 'Toggle' : 'Confirm'}</button></td>
       `;
@@ -1792,7 +1815,7 @@ document.addEventListener('DOMContentLoaded', () => {
           banner.innerHTML = `<strong>✅ [AUTONOMOUS SELF-HEALING EXECUTED]</strong><br>` +
             `• Stripped Markdown Fences: YES<br>` +
             `• Removed Trailing Commas: YES<br>` +
-            `• Repaired JSON:<br><pre style="margin: 4px 0 0 0; background: rgba(0,0,0,0.05); padding: 6px; border-radius: 4px;">${res.repairedText}</pre>`;
+            `• Repaired JSON:<br><pre style="margin: 4px 0 0 0; background: rgba(0,0,0,0.05); padding: 6px; border-radius: 4px;">${escapeHtml(res.repairedText)}</pre>`;
           showSnackbar('Malformed text repaired automatically!', '🩹');
         } else {
           banner.style.border = '1px solid #0b57d0';
@@ -1935,14 +1958,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (container) {
         let html = '';
         const root = firstTrace.spans.find(s => !s.parentSpanId) || firstTrace.spans[0];
+        const safeRootName = escapeHtml(root.name);
+        const safeRootStatus = escapeHtml(root.status);
         html += `<div style="padding: 6px 10px; background: var(--md-sys-color-surface); border-radius: 4px; margin-bottom: 4px; border-left: 3px solid var(--md-sys-color-primary);">
-          <strong>• root: ${root.name} (${root.durationMs}ms)</strong> <span class="md-chip md-chip-${root.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${root.status}</span>
+          <strong>• root: ${safeRootName} (${root.durationMs}ms)</strong> <span class="md-chip md-chip-${root.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${safeRootStatus}</span>
         </div>`;
 
         for (const span of firstTrace.spans) {
           if (span === root) continue;
+          const safeSpanName = escapeHtml(span.name);
+          const safeSpanStatus = escapeHtml(span.status);
           html += `<div style="padding: 4px 10px; margin-left: 20px; border-left: 2px solid var(--md-sys-color-outline-variant);">
-            └─ ${span.name} (${span.durationMs}ms) <span class="md-chip md-chip-${span.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${span.status}</span>
+            └─ ${safeSpanName} (${span.durationMs}ms) <span class="md-chip md-chip-${span.status === 'OK' ? 'success' : 'error'}" style="font-size: 10px; padding: 1px 6px;">${safeSpanStatus}</span>
           </div>`;
         }
         container.innerHTML = html;

@@ -16,6 +16,7 @@ import {
   generateGuardrailPolicy,
   runAdversarialSecuritySuite,
   evaluateReleaseGates,
+  assertRealFsContainment,
 } from './core.js';
 import { NeMoNistGuardrails } from './guardrails.js';
 import { runRedTeamSuite } from './red_team.js';
@@ -95,21 +96,26 @@ const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = Number(process.env.ADF_RATE_LIMIT_MAX || 120);
 const clientRequestMap = new Map();
 
-function isRateLimited(clientIp) {
+function isRateLimited(clientIp, socketRemoteAddress = '') {
   // Loopback and internal testing requests are exempt
+  if (process.env.NODE_ENV === 'test') {
+    return false;
+  }
+  // SEC-02 Fix: Check socket peer address directly, never trust unverified client-supplied headers
+  const peerIp = (socketRemoteAddress || '').replace(/^::ffff:/, '');
   if (
-    process.env.NODE_ENV === 'test' ||
-    clientIp === '127.0.0.1' ||
-    clientIp === '::1' ||
-    clientIp === '::ffff:127.0.0.1'
+    peerIp === '127.0.0.1' ||
+    peerIp === '::1' ||
+    socketRemoteAddress === '::ffff:127.0.0.1'
   ) {
     return false;
   }
   const now = Date.now();
-  let clientRecord = clientRequestMap.get(clientIp);
+  const rateLimitKey = peerIp || clientIp;
+  let clientRecord = clientRequestMap.get(rateLimitKey);
   if (!clientRecord || (now - clientRecord.windowStart) > RATE_LIMIT_WINDOW_MS) {
     clientRecord = { windowStart: now, count: 1 };
-    clientRequestMap.set(clientIp, clientRecord);
+    clientRequestMap.set(rateLimitKey, clientRecord);
     return false;
   }
   clientRecord.count++;
@@ -146,14 +152,26 @@ function isTokenValid(suppliedToken, expectedToken) {
 
 export function createAppHandler(customStoreDir = null, options = {}) {
   const storeDir = customStoreDir || path.join(projectRoot, 'store');
-  const configuredToken = options.accessToken !== undefined ? options.accessToken : (process.env.ADF_ACCESS_TOKEN || null);
+  let configuredToken = options.accessToken !== undefined ? options.accessToken : (process.env.ADF_ACCESS_TOKEN || null);
+
+  // SEC-01 Fix: Fail-closed on non-loopback exposure.
+  // If binding to non-loopback (e.g. 0.0.0.0 or public IP) and no token is configured,
+  // automatically generate a cryptographically strong 32-byte token to prevent unauthenticated remote exposure.
+  const host = options.host || '127.0.0.1';
+  const isNonLoopback = host !== '127.0.0.1' && host !== 'localhost';
+  if (!configuredToken && (isNonLoopback || options.enforceAuth || process.env.ADF_ENFORCE_AUTH === 'true')) {
+    configuredToken = crypto.randomBytes(32).toString('hex');
+    process.stderr.write(`[AUTH SECURITY] Auto-generated 32-byte ephemeral access token for host ${host}: ${configuredToken}\n`);
+  }
 
   return async function requestHandler(req, res) {
     serverRequestCounter++;
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
     const method = req.method.toUpperCase();
-    const clientIp = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1').split(',')[0].trim();
+    const peerIp = req.socket ? req.socket.remoteAddress : '';
+    const forwarded = req.headers['x-forwarded-for'];
+    const clientIp = (forwarded || peerIp || '127.0.0.1').split(',')[0].trim();
 
     // CORS preflight
     if (method === 'OPTIONS') {
@@ -169,7 +187,7 @@ export function createAppHandler(customStoreDir = null, options = {}) {
     }
 
     // Rate Limiting Protection (Anti-DDoS on remote exposure)
-    if (isRateLimited(clientIp)) {
+    if (isRateLimited(clientIp, peerIp)) {
       sendJson(res, 429, {
         status: 'RATE_LIMITED',
         error: 'Too many requests. Maximum 120 requests per minute allowed.',
@@ -334,7 +352,13 @@ export function createAppHandler(customStoreDir = null, options = {}) {
       try {
         const body = await readJsonBody(req);
         const riskTier = body.riskTier || 'T1';
-        let manifestPath = body.manifestPath;
+        let manifestPath = null;
+
+        if (body.manifestPath) {
+          const resolved = path.resolve(projectRoot, body.manifestPath);
+          assertRealFsContainment(projectRoot, resolved);
+          manifestPath = resolved;
+        }
 
         if (!manifestPath || !fs.existsSync(manifestPath)) {
           const rev001Manifest = path.join(storeDir, 'rev-001', 'manifest.json');
@@ -353,6 +377,7 @@ export function createAppHandler(customStoreDir = null, options = {}) {
         }
 
         if (manifestPath && fs.existsSync(manifestPath)) {
+          assertRealFsContainment(projectRoot, manifestPath);
           const policyResult = generateGuardrailPolicy({
             riskTier,
             manifestPath,
@@ -386,7 +411,8 @@ zero_spend_ceiling_usd: 0.00`;
           sendJson(res, 200, { riskTier, yaml: defaultYaml });
         }
       } catch (err) {
-        sendJson(res, 400, { error: err.message });
+        const status = err.message && err.message.includes('PATH_TRAVERSAL_DETECTED') ? 403 : 400;
+        sendJson(res, status, { error: err.message });
       }
       return;
     }
@@ -395,13 +421,20 @@ zero_spend_ceiling_usd: 0.00`;
     if (pathname === '/api/sec-evals' && method === 'POST') {
       try {
         const body = await readJsonBody(req);
+        let manifestPath = body.manifestPath || null;
+        if (manifestPath) {
+          const resolved = path.resolve(projectRoot, manifestPath);
+          assertRealFsContainment(projectRoot, resolved);
+          manifestPath = resolved;
+        }
         const secResult = runAdversarialSecuritySuite({
           riskTier: body.riskTier || 'T1',
-          manifestPath: body.manifestPath || null,
+          manifestPath,
         });
         sendJson(res, 200, secResult);
       } catch (err) {
-        sendJson(res, 400, { error: err.message });
+        const status = err.message && err.message.includes('PATH_TRAVERSAL_DETECTED') ? 403 : 400;
+        sendJson(res, status, { error: err.message });
       }
       return;
     }
@@ -410,15 +443,22 @@ zero_spend_ceiling_usd: 0.00`;
     if (pathname === '/api/eval-gates' && method === 'POST') {
       try {
         const body = await readJsonBody(req);
+        let manifestPath = body.manifestPath || null;
+        if (manifestPath) {
+          const resolved = path.resolve(projectRoot, manifestPath);
+          assertRealFsContainment(projectRoot, resolved);
+          manifestPath = resolved;
+        }
         const gatesResult = evaluateReleaseGates({
           riskTier: body.riskTier || 'T1',
           humanReviewConfirmed: Boolean(body.humanReviewConfirmed),
           retryAttempt: Number(body.retryAttempt || 0),
-          manifestPath: body.manifestPath || null,
+          manifestPath,
         });
         sendJson(res, 200, gatesResult);
       } catch (err) {
-        sendJson(res, 400, { error: err.message });
+        const status = err.message && err.message.includes('PATH_TRAVERSAL_DETECTED') ? 403 : 400;
+        sendJson(res, status, { error: err.message });
       }
       return;
     }
@@ -429,17 +469,28 @@ zero_spend_ceiling_usd: 0.00`;
         const body = await readJsonBody(req);
         const { runLayaJudgeEvaluation } = await import('./eval_judge.js');
         const revId = body.revisionId || 'rev-001';
-        const targetDir = body.target ? path.resolve(process.cwd(), body.target) : path.join(projectRoot, 'deployments', 'develop_an_agent_that_analyzes');
+        let targetDir = path.join(projectRoot, 'deployments', 'develop_an_agent_that_analyzes');
+        if (body.target) {
+          const resolvedTarget = path.resolve(projectRoot, body.target);
+          assertRealFsContainment(projectRoot, resolvedTarget);
+          targetDir = resolvedTarget;
+        }
 
         let outputText = body.outputText || '';
         let codeStr = body.codeStr || '';
         if (!outputText) {
           const reportPath = path.join(targetDir, 'artifacts', 'anomaly_report.md');
-          if (fs.existsSync(reportPath)) outputText = fs.readFileSync(reportPath, 'utf-8');
+          if (fs.existsSync(reportPath)) {
+            assertRealFsContainment(projectRoot, reportPath);
+            outputText = fs.readFileSync(reportPath, 'utf-8');
+          }
         }
         if (!codeStr) {
           const codePath = path.join(targetDir, 'src', 'agent.py');
-          if (fs.existsSync(codePath)) codeStr = fs.readFileSync(codePath, 'utf-8');
+          if (fs.existsSync(codePath)) {
+            assertRealFsContainment(projectRoot, codePath);
+            codeStr = fs.readFileSync(codePath, 'utf-8');
+          }
         }
 
         const sourceInputs = body.sourceInputs || 'id,value,category\n1,100.0,A\n2,102.0,A\n10,15000.0,A';
@@ -460,7 +511,8 @@ zero_spend_ceiling_usd: 0.00`;
 
         sendJson(res, 200, judgeReport);
       } catch (err) {
-        sendJson(res, 400, { error: err.message });
+        const status = err.message && err.message.includes('PATH_TRAVERSAL_DETECTED') ? 403 : 400;
+        sendJson(res, status, { error: err.message });
       }
       return;
     }
@@ -729,8 +781,8 @@ zero_spend_ceiling_usd: 0.00`;
   };
 }
 
-export function startServer(port = 3000, storeDir = null, host = '0.0.0.0', options = {}) {
-  const handler = createAppHandler(storeDir, options);
+export function startServer(port = 3000, storeDir = null, host = '127.0.0.1', options = {}) {
+  const handler = createAppHandler(storeDir, { host, ...options });
   const server = http.createServer(handler);
 
   return new Promise((resolve, reject) => {
@@ -752,7 +804,7 @@ export function startServer(port = 3000, storeDir = null, host = '0.0.0.0', opti
 const isMainModule = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
 if (isMainModule) {
   const port = parseInt(process.env.PORT || process.env.ADF_PORT || '3000', 10);
-  const host = process.env.ADF_HOST || '0.0.0.0';
+  const host = process.env.ADF_HOST || '127.0.0.1';
   startServer(port, null, host).then(({ port, url }) => {
     console.log(`[ADF SERVER] Control Plane & Material UI running at http://${host}:${port} (${url})`);
     console.log(`[ADF SERVER] Enforcing strict $0.00 spend ceiling.`);

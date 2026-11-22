@@ -116,7 +116,11 @@ export function evaluateEvidenceApplicability(check, currentArtifactHashes, curr
   return { isCurrent: true, applicability: check.status, reason: 'APPLICABLE: Artifact and checker dependencies match.' };
 }
 
-export function verifyEvidenceConsistency(revDir) {
+export function verifyEvidenceConsistency(revDirOrRevisionId, storeDir = null) {
+  const revDir = storeDir
+    ? path.join(path.resolve(storeDir), revDirOrRevisionId)
+    : path.resolve(revDirOrRevisionId);
+
   const eventsLogPath = path.join(revDir, 'check_events.jsonl');
   const evidencePath = path.join(revDir, 'evidence.json');
 
@@ -209,6 +213,123 @@ export function verifyEvidenceConsistency(revDir) {
     totalEvents: logEvents.length,
     reason: 'CONSISTENT: check_events.jsonl audit log matches evidence.json materialized ledger 100%.',
   };
+}
+
+/**
+ * Rematerializes evidence.json directly from the authoritative check_events.jsonl event stream.
+ * Resolves FINDING-DEF-01: restores 100% cryptographic ledger consistency.
+ * @param {string} revDirOrRevisionId
+ * @param {string} [storeDir]
+ * @returns {Object} Rematerialized evidence ledger object
+ */
+export function materializeEvidenceLedger(revDirOrRevisionId, storeDir = null) {
+  const revDir = storeDir
+    ? path.join(path.resolve(storeDir), revDirOrRevisionId)
+    : path.resolve(revDirOrRevisionId);
+
+  const eventsLogPath = path.join(revDir, 'check_events.jsonl');
+  const evidencePath = path.join(revDir, 'evidence.json');
+
+  if (!fs.existsSync(eventsLogPath)) {
+    throw new Error(`CANNOT_REMATERIALIZE: check_events.jsonl does not exist in "${revDir}".`);
+  }
+
+  const logContent = fs.readFileSync(eventsLogPath, 'utf-8');
+  const lines = logContent.split('\n').map(l => l.trim()).filter(Boolean);
+  const logEvents = lines.map(line => JSON.parse(line));
+
+  let evidence = null;
+  if (fs.existsSync(evidencePath)) {
+    try {
+      evidence = JSON.parse(fs.readFileSync(evidencePath, 'utf-8'));
+    } catch {
+      evidence = null;
+    }
+  }
+
+  if (!evidence) {
+    const revisionId = path.basename(revDir);
+    evidence = {
+      revisionId,
+      parentRevisionId: null,
+      createdAt: logEvents.length > 0 ? logEvents[0].executedAt : new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      checks: [],
+      events: [],
+    };
+  }
+
+  evidence.events = logEvents;
+
+  if (!Array.isArray(evidence.checks)) {
+    evidence.checks = [];
+  }
+
+  // Ensure every checkId in events is represented in checks
+  for (const event of logEvents) {
+    if (!evidence.checks.some(c => c.checkId === event.checkId)) {
+      evidence.checks.push({
+        checkId: event.checkId,
+        name: event.checkId,
+        scope: 'Rematerialized check registration from audit log',
+        sourceRevision: event.sourceRevision || evidence.revisionId,
+        initialStatus: 'NOT RUN',
+        status: 'NOT RUN',
+        executionCount: 0,
+        history: [],
+        checker: {
+          version: CHECKER_ENGINE_VERSION,
+          implementationSha256: event.checkerImplementationSha256 || getCheckerImplementationHash(),
+          schemaVersion: '0.3.0',
+        },
+        inputs: {},
+        command: `node src/cli.js run-check --revision ${evidence.revisionId} --check ${event.checkId}`,
+        executedAt: null,
+        exitCode: null,
+        output: null,
+        error: null,
+        limitationNotes: 'Rematerialized from audit trail.',
+      });
+    }
+  }
+
+  // Re-synchronize each check's state from the log events
+  for (const check of evidence.checks) {
+    const checkEvents = logEvents.filter(e => e.checkId === check.checkId);
+    check.executionCount = checkEvents.length;
+
+    if (checkEvents.length > 0) {
+      check.history = checkEvents.map(e => ({
+        eventId: e.eventId,
+        executedAt: e.executedAt,
+        checkerImplementationSha256: e.checkerImplementationSha256,
+        status: e.status,
+        exitCode: e.exitCode,
+      }));
+      const latest = checkEvents[checkEvents.length - 1];
+      check.status = latest.status;
+      check.executedAt = latest.executedAt;
+      check.exitCode = latest.exitCode;
+      check.output = latest.output;
+      check.error = latest.error;
+      if (!check.checker) check.checker = {};
+      check.checker.version = CHECKER_ENGINE_VERSION;
+      check.checker.implementationSha256 = latest.checkerImplementationSha256 || getCheckerImplementationHash();
+      check.checker.schemaVersion = '0.3.0';
+    } else {
+      check.status = check.initialStatus || 'NOT RUN';
+      check.history = [];
+      check.executedAt = null;
+      check.exitCode = null;
+      check.output = null;
+      check.error = null;
+    }
+  }
+
+  evidence.lastUpdated = logEvents.length > 0 ? logEvents[logEvents.length - 1].executedAt : evidence.createdAt;
+
+  fs.writeFileSync(evidencePath, deterministicJsonString(evidence), 'utf-8');
+  return evidence;
 }
 
 export function validateRequirements(requirements) {
