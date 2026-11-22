@@ -40,3 +40,11 @@ test('skip link is the first tab stop and moves focus to main', async ({ page })
   await page.keyboard.press('Enter');
   await expect(page.locator('#mainContent')).toBeFocused();
 });
+
+test('editorial design tokens are defined on root', async ({ page }) => {
+  await page.goto('/');
+  const surfaceColor = await page.evaluate(() => {
+    return getComputedStyle(document.documentElement).getPropertyValue('--adf-color-canvas').trim();
+  });
+  expect(surfaceColor).toBe('#fbfbfa');
+});

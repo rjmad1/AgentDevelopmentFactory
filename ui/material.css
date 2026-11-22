@@ -5,6 +5,29 @@
  */
 
 :root {
+  /* Warm Monochrome & Editorial Minimalist Tokens */
+  --adf-color-canvas: #fbfbfa;
+  --adf-color-surface: #ffffff;
+  --adf-color-surface-subtle: #f7f6f3;
+  --adf-color-border: #eaeaea;
+  --adf-color-text-primary: #111111;
+  --adf-color-text-secondary: #787774;
+  --adf-color-text-tertiary: #9b9a97;
+
+  /* Editorial Spot Pastels (Tags, Chips & Status Badges) */
+  --adf-pastel-green-bg: #edf3ec;
+  --adf-pastel-green-text: #346538;
+  --adf-pastel-amber-bg: #fbf3db;
+  --adf-pastel-amber-text: #956400;
+  --adf-pastel-red-bg: #fdebec;
+  --adf-pastel-red-text: #9f2f2d;
+  --adf-pastel-blue-bg: #e1f3fe;
+  --adf-pastel-blue-text: #1f6c9f;
+
+  /* Typography */
+  --adf-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Geist Sans', 'Helvetica Neue', sans-serif;
+  --adf-font-mono: 'SF Mono', 'Geist Mono', Consolas, Monaco, monospace;
+
   /* M3 Light Palette (Default) */
   --md-sys-color-primary: #0b57d0;
   --md-sys-color-on-primary: #ffffff;
@@ -80,6 +103,23 @@
 
 /* Dark Theme Overrides */
 [data-theme="dark"] {
+  /* Warm Monochrome & Editorial Minimalist Tokens (Dark) */
+  --adf-color-canvas: #0f1115;
+  --adf-color-surface: #161920;
+  --adf-color-surface-subtle: #1e222b;
+  --adf-color-border: #2e3440;
+  --adf-color-text-primary: #e2e2e9;
+  --adf-color-text-secondary: #9aa0a6;
+  --adf-color-text-tertiary: #6e737b;
+
+  --adf-pastel-green-bg: #143320;
+  --adf-pastel-green-text: #6dd58c;
+  --adf-pastel-amber-bg: #382800;
+  --adf-pastel-amber-text: #ffb951;
+  --adf-pastel-red-bg: #3b1414;
+  --adf-pastel-red-text: #ffb4ab;
+  --adf-pastel-blue-bg: #102a45;
+  --adf-pastel-blue-text: #a8c7fa;
   --md-sys-color-primary: #a8c7fa;
   --md-sys-color-on-primary: #041e49;
   --md-sys-color-inverse-primary: #0b57d0;
