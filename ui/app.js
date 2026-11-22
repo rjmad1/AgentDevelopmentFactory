@@ -979,6 +979,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // SVG Topology Node Inspector
+  const nodeCoordinator = document.getElementById('svgNodeCoordinator');
+  const drawer = document.getElementById('topologyInspectorDrawer');
+  const btnCloseInspector = document.getElementById('btnCloseInspector');
+
+  if (nodeCoordinator && drawer) {
+    nodeCoordinator.addEventListener('click', () => {
+      drawer.style.display = 'block';
+    });
+    nodeCoordinator.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        drawer.style.display = 'block';
+      }
+    });
+  }
+  if (btnCloseInspector && drawer) {
+    btnCloseInspector.addEventListener('click', () => {
+      drawer.style.display = 'none';
+    });
+  }
+
   // 12. Step 3: Risk Tier Selector & Policy Preview
   const tierBtns = document.querySelectorAll('#tierSelector .md-segmented-btn');
   const yamlPreview = document.getElementById('yamlPolicyPreview');
