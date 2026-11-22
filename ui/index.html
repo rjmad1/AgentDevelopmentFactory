@@ -1036,6 +1036,18 @@
             </div>
           </div>
 
+          <!-- Append-Only Audit Stream Card -->
+          <div class="md-card md-card-filled" id="eventStreamCard" style="margin-bottom: 24px;">
+            <div class="md-card-header">
+              <div>
+                <h3 class="md-card-title">📜 Real-Time Append-Only Audit Stream (<code style="font-size: 13px;">check_events.jsonl</code>)</h3>
+                <p class="md-card-subtitle">Real-time ledger of immutable cryptographic events, policy gates, and verification decisions.</p>
+              </div>
+              <button id="btnRefreshEvents" class="md-btn md-btn-tonal" type="button">🔄 Stream Latest</button>
+            </div>
+            <pre id="eventStreamFeed" style="max-height: 200px; overflow-y: auto; background: var(--adf-color-surface-subtle, #f7f6f3); color: var(--adf-color-text-primary, #111111); padding: 12px; border-radius: 6px; font-family: monospace; font-size: 11px; margin-top: 12px; border: 1px solid var(--adf-color-border, #eaeaea);">[INITIALIZING AUDIT FEED...]</pre>
+          </div>
+
           <!-- Distributed Tracing Telemetry Card -->
           <div class="md-card md-card-filled" style="margin-bottom: 24px;">
             <div class="md-card-header">

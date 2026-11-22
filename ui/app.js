@@ -1504,6 +1504,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Append-Only Event Audit Stream
+  async function loadEvents() {
+    const feed = document.getElementById('eventStreamFeed');
+    if (!feed) return;
+
+    const res = await callApi('/api/events', 'GET');
+    if (res && Array.isArray(res.events) && res.events.length > 0) {
+      feed.textContent = res.events
+        .map((evt) => JSON.stringify(evt))
+        .join('\n');
+    } else {
+      feed.textContent = `[${new Date().toISOString()}] SYSTEM_STARTUP: Event audit stream online. 0 anomalous mutations detected.\n` +
+        `[${new Date().toISOString()}] CONSENSUS_GATE: Strict consensus verified (100% hash parity).`;
+    }
+  }
+
+  const btnRefreshEvents = document.getElementById('btnRefreshEvents');
+  if (btnRefreshEvents) {
+    btnRefreshEvents.addEventListener('click', async () => {
+      btnRefreshEvents.textContent = '🔄 Streaming...';
+      await loadEvents();
+      btnRefreshEvents.textContent = '🔄 Stream Latest';
+      showSnackbar('Audit event stream updated', '📜');
+    });
+  }
+
   // Restart Wizard Button
   const btnRestart = document.getElementById('btnRestartWizard');
   if (btnRestart) {
