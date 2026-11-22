@@ -40,3 +40,7 @@ Thumbs.db
 # Playwright UI test output
 /test-results/
 /playwright-report/
+
+# Binaries
+deploy/cloudflared.exe
+*.exe
